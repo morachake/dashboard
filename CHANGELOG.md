@@ -124,12 +124,6 @@ _In development mode, some of the above plugins will throw a warning because the
 
 ### Bug fixing
 
-- https://github.com/creativetimofficial/argon-dashboard-react/issues/18 (Added this in live docs, we need for our product to have a homepage prop inside the package.json. If build is not working, just delete the homepage prop from inside the package.json, or configure it to your own specs.)
-- https://github.com/creativetimofficial/argon-dashboard-react/issues/17
-- https://github.com/creativetimofficial/argon-dashboard-react/issues/15
-- https://github.com/creativetimofficial/argon-dashboard-react/issues/12
-- https://github.com/creativetimofficial/argon-dashboard-react/issues/3
-- Changed `componentWillMount` with `constructor` function inside `src/views/Index.js` (this was for initializing the charts)
 
 ### Major style changes
 
