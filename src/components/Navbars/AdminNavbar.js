@@ -27,7 +27,8 @@ const AdminNavbar = (props) => {
             className="h4 mb-0 text-white text-uppercase d-none d-lg-inline-block"
             to="/"
           >
-            {props.brandText}
+            {/* {props.brandText} */}
+            <h6 style={{ fontSize: '0.9em' , color:'#FFFF'}}> Mombasa county service delivery unit</h6>
           </Link>
           <Form className="navbar-search navbar-search-dark form-inline mr-3 d-none d-md-flex ml-lg-auto">
             <FormGroup className="mb-0">
@@ -45,17 +46,18 @@ const AdminNavbar = (props) => {
             <UncontrolledDropdown nav>
               <DropdownToggle className="pr-0" nav>
                 <Media className="align-items-center">
-                  <span className="avatar avatar-sm rounded-circle">
+                <Media className="ml-2 d-none d-lg-block">
+                    <div style={{ fontSize: '2em' , color:'#FFFF'}}>
+                      <i className="ni ni-notification-70" />
+                    </div>
+                  </Media>
+                  <span className="ml-3 avatar avatar-sm rounded-circle">
                     <img
                       alt="..."
                       src="https://web.mombasa.go.ke/wp-content/uploads/elementor/thumbs/msa-county-pvpwt97u9pzd6lh7rs4eyuajx9c5n3tbhn01h7rg14.png"
                     />
                   </span>
-                  <Media className="ml-2 d-none d-lg-block">
-                    <span className="mb-0 text-sm font-weight-bold">
-                      Jessica Jones
-                    </span>
-                  </Media>
+                  
                 </Media>
               </DropdownToggle>
               <DropdownMenu className="dropdown-menu-arrow" right>
