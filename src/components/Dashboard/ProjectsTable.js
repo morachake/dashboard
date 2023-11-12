@@ -8,9 +8,9 @@ import {
 } from "reactstrap";
 import projectsData from 'data/projectdata';
 export default function ProjectsTable() {
-  const data = projectsData.map(project =>{
+  // const data = projectsData.map(project =>{
     
-  })
+  // })
   return (
     <>
     <CardBody className="shadow">
