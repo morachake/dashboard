@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Button,
   CardHeader,
@@ -6,56 +6,65 @@ import {
   Table,
   Row,
 } from "reactstrap";
-import projectsData from 'data/projectdata';
+
 export default function ProjectsTable() {
-  // const data = projectsData.map(project =>{
-    
-  // })
+  const [projectsData, setProjectsData] = useState([]);
+
+  useEffect(() => {
+    // Fetch data from the endpoint when the component mounts
+    fetch('http://127.0.0.1:5000/forms')
+      .then(response => response.json())
+      .then(data => setProjectsData(data))
+      .catch(error => console.error('Error fetching data:', error));
+  }, []);  // The empty dependency array ensures the effect runs only once when the component mounts
+
+  const tableRows = projectsData.map(project => (
+    <tr key={project.id}>
+      <td>{project.amount_certified}</td>
+      <td>{project.contract_sum}</td>
+      <td>{project.contractor_details}</td>
+      <td>{project.project_name}</td>
+      <td>{project.status}</td>
+      <td>{project.time_frame}</td>
+    </tr>
+  ));
+
   return (
     <>
-    <CardBody className="shadow">
-              <CardHeader className="border-0">
-                <Row className="align-items-center">
-                  <div className="col">
-                    <h3 className="mb-0">Page visits</h3>
-                  </div>
-                  <div className="col text-right">
-                    <Button
-                      color="primary"
-                      href="#pablo"
-                      onClick={(e) => e.preventDefault()}
-                      size="sm"
-                    >
-                      See all
-                    </Button>
-                  </div>
-                </Row>
-              </CardHeader>
-              <Table className="align-items-center table-flush" responsive>
-                <thead className="thead-light">
-                  <tr>
-                    <th scope="col">Page name</th>
-                    <th scope="col">Visitors</th>
-                    <th scope="col">Unique users</th>
-                    <th scope="col">Bounce rate</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <th scope="row">/argon/</th>
-                    <td>4,569</td>
-                    <td>340</td>
-                    <td>
-                      <i className="fas fa-arrow-up text-success mr-3" /> 46,53%
-                    </td>
-                  </tr>
-                 
-                  
-                 
-                 
-                </tbody>
-              </Table>
-            </CardBody>
+      <CardBody className="shadow">
+        <CardHeader className="border-0">
+          <Row className="align-items-center">
+            <div className="col">
+              <h3 className="mb-0">Project Details</h3>
+            </div>
+            <div className="col text-right">
+              <Button
+                color="primary"
+                href="#pablo"
+                onClick={(e) => e.preventDefault()}
+                size="sm"
+              >
+                See all
+              </Button>
+            </div>
+          </Row>
+        </CardHeader>
+        <Table className="align-items-center table-flush" responsive>
+          <thead className="thead-light">
+            <tr>
+              <th scope="col">Amount</th>
+              <th scope="col">Contract Sum</th>
+              <th scope="col">Contractor</th>
+              <th scope="col">Project Name</th>
+              <th scope="col">Status</th>
+              <th scope="col">Time Frame</th>
+            </tr>
+          </thead>
+          <tbody>
+            {tableRows}
+          </tbody>
+        </Table>
+      </CardBody>
     </>
   );
 }

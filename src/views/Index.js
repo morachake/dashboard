@@ -31,6 +31,9 @@ import {
 import Header from "components/Headers/Header.js";
 import ProjectsTable from "components/Dashboard/ProjectsTable";
 import Departments from "components/Dashboard/Departments";
+import projectsData from "data/projectdata";
+import BudgetChart from "components/Dashboard/BudgetChart";
+import BudgetBars from "components/Dashboard/BudgetBars";
 
 const Index = (props) => {
   const [activeNav, setActiveNav] = useState(1);
@@ -95,10 +98,8 @@ const Index = (props) => {
               <CardBody>
                 {/* Chart */}
                 <div className="chart">
-                  <Line
-                    data={chartExample1[chartExample1Data]}
-                    options={chartExample1.options}
-                    getDatasetAtEvent={(e) => console.log(e)}
+                  <BudgetBars
+                    projectsData={projectsData}
                   />
                 </div>
               </CardBody>
@@ -117,22 +118,19 @@ const Index = (props) => {
               </CardHeader>
               <CardBody>
                 <div className="chart">
-                  <Pie
-                    data={chartExample2.data}
-                    options={chartExample2.options}
-                  />
+                  <BudgetChart projectsData={projectsData}/>
                 </div>
               </CardBody>
             </Card>
           </Col>
         </Row>
         <Row className="mt-5">
-          <Col className="mb-5 mb-xl-0" xl="8">
+          {/* <Col className="mb-5 mb-xl-0" xl="8"> */}
             <ProjectsTable/>
-          </Col>
-          <Col xl="4">
+          {/* </Col> */}
+          {/* <Col xl="4">
             <Departments/>
-          </Col>
+          </Col> */}
         </Row>
       </Container>
     </>
