@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 // node.js library that concatenates classes (strings)
 import classnames from "classnames";
 // javascipt plugin for creating charts
@@ -37,8 +37,33 @@ import BudgetBars from "components/Dashboard/BudgetBars";
 
 const Index = (props) => {
   const [activeNav, setActiveNav] = useState(1);
-  const [chartExample1Data, setChartExample1Data] = useState("data1");
+  const [sectorFilter, setSectorFilter] = useState('');
+  const [locationFilter, setLocationFilter] = useState('');
+  const [filteredData, setFilteredData] = useState(projectsData);
 
+  // Handler functions for filter changes
+  const handleSectorChange = (e) => {
+    setSectorFilter(e.target.value);
+  };
+
+  const handleLocationChange = (e) => {
+    setLocationFilter(e.target.value);
+  };
+
+  // Effect to filter data when filters change
+  useEffect(() => {
+    let data = projectsData;
+
+    if (sectorFilter) {
+      data = data.filter(project => project.sector === sectorFilter);
+    }
+
+    if (locationFilter) {
+      data = data.filter(project => project.location === locationFilter);
+    }
+
+    setFilteredData(data);
+  }, [sectorFilter, locationFilter]);
   if (window.Chart) {
     parseOptions(Chart, chartOptions());
   }
@@ -46,11 +71,19 @@ const Index = (props) => {
   const toggleNavs = (e, index) => {
     e.preventDefault();
     setActiveNav(index);
-    setChartExample1Data("data" + index);
+    //setChartExample1Data("data" + index);
   };
+  const uniqueSectors = Array.from(new Set(projectsData.map(project => project.sector)));
+  const uniqueLocations = Array.from(new Set(projectsData.map(project => project.location)));
+
   return (
     <>
-      <Header />
+      <Header
+        onSectorChange={handleSectorChange}
+        onLocationChange={handleLocationChange}
+        sectors={uniqueSectors}
+        locations={uniqueLocations}
+      />
       {/* Page content */}
       <Container className="mt--7" fluid>
         <Row>
@@ -99,7 +132,7 @@ const Index = (props) => {
                 {/* Chart */}
                 <div className="chart">
                   <BudgetBars
-                    projectsData={projectsData}
+                    projectsData={filteredData}
                   />
                 </div>
               </CardBody>
@@ -118,7 +151,7 @@ const Index = (props) => {
               </CardHeader>
               <CardBody>
                 <div className="chart">
-                  <BudgetChart projectsData={projectsData}/>
+                  <BudgetChart projectsData={filteredData}/>
                 </div>
               </CardBody>
             </Card>

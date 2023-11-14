@@ -1,6 +1,8 @@
 
+import { useState } from "react";
 import { Link } from "react-router-dom";
 // reactstrap components
+import "./admidbar.css"
 import {
   DropdownMenu,
   DropdownItem,
@@ -15,10 +17,18 @@ import {
   Navbar,
   Nav,
   Container,
+  Modal,
   Media,
+  Button,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
 } from "reactstrap";
 
 const AdminNavbar = (props) => {
+  const [modal, setModal] = useState(false);
+
+  const toggle = () => setModal(!modal);
   return (
     <>
       <Navbar className="navbar-top navbar-dark" expand="md" id="navbar-main">
@@ -28,7 +38,7 @@ const AdminNavbar = (props) => {
             to="/"
           >
             {/* {props.brandText} */}
-            <h6 style={{ fontSize: '0.9em' , color:'#FFFF'}}> Mombasa county service delivery unit</h6>
+            <h6 style={{ fontSize: '0.9em', color: '#FFFF' }}> Mombasa county service delivery unit</h6>
           </Link>
           <Form className="navbar-search navbar-search-dark form-inline mr-3 d-none d-md-flex ml-lg-auto">
             <FormGroup className="mb-0">
@@ -43,21 +53,46 @@ const AdminNavbar = (props) => {
             </FormGroup>
           </Form>
           <Nav className="align-items-center d-none d-md-flex" navbar>
+            {/* message modal */}
+            <Button onClick={toggle} >
+              Notifications
+            </Button>
+            <Modal isOpen={modal} toggle={toggle} className="notification-modal">
+              <ModalHeader toggle={toggle}>Notifications</ModalHeader>
+              <ModalBody>
+                {/* Here you can map through your notifications and display them */}
+                <div className="notification-item">
+                  Project updated successfully
+                </div>
+                <div className="notification-item">
+                 Jomvu road update...
+                </div>
+                <div className="notification-item">
+                  Lokoni subcount water project ...
+                </div>
+                <div className="notification-item">
+                 New CES added ..
+                </div>
+                {/* Add more items here */}
+              </ModalBody>
+              <ModalFooter>
+                <Button color="secondary" onClick={toggle}>
+                  Close
+                </Button>
+              </ModalFooter>
+            </Modal>
+            {/* end of message modal */}
             <UncontrolledDropdown nav>
               <DropdownToggle className="pr-0" nav>
                 <Media className="align-items-center">
-                <Media className="ml-2 d-none d-lg-block">
-                    <div style={{ fontSize: '2em' , color:'#FFFF'}}>
-                      <i className="ni ni-notification-70" />
-                    </div>
-                  </Media>
+
                   <span className="ml-3 avatar avatar-sm rounded-circle">
                     <img
                       alt="..."
                       src="https://web.mombasa.go.ke/wp-content/uploads/elementor/thumbs/msa-county-pvpwt97u9pzd6lh7rs4eyuajx9c5n3tbhn01h7rg14.png"
                     />
                   </span>
-                  
+
                 </Media>
               </DropdownToggle>
               <DropdownMenu className="dropdown-menu-arrow" right>

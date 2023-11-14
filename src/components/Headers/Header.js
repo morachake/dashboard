@@ -1,9 +1,9 @@
-
-
+import React, { useState, useEffect } from 'react';
 // reactstrap components
-import { Card, CardBody, CardTitle, Container, Row, Col, Input, FormGroup, Label } from "reactstrap";
+import { Container, Row, Col, Input, FormGroup, Label } from "reactstrap";
 
-const Header = () => {
+
+const Header = ({ onSectorChange, onLocationChange ,sectors,locations}) => {
   return (
     <>
       <div className="header bg-gradient-info pb-8 pt-5 pt-md-8">
@@ -12,49 +12,40 @@ const Header = () => {
             <Row>
               <Col>
                 <FormGroup>
-                  <Label for="exampleSelect">
+                  <Label for="sectorSelect">
                     Filter by sector
                   </Label>
                   <Input
-                    id="exampleSelect"
+                    id="sectorSelect"
                     name="select"
                     type="select"
+                    onChange={onSectorChange}
                   >
-                    <option>
-                      Education
-                    </option>
-                    <option>
-                      Trade
-                    </option>
-                    <option>
-                      Finance
-                    </option>
+                    <option value="">All Sectors</option>
+                    {sectors.map((sector, index) => (
+                      <option key={index} value={sector}>{sector}</option>
+                    ))}
                   </Input>
                 </FormGroup>
               </Col>
               <Col>
-              <FormGroup>
-                  <Label for="exampleSelect">
+                <FormGroup>
+                  <Label for="locationSelect">
                     Filter by Location
                   </Label>
                   <Input
-                    id="exampleSelect"
+                    id="locationSelect"
                     name="select"
                     type="select"
+                    onChange={onLocationChange}
                   >
-                    <option>
-                      Likoni
-                    </option>
-                    <option>
-                      Kisauni
-                    </option>
-                    <option>
-                      Changamwe
-                    </option>
+                    <option value="">All Locations</option>
+                    {locations.map((location, index) => (
+                      <option key={index} value={location}>{location}</option>
+                    ))}
                   </Input>
                 </FormGroup>
               </Col>
-             
             </Row>
           </div>
         </Container>
