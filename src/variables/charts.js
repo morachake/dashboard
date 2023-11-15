@@ -290,7 +290,7 @@ function parseOptions(parent, options) {
   }
 }
 
-// Example 1 of Chart inside src/views/Index.js (Sales value - Card)
+// Example 1 of Chart inside src/views/Index.js ()
 let chartExample1 = {
   options: {
     scales: {

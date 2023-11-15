@@ -23,12 +23,15 @@ import {
   ModalHeader,
   ModalBody,
   ModalFooter,
+  Label,
 } from "reactstrap";
 
 const AdminNavbar = (props) => {
   const [modal, setModal] = useState(false);
+  const [governorModal, setGovernorModal] = useState(false);
 
   const toggle = () => setModal(!modal);
+  const openModal = () => setGovernorModal(!governorModal)
   return (
     <>
       <Navbar className="navbar-top navbar-dark" expand="md" id="navbar-main">
@@ -54,9 +57,13 @@ const AdminNavbar = (props) => {
           </Form>
           <Nav className="align-items-center d-none d-md-flex" navbar>
             {/* message modal */}
+            <Button onClick={openModal} >
+              Governors Notes
+            </Button>
             <Button onClick={toggle} >
               Notifications
             </Button>
+
             <Modal isOpen={modal} toggle={toggle} className="notification-modal">
               <ModalHeader toggle={toggle}>Notifications</ModalHeader>
               <ModalBody>
@@ -65,13 +72,13 @@ const AdminNavbar = (props) => {
                   Project updated successfully
                 </div>
                 <div className="notification-item">
-                 Jomvu road update...
+                  Jomvu road update...
                 </div>
                 <div className="notification-item">
                   Lokoni subcount water project ...
                 </div>
                 <div className="notification-item">
-                 New CES added ..
+                  New CES added ..
                 </div>
                 {/* Add more items here */}
               </ModalBody>
@@ -82,6 +89,39 @@ const AdminNavbar = (props) => {
               </ModalFooter>
             </Modal>
             {/* end of message modal */}
+            {/* governors notes complete */}
+            <Modal isOpen={governorModal} >
+              <ModalHeader >Notes</ModalHeader>
+              <ModalBody>
+                <ul>
+                  <li>1: Update from Transport Sector</li>
+                  <li>2: Schedule appointment with the finance department</li>
+                  <li>3: Draft the report for the upcoming project</li>
+                  
+                </ul>
+                <Form onSubmit={(e) => e.preventDefault()}>
+                  <FormGroup className="w-100">
+                    <Input
+                      id="exampleText"
+                      name="text"
+                      type="textarea"
+                      placeholder="Type your note here..."
+                      className="w-100"
+                    />
+                  </FormGroup>
+                </Form>
+              </ModalBody>
+              <ModalFooter>
+                <Button color="primary">
+                  Add Note
+                </Button>
+                <Button color="secondary" onClick={openModal}>
+                  Close
+                </Button>
+              </ModalFooter>
+            </Modal>
+
+            {/* end  */}
             <UncontrolledDropdown nav>
               <DropdownToggle className="pr-0" nav>
                 <Media className="align-items-center">

@@ -17,7 +17,7 @@ const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, per
   );
 };
 
-export default function BudgetChart () {
+export default function BudgetChart ({filteredData}) {
   // Aggregate budgetAllocation by sector
   const pieChartData = useMemo(() => {
     const sectorBudgetData = projectsData.reduce((acc, project) => {
