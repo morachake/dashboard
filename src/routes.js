@@ -1,12 +1,12 @@
 
 import Index from "views/Index.js";
-import Profile from "views/examples/Profile.js";
-import Register from "views/examples/Register.js";
-import Login from "views/examples/Login.js";
-import Notes from "views/examples/Notes.js";
-import Tables from "views/examples/Tables.js";
-import Departments from "views/Departments.js";
-import DataForm from "views/DataForm.js";
+import Profile from "views/admin/Profile.js";
+import Register from "views/admin/Register.js";
+import Login from "views/admin/Login.js";
+import Notes from "views/admin/Notes.js";
+import Tables from "views/admin/Tables.js";
+import Departments from "views/admin/Departments.js";
+import DataForm from "views/admin/DataForm.js";
 var routes = [
   {
     path: "/index",
