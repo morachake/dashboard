@@ -1,5 +1,6 @@
 
 // reactstrap components
+import { useAuth } from "context/AuthContext";
 import { useState } from "react";
 import {
   Button,
@@ -19,32 +20,11 @@ import {
 const Login = () => {
   const [username,setUsername] = useState("");
   const [password,setPassword] = useState("");
-  const handleLogin = async() => {
-    console.log("DETAILS",username)
-    console.log("DETAILS",password)
-    try {
-      const response = await fetch("http://127.0.0.1:5000/login", {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          username: username,
-          password: password
-        })
-      })
-      if (response.ok){
-        const data = await response.json();
-        console.log("Logon succesfully completed");
-        console.log("user data is",data);
-      } else {
-        console.log("Login failed");
-        const errorData = await response.json();
-        console.log("error data is",errorData.message);
-      }
-    } catch (error) {
-      console.log("An Error occured: " + error.message);
-    }
+  const {login} = useAuth()
+
+  const handleLogin = async () => {
+    console.log("DETAILS", username, password);
+    await login(username, password); 
   };
   return (
     <>
