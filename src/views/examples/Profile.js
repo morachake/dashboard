@@ -15,8 +15,11 @@ import {
 } from "reactstrap";
 // core components
 import UserHeader from "components/Headers/UserHeader.js";
+import { useAuth } from "context/AuthContext";
 
 const Profile = () => {
+  const {user} = useAuth()
+  console.log(user)
   return (
     <>
       <UserHeader />
@@ -57,21 +60,17 @@ const Profile = () => {
                 </Row>
                 <div className="text-center">
                   <h3>
-                    Jessica Jones
-                    <span className="font-weight-light">, 27</span>
+                    {user.username}
                   </h3>
                   <div className="h5 font-weight-300">
                     <i className="ni location_pin mr-2" />
-                    Bucharest, Romania
+                   {user.email}
                   </div>
                   <div className="h5 mt-4">
                     <i className="ni business_briefcase-24 mr-2" />
-                    Solution Manager - Creative Tim Officer
+                    {user.role}
                   </div>
-                  <hr className="my-4" />                 
-                  <a href="#pablo" onClick={(e) => e.preventDefault()}>
-                    Show more
-                  </a>
+                  <hr className="my-4" />               
                 </div>
               </CardBody>
             </Card>

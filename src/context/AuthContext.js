@@ -8,7 +8,8 @@ export const useAuth = () => useContext(AuthContext);
 export const AuthProvider = ({ children }) => {
   const navigate = useNavigate()
   const [user, setUser] = useState(() => {
-    
+    const savedUser = localStorage.getItem('user');
+    return savedUser ? JSON.parse(savedUser) : null;
   });
   const [isAuthenticated, setIsAuthenticated] = useState(
     Boolean(localStorage.getItem('authToken'))
@@ -29,6 +30,8 @@ export const AuthProvider = ({ children }) => {
         setUser(data.user);
         setIsAuthenticated(true);
         console.log("Login successfully completed", data);
+        localStorage.setItem('user', JSON.stringify(data.user)); 
+        localStorage.setItem('authToken', data.token);
         // Redirect or perform additional actions
         navigate('/admin/index')
       } else {
