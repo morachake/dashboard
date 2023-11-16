@@ -9,6 +9,7 @@ import AuthNavbar from "components/Navbars/AuthNavbar.js";
 import AuthFooter from "components/Footers/AuthFooter.js";
 
 import routes from "routes.js";
+import Login from "views/examples/Login";
 
 const Auth = (props) => {
   const mainContent = React.useRef(null);
@@ -49,8 +50,7 @@ const Auth = (props) => {
                 <Col lg="5" md="6">
                   <h1 className="text-white">Welcome!</h1>
                   <p className="text-lead text-light">
-                    Use these awesome forms to login or create new account in
-                    your project for free.
+                   Please Login Below to Proceed to
                   </p>
                 </Col>
               </Row>
@@ -75,10 +75,11 @@ const Auth = (props) => {
         {/* Page content */}
         <Container className="mt--8 pb-5">
           <Row className="justify-content-center">
-            <Routes>
-              {getRoutes(routes)}
-              <Route path="*" element={<Navigate to="/auth/login" replace />} />
-            </Routes>
+            <Login/>
+            {/* <Routes> */}
+              {/* {getRoutes(routes)}
+              <Route path="*" element={<Navigate to="/auth/login" replace />} /> */}
+            {/* </Routes> */}
           </Row>
         </Container>
       </div>

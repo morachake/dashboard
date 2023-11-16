@@ -23,13 +23,16 @@ import {
   ModalHeader,
   ModalBody,
   ModalFooter,
-  Label,
 } from "reactstrap";
+import { useAuth } from "context/AuthContext";
 
 const AdminNavbar = (props) => {
+
+
   const [modal, setModal] = useState(false);
   const [governorModal, setGovernorModal] = useState(false);
-
+  const {logout,user} = useAuth()
+  console.log(user);
   const toggle = () => setModal(!modal);
   const openModal = () => setGovernorModal(!governorModal)
   return (
@@ -137,26 +140,17 @@ const AdminNavbar = (props) => {
               </DropdownToggle>
               <DropdownMenu className="dropdown-menu-arrow" right>
                 <DropdownItem className="noti-title" header tag="div">
-                  <h6 className="text-overflow m-0">Welcome!</h6>
+                  <h6 className="text-overflow m-0">Welcome! {user?.username}</h6>
                 </DropdownItem>
                 <DropdownItem to="/admin/user-profile" tag={Link}>
                   <i className="ni ni-single-02" />
-                  <span>My profile</span>
+                  <span>My profile </span>
                 </DropdownItem>
-                <DropdownItem to="/admin/user-profile" tag={Link}>
-                  <i className="ni ni-settings-gear-65" />
-                  <span>Settings</span>
+                <DropdownItem >
+                  <i className="ni ni-notification-70" />
+                  <span>Notifications </span>
                 </DropdownItem>
-                <DropdownItem to="/admin/user-profile" tag={Link}>
-                  <i className="ni ni-calendar-grid-58" />
-                  <span>Activity</span>
-                </DropdownItem>
-                <DropdownItem to="/admin/user-profile" tag={Link}>
-                  <i className="ni ni-support-16" />
-                  <span>Support</span>
-                </DropdownItem>
-                <DropdownItem divider />
-                <DropdownItem href="#pablo" onClick={(e) => e.preventDefault()}>
+                <DropdownItem href="#pablo" onClick={logout}>
                   <i className="ni ni-user-run" />
                   <span>Logout</span>
                 </DropdownItem>

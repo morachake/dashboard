@@ -7,6 +7,9 @@ export const useAuth = () => useContext(AuthContext);
 
 export const AuthProvider = ({ children }) => {
   const navigate = useNavigate()
+  const [user, setUser] = useState(() => {
+    
+  });
   const [isAuthenticated, setIsAuthenticated] = useState(
     Boolean(localStorage.getItem('authToken'))
   );
@@ -22,9 +25,8 @@ export const AuthProvider = ({ children }) => {
       });
 
       if (response.ok) {
-        const data = await response.json();
-        // Save the token and set auth state
-        localStorage.setItem('authToken', data.token);
+        const data = await response.json();        
+        setUser(data.user);
         setIsAuthenticated(true);
         console.log("Login successfully completed", data);
         // Redirect or perform additional actions
@@ -40,6 +42,13 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const register = async (username,email,password) => {
+    try {
+      
+    } catch (error) {
+      
+    }
+  };
   const logout = () => {
     // Clear auth token and update state
     localStorage.removeItem('authToken');
@@ -47,7 +56,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, login, logout }}>
+    <AuthContext.Provider value={{user, isAuthenticated, login, logout }}>
       {children}
     </AuthContext.Provider>
   );

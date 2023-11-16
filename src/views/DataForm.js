@@ -1,11 +1,12 @@
-import Header from 'components/Headers/Header';
+
+import UserHeader from 'components/Headers/UserHeader';
 import React from 'react';
 import { Button, Container, Form, FormGroup, FormText, Input, Label } from 'reactstrap';
 
 export default function DataForm() {
     return (
         <>
-            <Header />
+            <UserHeader />
             <Container className="mt--7" fluid>
                 <Form>
                     <FormGroup>

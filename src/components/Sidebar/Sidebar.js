@@ -7,17 +7,11 @@ import { PropTypes } from "prop-types";
 
 // reactstrap components
 import {
-  Button,
-  Card,
-  CardHeader,
-  CardBody,
-  CardTitle,
   Collapse,
   DropdownMenu,
   DropdownItem,
   UncontrolledDropdown,
   DropdownToggle,
-  FormGroup,
   Form,
   Input,
   InputGroupAddon,
@@ -28,9 +22,7 @@ import {
   Navbar,
   NavItem,
   NavLink,
-  Nav,
-  Progress,
-  Table,
+  Nav, 
   Container,
   Row,
   Col,
@@ -145,18 +137,9 @@ const Sidebar = (props) => {
                 <i className="ni ni-single-02" />
                 <span>My profile</span>
               </DropdownItem>
-             
               <DropdownItem to="/admin/user-profile" tag={Link}>
                 <i className="ni ni-settings-gear-65" />
                 <span>Settings</span>
-              </DropdownItem>
-              <DropdownItem to="/admin/user-profile" tag={Link}>
-                <i className="ni ni-calendar-grid-58" />
-                <span>Activity</span>
-              </DropdownItem>
-              <DropdownItem to="/admin/user-profile" tag={Link}>
-                <i className="ni ni-support-16" />
-                <span>Support</span>
               </DropdownItem>
               <DropdownItem divider />
               <DropdownItem href="#pablo" onClick={(e) => e.preventDefault()}>
@@ -214,8 +197,6 @@ const Sidebar = (props) => {
           </Form>
           {/* Navigation */}
           <Nav navbar>{createLinks(routes)}</Nav>  
-        
-       
         </Collapse>
       </Container>
     </Navbar>

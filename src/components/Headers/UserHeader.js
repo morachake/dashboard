@@ -1,7 +1,7 @@
 
 
 // reactstrap components
-import { Button, Container, Row, Col } from "reactstrap";
+import {  Container, Row, Col } from "reactstrap";
 
 const UserHeader = () => {
   return (
@@ -11,7 +11,7 @@ const UserHeader = () => {
         style={{
           minHeight: "600px",
           backgroundImage:
-            "url(" + require("../../assets/img/theme/profile-cover.jpg") + ")",
+            "url(https://web.mombasa.go.ke/wp-content/uploads/elementor/thumbs/msa-county-pvpwt97u9pzd6lh7rs4eyuajx9c5n3tbhn01h7rg14.png)",
           backgroundSize: "cover",
           backgroundPosition: "center top",
         }}
@@ -21,18 +21,9 @@ const UserHeader = () => {
         <Container className="d-flex align-items-center" fluid>
           <Row>
             <Col lg="7" md="10">
-              <h1 className="display-2 text-white">Hello Jesse</h1>
-              <p className="text-white mt-0 mb-5">
-                This is your profile page. You can see the progress you've made
-                with your work and manage your projects or assigned tasks
-              </p>
-              <Button
-                color="info"
-                href="#pablo"
-                onClick={(e) => e.preventDefault()}
-              >
-                Edit profile
-              </Button>
+              <h1 className="text-white mt-0 mb-5">
+                WelcomeBack
+              </h1>
             </Col>
           </Row>
         </Container>
