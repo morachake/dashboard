@@ -27,11 +27,13 @@ import {
   Row,
   Col,
 } from "reactstrap";
+import { useAuth } from "context/AuthContext";
 
 var ps;
 
 const Sidebar = (props) => {
   const [collapseOpen, setCollapseOpen] = useState();
+  const {user} = useAuth()
   // verifies if routeName is the one active (in browser input)
   const activeRoute = (routeName) => {
     return props.location.pathname.indexOf(routeName) > -1 ? "active" : "";
@@ -104,34 +106,19 @@ const Sidebar = (props) => {
         {/* User */}
         <Nav className="align-items-center d-md-none">
           <UncontrolledDropdown nav>
-            <DropdownToggle nav className="nav-link-icon">
-              <i className="ni ni-bell-55" />
-            </DropdownToggle>
-            <DropdownMenu
-              aria-labelledby="navbar-default_dropdown_1"
-              className="dropdown-menu-arrow"
-              right
-            >
-              <DropdownItem>Action</DropdownItem>
-              <DropdownItem>Another action</DropdownItem>
-              <DropdownItem divider />
-              <DropdownItem>Something else here</DropdownItem>
-            </DropdownMenu>
-          </UncontrolledDropdown>
-          <UncontrolledDropdown nav>
             <DropdownToggle nav>
               <Media className="align-items-center">
                 <span className="avatar avatar-sm rounded-circle">
                   <img
                     alt="..."
-                    src={require("../../assets/img/theme/team-1-800x800.jpg")}
+                    src="https://web.mombasa.go.ke/wp-content/uploads/elementor/thumbs/msa-county-pvpwt97u9pzd6lh7rs4eyuajx9c5n3tbhn01h7rg14.png"
                   />
                 </span>
               </Media>
             </DropdownToggle>
             <DropdownMenu className="dropdown-menu-arrow" right>
               <DropdownItem className="noti-title" header tag="div">
-                <h6 className="text-overflow m-0">Welcome!</h6>
+                <h6 className="text-overflow m-0">Welcome!{user.username}</h6>
               </DropdownItem>
               <DropdownItem to="/admin/user-profile" tag={Link}>
                 <i className="ni ni-single-02" />

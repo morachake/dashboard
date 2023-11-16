@@ -51,7 +51,7 @@ const Admin = (props) => {
         routes={routes}
         logo={{
           innerLink: "/admin/index",
-          imgSrc: require("../assets/img/brand/argon-react.png"),
+          imgSrc: ("https://web.mombasa.go.ke/wp-content/uploads/elementor/thumbs/msa-county-pvpwt97u9pzd6lh7rs4eyuajx9c5n3tbhn01h7rg14.png"),
           imgAlt: "...",
         }}
       />
