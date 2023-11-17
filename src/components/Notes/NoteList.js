@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
     Card,
     CardHeader,
@@ -10,36 +10,21 @@ import {
 } from 'reactstrap';
 
 export default function NoteList() {
-    const notes = [
-        {
-            subject: "I need an update on the jomvu project",
-            details: "You can create a list of notes where the subject is clickable and expands to show more details using React's state and the Collapse component from Reactstrap. Below is an example of how you might implement this. Each note will be represented by a state object containing its subject and details, and the visibility of its details will be controlled by the state as well."
-        },
-        {
-            subject: "We need a clean bill of notes",
-            details: "You can create a list of notes where the subject is clickable and expands to show more details using React's state and the Collapse component from Reactstrap. Below is an example of how you might implement this. Each note will be represented by a state object containing its subject and details, and the visibility of its details will be controlled by the state as well."
-        },
-        {
-            subject: "Update on tax collection changes",
-             details: "You can create a list of notes where the subject is clickable and expands to show more details using React's state and the Collapse component from Reactstrap. Below is an example of how you might implement this. Each note will be represented by a state object containing its subject and details, and the visibility of its details will be controlled by the state as well."
-        },
-        {
-            subject: "Call my office todays you",
-             details: "You can create a list of notes where the subject is clickable and expands to show more details using React's state and the Collapse component from Reactstrap. Below is an example of how you might implement this. Each note will be represented by a state object containing its subject and details, and the visibility of its details will be controlled by the state as well."
-        },
-        {
-            subject: "Please contact me before theend of the week with all updates required",
-             details: "You can create a list of notes where the subject is clickable and expands to show more details using React's state and the Collapse component from Reactstrap. Below is an example of how you might implement this. Each note will be represented by a state object containing its subject and details, and the visibility of its details will be controlled by the state as well."
-        },
-    ];
+    const [notes, setNotes] = useState([]);
+    useEffect(() => {
+        fetch('http://127.0.0.1:5000/notes')
+        .then(response => response.json()) // Corrected: json is a method, so it needs to be called with ()
+        .then(data => {
+            const sortedData = data.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+            setNotes(sortedData);
+        })
+        .catch(error => console.error("An error occurred while fetching notes: ", error));
+    }, []); // Added dependency array to prevent this effect from running on every render
+
     const [openNoteIndex, setOpenNoteIndex] = useState(null);
 
     const toggleDetails = (index) => {
-        if (openNoteIndex === index) { // If the clicked note is already open, close it
-            setOpenNoteIndex(null);
-        } else {
-            setOpenNoteIndex(index); // Else, open the clicked note
-        }
+        setOpenNoteIndex(openNoteIndex === index ? null : index);
     };
 
     return (
@@ -55,18 +40,20 @@ export default function NoteList() {
             </CardHeader>
             <CardBody>
                 {notes.map((note, index) => (
-                    <div key={index}>
+                    <div key={note.id}> {/* Changed key to note.id to ensure uniqueness */}
                         <Button
                             color="link"
                             onClick={() => toggleDetails(index)}
                             style={{ marginBottom: '1rem', textDecoration: 'none' }}
                         >
-                            {note.subject}
+                            {note.body} {/* Assuming the subject is in the 'body' field */}
                         </Button>
                         <Collapse isOpen={openNoteIndex === index}>
                             <Card>
                                 <CardBody>
-                                    {note.details}
+                                    {note.body} {/* Assuming the details are in the 'body' field */}
+                                    <br />
+                                    <small>{new Date(note.timestamp).toLocaleString()}</small>
                                 </CardBody>
                             </Card>
                         </Collapse>
@@ -76,5 +63,3 @@ export default function NoteList() {
         </Card>
     );
 };
-
-
