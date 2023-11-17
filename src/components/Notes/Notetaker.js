@@ -37,7 +37,8 @@ export default function NoteTaker() {
         }
 
         const noteData = {
-            body: details // The content of the note taken from the textarea
+            body: details ,
+            subject: subject
         };
 
         // Send the POST request to create a new note with only the 'body'

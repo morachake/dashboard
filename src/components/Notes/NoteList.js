@@ -19,7 +19,7 @@ export default function NoteList() {
             setNotes(sortedData);
         })
         .catch(error => console.error("An error occurred while fetching notes: ", error));
-    }, []); // Added dependency array to prevent this effect from running on every render
+    }, []); 
 
     const [openNoteIndex, setOpenNoteIndex] = useState(null);
 
@@ -40,18 +40,18 @@ export default function NoteList() {
             </CardHeader>
             <CardBody>
                 {notes.map((note, index) => (
-                    <div key={note.id}> {/* Changed key to note.id to ensure uniqueness */}
+                    <div key={note.id}> 
                         <Button
                             color="link"
                             onClick={() => toggleDetails(index)}
                             style={{ marginBottom: '1rem', textDecoration: 'none' }}
                         >
-                            {note.body} {/* Assuming the subject is in the 'body' field */}
+                            {note.subject} 
                         </Button>
                         <Collapse isOpen={openNoteIndex === index}>
                             <Card>
                                 <CardBody>
-                                    {note.body} {/* Assuming the details are in the 'body' field */}
+                                    {note.body} 
                                     <br />
                                     <small>{new Date(note.timestamp).toLocaleString()}</small>
                                 </CardBody>
