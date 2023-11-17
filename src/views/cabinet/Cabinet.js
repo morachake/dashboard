@@ -5,8 +5,10 @@ import classnames from "classnames";
 // javascipt plugin for creating charts
 import Chart from "chart.js";
 // react plugin used to create charts
+import { Line, Bar, Pie } from "react-chartjs-2";
 // reactstrap components
 import {
+  Button,
   Card,
   CardHeader,
   CardBody,
@@ -17,8 +19,6 @@ import {
   Row,
   Col,
 } from "reactstrap";
-
-// core components
 import {
   chartOptions,
   parseOptions
@@ -31,7 +31,7 @@ import projectsData from "data/projectdata";
 import BudgetChart from "components/Dashboard/BudgetChart";
 import BudgetBars from "components/Dashboard/BudgetBars";
 
-const Index = (props) => {
+const Cabinet = (props) => {
   const [activeNav, setActiveNav] = useState(1);
   const [sectorFilter, setSectorFilter] = useState('');
   const [locationFilter, setLocationFilter] = useState('');
@@ -166,4 +166,4 @@ const Index = (props) => {
   );
 };
 
-export default Index;
+export default Cabinet;

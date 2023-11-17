@@ -1,13 +1,15 @@
 
 import Index from "views/Index.js";
 import Profile from "views/admin/Profile.js";
-import Register from "views/admin/Register.js";
-import Login from "views/admin/Login.js";
 import Notes from "views/admin/Notes.js";
 import Tables from "views/admin/Tables.js";
 import Departments from "views/admin/Departments.js";
 import DataForm from "views/admin/DataForm.js";
-var routes = [
+
+import Executive from "views/executive/Executive";
+import Cabinet from "views/cabinet/Cabinet";
+
+const adminRoutes = [
   {
     path: "/index",
     name: "Dashboard",
@@ -50,20 +52,55 @@ var routes = [
     component: <Profile />,
     layout: "/admin",
   },
+];
 
+// Executive-specific routes
+const executiveRoutes = [
+  {
+    path: "/executive",
+    name: "Executive",
+    icon: "ni ni-tv-2 text-primary",
+    component: <Executive />,
+    layout: "/executive",
+  },
   // {
-  //   path: "/login",
-  //   name: "Login",
-  //   icon: "ni ni-key-25 text-info",
-  //   component: <Login />,
-  //   layout: "/auth",
+  //   path: "/user-profile",
+  //   name: "User Profile",
+  //   icon: "ni ni-single-02 text-yellow",
+  //   component: <Profile />,
+  //   layout: "/executive",
   // },
   // {
-  //   path: "/register",
-  //   name: "Register",
-  //   icon: "ni ni-circle-08 text-pink",
-  //   component: <Register />,
-  //   layout: "/auth",
+  //   path: "/adddata",
+  //   name: "Add Data",
+  //   icon: "ni ni-tv-2 text-primary",
+  //   component: <DataForm />,
+  //   layout: "/executive",
   // },
 ];
-export default routes;
+
+// Cabinet-specific routes
+const cabinetRoutes = [
+  {
+    path: "/cabinet",
+    name: "Cabinet",
+    icon: "ni ni-tv-2 text-primary",
+    component: <Cabinet />,
+    layout: "/cabinet",
+  },
+  // {
+  //   path: "/user-profile",
+  //   name: "User Profile",
+  //   icon: "ni ni-single-02 text-yellow",
+  //   component: <Profile />,
+  //   layout: "/cabinet",
+  // },
+  // {
+  //   path: "/adddata",
+  //   name: "Add Data",
+  //   icon: "ni ni-tv-2 text-primary",
+  //   component: <DataForm />,
+  //   layout: "/cabinet",
+  // },
+];
+export   { adminRoutes, executiveRoutes, cabinetRoutes };

@@ -8,9 +8,9 @@ import AdminNavbar from "components/Navbars/AdminNavbar.js";
 import AdminFooter from "components/Footers/AdminFooter.js";
 import Sidebar from "components/Sidebar/Sidebar.js";
 
-import {adminRoutes} from "../routes/routes";
+import {cabinetRoutes} from "../routes/routes";
 
-const Admin = (props) => {
+const CabinetLayout = (props) => {
   const mainContent = React.useRef(null);
   const location = useLocation();
 
@@ -22,7 +22,7 @@ const Admin = (props) => {
 
   const getRoutes = (routes) => {
     return routes.map((prop, key) => {
-      if (prop.layout === "/admin") {
+      if (prop.layout === "/cabinet") {
         return (
           <Route path={prop.path} element={prop.component} key={key} exact />
         );
@@ -33,12 +33,12 @@ const Admin = (props) => {
   };
 
   const getBrandText = (path) => {
-    for (let i = 0; i < adminRoutes.length; i++) {
+    for (let i = 0; i < cabinetRoutes.length; i++) {
       if (
-        props?.location?.pathname.indexOf(adminRoutes[i].layout + adminRoutes[i].path) !==
+        props?.location?.pathname.indexOf(cabinetRoutes[i].layout + cabinetRoutes[i].path) !==
         -1
       ) {
-        return adminRoutes[i].name;
+        return cabinetRoutes[i].name;
       }
     }
     return "Brand";
@@ -48,9 +48,9 @@ const Admin = (props) => {
     <>
       <Sidebar
         {...props}
-        routes={adminRoutes}
+        routes={cabinetRoutes}
         logo={{
-          innerLink: "/admin/index",
+          innerLink: "/cabinet/index",
           imgSrc: ("https://web.mombasa.go.ke/wp-content/uploads/elementor/thumbs/msa-county-pvpwt97u9pzd6lh7rs4eyuajx9c5n3tbhn01h7rg14.png"),
           imgAlt: "...",
         }}
@@ -60,10 +60,10 @@ const Admin = (props) => {
           {...props}
           brandText={getBrandText(props?.location?.pathname)}
         />
-        <Routes>
-          {getRoutes(adminRoutes)}
-          <Route path="*" element={<Navigate to="/admin/index" replace />} />
-        </Routes>
+        {/* <Routes>
+          {getRoutes(cabinetRoutes)}
+          <Route path="*" element={<Navigate to="/cabinet" replace />} />
+        </Routes> */}
         <Container fluid>
           <AdminFooter />
         </Container>
@@ -72,4 +72,4 @@ const Admin = (props) => {
   );
 };
 
-export default Admin;
+export default CabinetLayout;

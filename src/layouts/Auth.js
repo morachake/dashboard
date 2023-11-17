@@ -8,7 +8,6 @@ import { Container, Row, Col } from "reactstrap";
 import AuthNavbar from "components/Navbars/AuthNavbar.js";
 import AuthFooter from "components/Footers/AuthFooter.js";
 
-import routes from "../routes/routes";
 import Login from "views/admin/Login";
 
 const Auth = (props) => {
@@ -27,17 +26,7 @@ const Auth = (props) => {
     mainContent.current.scrollTop = 0;
   }, [location]);
 
-  const getRoutes = (routes) => {
-    return routes.map((prop, key) => {
-      if (prop.layout === "/auth") {
-        return (
-          <Route path={prop.path} element={prop.component} key={key} exact />
-        );
-      } else {
-        return null;
-      }
-    });
-  };
+ 
 
   return (
     <>
@@ -76,10 +65,6 @@ const Auth = (props) => {
         <Container className="mt--8 pb-5">
           <Row className="justify-content-center">
             <Login/>
-            {/* <Routes> */}
-              {/* {getRoutes(routes)}
-              <Route path="*" element={<Navigate to="/auth/login" replace />} /> */}
-            {/* </Routes> */}
           </Row>
         </Container>
       </div>

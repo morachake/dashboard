@@ -11,21 +11,34 @@ import AdminLayout from "layouts/Admin.js";
 import AuthLayout from "layouts/Auth.js";
 import { AuthProvider } from "context/AuthContext";
 import ProtectedRoute from "context/ProtectedRoutes";
+import ExLayout from "layouts/ExLayout";
+import CabinetLayout from "layouts/CabinetLayout ";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
 root.render(
   <BrowserRouter>
-    <AuthProvider>
-      <Routes>
-        <Route path="/admin/*" element={
-          <ProtectedRoute>
-             <AdminLayout />
-          </ProtectedRoute>       
-        } />
-        <Route path="/auth/*" element={<AuthLayout />} />
-        <Route path="*" element={<Navigate to="/admin/index" replace />} />
-      </Routes>
-    </AuthProvider>
-  </BrowserRouter>
+  <AuthProvider>
+    <Routes>
+       {/* <Route path="/admin/*" element={
+        <ProtectedRoute userType="admin">
+         <AdminLayout />
+        </ProtectedRoute>       
+      } /> */}
+      {/* <Route path="/executive/*" element={
+        <ProtectedRoute >
+          <ExLayout />
+        </ProtectedRoute>       
+      } /> */}
+      <Route path="/cabinet/*" element={
+        <ProtectedRoute >
+          <CabinetLayout />
+        </ProtectedRoute>       
+      } />
+     
+      <Route path="/auth/*" element={<AuthLayout />} />
+      <Route path="*" element={<Navigate to="/auth/login" replace />} />
+    </Routes>
+  </AuthProvider>
+</BrowserRouter>
 );

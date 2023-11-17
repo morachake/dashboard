@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { 
-  Card, CardHeader, CardBody, FormGroup, Input, Label, Button, Alert 
+  Card, CardHeader, CardBody, FormGroup, Input, Label, Button, Alert, Row 
 } from 'reactstrap';
 
 export default function NoteTaker() {
@@ -70,6 +70,14 @@ export default function NoteTaker() {
                 </h6>
             </CardHeader>
             <CardBody>
+                <FormGroup>
+                    <Row>
+                        <Label>Asssigned To(optional)</Label>
+                        <Input 
+                            type='select'
+                        />
+                    </Row>
+                </FormGroup>
                 {errors.subject && <Alert color="danger">{errors.subject}</Alert>}
                 <FormGroup>
                     <Label for="noteSubject">Subject</Label>
