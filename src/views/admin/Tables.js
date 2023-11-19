@@ -1,61 +1,111 @@
+// Import required components and hooks from 'react-data-grid' and other necessary libraries
+import DataGrid from 'react-data-grid';
+import { useState } from 'react';
+import { Card, CardFooter, CardHeader, Container, Row, Button } from 'reactstrap';
+import Header from 'components/Headers/Header';
+import projectsData from 'data/projectdata';
+import { saveAs } from 'file-saver';
+import html2canvas from 'html2canvas';
+import { jsPDF } from 'jspdf';
 
-// reactstrap components
-import {
-  Card,
-  CardHeader,
-  CardFooter,
-  Pagination,
-  PaginationItem,
-  PaginationLink,
-  Table,
-  Container,
-  Row,
-} from "reactstrap";
-// core components
-import Header from "components/Headers/Header.js";
-import projectsData from "data/projectdata";
+// Define a function to convert the data to CSV
+const downloadCSV = (arrayOfObjects) => {
+  const replacer = (key, value) => (value === null ? '' : value); 
+  const header = Object.keys(arrayOfObjects[0]);
+  const csv = [
+    header.join(','), 
+    ...arrayOfObjects.map(row => header.map(fieldName => JSON.stringify(row[fieldName], replacer)).join(','))
+  ].join('\r\n');
 
-
+  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+  saveAs(blob, 'projectsData.csv');
+};
+const downloadPDF = async (htmlElement) => {
+  const canvas = await html2canvas(htmlElement);
+  const imgData = canvas.toDataURL('image/png');
+  const pdf = new jsPDF({
+    orientation: 'landscape',
+  });
+  pdf.addImage(imgData, 'PNG', 0, 0);
+  pdf.save('projectsData.pdf');
+};
 
 const Tables = () => {
+  const [pageSize, setPageSize] = useState(15);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [rows, setRows] = useState(projectsData); // You should maintain rows state for sorting to work properly
+
+  // Define your columns with sortable set to true and editor to TextEditor
+ // Define your columns to include all properties from your data
+const columns = [
+  { key: 'sector', name: 'Sector', sortable: true },
+  { key: 'projectName', name: 'Project Name', sortable: true },
+  { key: 'location', name: 'Location', sortable: true },
+  { key: 'contractSum', name: 'Contract Sum', sortable: true },
+  { key: 'budgetAllocation', name: 'Budget Allocation', sortable: true },
+  { key: 'amountPaid', name: 'Amount Paid', sortable: true },
+  { key: 'contractVariation', name: 'Contract Variation', sortable: true },
+  { key: 'implementationStatus', name: 'Implementation Status', sortable: true },
+  { key: 'sourceOfFunding', name: 'Source of Funding', sortable: true },
+  { key: 'remarks', name: 'Remarks', sortable: true },
+];
+
+  // Handler for sort events
+  const onSort = (columnKey, direction) => {
+    const comparator = (a, b) => {
+      if (a[columnKey] === b[columnKey]) return 0;
+      if (direction === 'ASC') {
+        return a[columnKey] > b[columnKey] ? 1 : -1;
+      } else {
+        return a[columnKey] < b[columnKey] ? 1 : -1;
+      }
+    };
+    const sortedRows = [...rows].sort(comparator);
+    setRows(sortedRows);
+  };
+
+  // Handler for page changes
+  const onPageChange = (page) => {
+    setCurrentPage(page);
+  };
+// Use the complete projectsData as rows for the DataGrid
+
+
+  // Calculate the rows to be displayed on the current page
+  const paginatedRows = rows.slice((currentPage - 1) * pageSize, currentPage * pageSize);
+
   return (
     <>
       <Header />
-      {/* Page content */}
       <Container className="mt--7" fluid>
-        {/* Table */}
         <Row>
           <div className="col">
             <Card className="shadow">
               <CardHeader className="border-0">
-                <h3 className="mb-0">Tables</h3>
+                <Button color="primary" onClick={() => downloadCSV(rows)}>Export to CSV</Button>
+                <Button color="primary" onClick={() => {
+                  const gridElement = document.getElementById('grid'); 
+                  downloadPDF(gridElement);
+                }}>Export to PDF</Button>
               </CardHeader>
-              <Table className="align-items-center table-flush" responsive>
-                <thead className="thead-light">
-                  <tr>
-                    <th scope="col">Sector</th>
-                    <th scope="col">Project Name</th>
-                    <th scope="col">Location</th>
-                    <th scope="col">Budget Allocation</th>
-                    <th scope="col">Source of Funding</th>
-                    <th scope="col" />
-                  </tr>
-                </thead>
-                <tbody>
-                  {projectsData.map((project, index) => (
-                    <tr key={index}>
-                      <th scope="row">{project.sector}</th>
-                      <td>{project.projectName.slice(0, 15)}...</td> 
-                      <td>{project.location}</td>
-                      <td>{project.budgetAllocation}</td>
-                      <td>{project.sourceOfFunding}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </Table>
-              {/* Pagination remains unchanged */}
+              <div id="grid"> 
+              <DataGrid
+                className="light-background"
+                columns={columns}
+                rows={paginatedRows}
+                onSort={onSort}
+                sortColumn="sector"
+                sortDirection="NONE"
+              />
+              </div>
               <CardFooter className="py-4">
-                {/* ... */}
+                {/* Basic Pagination Control */}
+                <Button onClick={() => onPageChange(currentPage - 1)} disabled={currentPage === 1}>
+                  Previous
+                </Button>
+                <Button onClick={() => onPageChange(currentPage + 1)} disabled={currentPage * pageSize >= rows.length}>
+                  Next
+                </Button>
               </CardFooter>
             </Card>
           </div>
@@ -64,96 +114,5 @@ const Tables = () => {
     </>
   );
 };
-
-
-// const Tables = () => {
-//   return (
-//     <>
-//       <Header />
-//       {/* Page content */}
-//       <Container className="mt--7" fluid>
-//         {/* Table */}
-//         <Row>
-//           <div className="col">
-//             <Card className="shadow">
-//               <CardHeader className="border-0">
-//                 <h3 className="mb-0">Card tables</h3>
-//               </CardHeader>
-//               <Table className="align-items-center table-flush" responsive>
-//                 <thead className="thead-light">
-//                   <tr>
-//                     <th scope="col">Project</th>
-//                     <th scope="col">Budget</th>
-//                     <th scope="col">Status</th>
-//                     <th scope="col">Users</th>
-//                     <th scope="col">Completion</th>
-//                     <th scope="col" />
-//                   </tr>
-//                 </thead>
-//                 <tbody>
-//                     <tr>
-//                       <td>Home</td>
-//                     </tr>
-//                 </tbody>
-//               </Table>
-//               <CardFooter className="py-4">
-//                 <nav aria-label="...">
-//                   <Pagination
-//                     className="pagination justify-content-end mb-0"
-//                     listClassName="justify-content-end mb-0"
-//                   >
-//                     <PaginationItem className="disabled">
-//                       <PaginationLink
-//                         href="#pablo"
-//                         onClick={(e) => e.preventDefault()}
-//                         tabIndex="-1"
-//                       >
-//                         <i className="fas fa-angle-left" />
-//                         <span className="sr-only">Previous</span>
-//                       </PaginationLink>
-//                     </PaginationItem>
-//                     <PaginationItem className="active">
-//                       <PaginationLink
-//                         href="#pablo"
-//                         onClick={(e) => e.preventDefault()}
-//                       >
-//                         1
-//                       </PaginationLink>
-//                     </PaginationItem>
-//                     <PaginationItem>
-//                       <PaginationLink
-//                         href="#pablo"
-//                         onClick={(e) => e.preventDefault()}
-//                       >
-//                         2 <span className="sr-only">(current)</span>
-//                       </PaginationLink>
-//                     </PaginationItem>
-//                     <PaginationItem>
-//                       <PaginationLink
-//                         href="#pablo"
-//                         onClick={(e) => e.preventDefault()}
-//                       >
-//                         3
-//                       </PaginationLink>
-//                     </PaginationItem>
-//                     <PaginationItem>
-//                       <PaginationLink
-//                         href="#pablo"
-//                         onClick={(e) => e.preventDefault()}
-//                       >
-//                         <i className="fas fa-angle-right" />
-//                         <span className="sr-only">Next</span>
-//                       </PaginationLink>
-//                     </PaginationItem>
-//                   </Pagination>
-//                 </nav>
-//               </CardFooter>
-//             </Card>
-//           </div>
-//         </Row>
-//       </Container>
-//     </>
-//   );
-// };
 
 export default Tables;
