@@ -1,70 +1,76 @@
 import React, { useState, useEffect } from 'react';
-import {
-  Button,
-  CardHeader,
-  CardBody,
-  Table,
-  Row,
-} from "reactstrap";
+import { DataTable } from 'primereact/datatable';
+import { Column } from 'primereact/column';
+import { InputText } from 'primereact/inputtext';
+import { Dropdown } from 'primereact/dropdown';
+import { Tag } from 'primereact/tag';
+import projectsData from '../../data/projectdata'; // Adjust the import path as needed
 
 export default function ProjectsTable() {
-  const [projectsData, setProjectsData] = useState([]);
+    const [projects, setProjects] = useState(null);
+    const [globalFilterValue, setGlobalFilterValue] = useState('');
+    const [statuses] = useState(['Stalled', 'Complete', 'Incomplete', 'Cancelled']);
 
-  useEffect(() => {
-    // Fetch data from the endpoint when the component mounts
-    fetch('http://127.0.0.1:5000/forms')
-      .then(response => response.json())
-      .then(data => setProjectsData(data))
-      .catch(error => console.error('Error fetching data:', error));
-  }, []);  // The empty dependency array ensures the effect runs only once when the component mounts
+    useEffect(() => {
+        setProjects(projectsData);
+    }, []); // Empty dependency array to mimic componentDidMount behavior
 
-  const tableRows = projectsData.map(project => (
-    <tr key={project.id}>
-      <td>{project.amount_certified}</td>
-      <td>{project.contract_sum}</td>
-      <td>{project.contractor_details}</td>
-      <td>{project.project_name}</td>
-      <td>{project.status}</td>
-      <td>{project.time_frame}</td>
-    </tr>
-  ));
+    const onGlobalFilterChange = (e) => {
+        const value = e.target.value;
+        setGlobalFilterValue(value);
+    };
 
-  return (
-    <>
-      <CardBody className="shadow">
-        <CardHeader className="border-0">
-          <Row className="align-items-center">
-            <div className="col">
-              <h3 className="mb-0">Project Details</h3>
+    const renderHeader = () => {
+        return (
+            <div className="flex justify-content-end">
+                <span className="p-input-icon-left">
+                    <i className="pi pi-search" />
+                    <InputText value={globalFilterValue} onChange={onGlobalFilterChange} placeholder="Keyword Search" />
+                </span>
             </div>
-            <div className="col text-right">
-              <Button
-                color="primary"
-                href="#pablo"
-                onClick={(e) => e.preventDefault()}
-                size="sm"
-              >
-                See all
-              </Button>
-            </div>
-          </Row>
-        </CardHeader>
-        <Table className="align-items-center table-flush" responsive>
-          <thead className="thead-light">
-            <tr>
-              <th scope="col">Amount</th>
-              <th scope="col">Contract Sum</th>
-              <th scope="col">Contractor</th>
-              <th scope="col">Project Name</th>
-              <th scope="col">Status</th>
-              <th scope="col">Time Frame</th>
-            </tr>
-          </thead>
-          <tbody>
-            {tableRows}
-          </tbody>
-        </Table>
-      </CardBody>
-    </>
-  );
+        );
+    };
+
+    const statusBodyTemplate = (rowData) => {
+        return <Tag value={rowData.status} severity={getSeverity(rowData.status)} />;
+    };
+
+    const getSeverity = (status) => {
+        switch (status) {
+            case 'Cancelled':
+                return 'danger';
+            case 'Complete':
+                return 'success';
+            case 'Stalled':
+                return 'warning';
+            case 'Incomplete':
+                return 'info';
+            default:
+                return 'secondary';
+        }
+    };
+
+    const statusRowFilterTemplate = (options) => {
+        return (
+            <Dropdown value={options.value} options={statuses} onChange={(e) => options.filterApplyCallback(e.value)} placeholder="Select a Status" className="p-column-filter" showClear />
+        );
+    };
+
+    const header = renderHeader();
+
+    return (
+        <div className="card">
+            <DataTable value={projects} paginator rows={10} dataKey="id" globalFilter={globalFilterValue} header={header} emptyMessage="No projects found.">
+                <Column field="sector" header="Sector" filter filterPlaceholder="Search by sector" />
+                <Column field="projectName" header="Project Name" filter filterPlaceholder="Search by name" />
+                <Column field="location" header="Location" filter filterPlaceholder="Search by location" />
+                <Column field="budgetAllocation" header="Budget Allocation" />
+                <Column field="sourceOfFunding" header="Source of Funding" />
+                <Column field="status" header="Status" showFilterMenu={true} filterMenuStyle={{ width: '14rem' }} style={{ minWidth: '12rem' }} body={statusBodyTemplate} filter filterElement={statusRowFilterTemplate} />
+                {/* <Column field="status" header="Status" body={statusBodyTemplate} filter filterElement={statusRowFilterTemplate} /> */}
+                {/* <Column field="remarks" header="Remarks" /> */}
+                {/* Add more columns as needed */}
+            </DataTable>
+        </div>
+    );
 }

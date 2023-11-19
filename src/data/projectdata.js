@@ -9,6 +9,7 @@ const projectsData = [
       contractVariation: null,
       implementationStatus: null,
       sourceOfFunding: 'GoK',
+      status:"Cancelled",
       remarks: null
     },
     {
@@ -21,6 +22,7 @@ const projectsData = [
         contractVariation: null,
         implementationStatus: null,
         sourceOfFunding: 'GoK',
+        status:"Cancelled",
         remarks: null
       },
       {
@@ -33,6 +35,7 @@ const projectsData = [
         contractVariation: null,
         implementationStatus: null,
         sourceOfFunding: 'GoK',
+        status:"Stalled",
         remarks: null
       },
       {
@@ -45,6 +48,7 @@ const projectsData = [
         contractVariation: null,
         implementationStatus: null,
         sourceOfFunding: 'GoK',
+        status:"Incomplete",
         remarks: null
       },
       {
@@ -57,6 +61,7 @@ const projectsData = [
         contractVariation: null,
         implementationStatus: null,
         sourceOfFunding: 'GoK',
+        status:"complete",
         remarks: null
       },
       {
@@ -68,6 +73,7 @@ const projectsData = [
         amountPaid: null,
         contractVariation: null,
         implementationStatus: null,
+        status:"Incomplete",
         sourceOfFunding: 'GoK',
         remarks: null
       }
