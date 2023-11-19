@@ -4,20 +4,31 @@ import { Column } from 'primereact/column';
 import { InputText } from 'primereact/inputtext';
 import { Dropdown } from 'primereact/dropdown';
 import { Tag } from 'primereact/tag';
-import projectsData from '../../data/projectdata'; // Adjust the import path as needed
+import { FilterMatchMode } from 'primereact/api';
 
 export default function ProjectsTable() {
     const [projects, setProjects] = useState(null);
     const [globalFilterValue, setGlobalFilterValue] = useState('');
     const [statuses] = useState(['Stalled', 'Complete', 'Incomplete', 'Cancelled']);
-
+    const [filters, setFilters] = useState({
+        global: { value: '', matchMode: FilterMatchMode.CONTAINS },
+        // ... other filters
+    });
     useEffect(() => {
-        setProjects(projectsData);
-    }, []); // Empty dependency array to mimic componentDidMount behavior
+        fetch('http://127.0.0.1:5000/forms')
+            .then(response => response.json())
+            .then(data => setProjects(data))
+            .catch(error => console.error('Error fetching data:', error));
+    }, []);
 
     const onGlobalFilterChange = (e) => {
-        const value = e.target.value;
+        const value = e.target.value || '';
         setGlobalFilterValue(value);
+
+        setFilters(prevFilters => ({
+            ...prevFilters,
+            global: { ...prevFilters.global, value: value }
+        }));
     };
 
     const renderHeader = () => {
@@ -60,16 +71,19 @@ export default function ProjectsTable() {
 
     return (
         <div className="card">
-            <DataTable value={projects} paginator rows={10} dataKey="id" globalFilter={globalFilterValue} header={header} emptyMessage="No projects found.">
-                <Column field="sector" header="Sector" filter filterPlaceholder="Search by sector" />
-                <Column field="projectName" header="Project Name" filter filterPlaceholder="Search by name" />
-                <Column field="location" header="Location" filter filterPlaceholder="Search by location" />
-                <Column field="budgetAllocation" header="Budget Allocation" />
-                <Column field="sourceOfFunding" header="Source of Funding" />
-                <Column field="status" header="Status" showFilterMenu={true} filterMenuStyle={{ width: '14rem' }} style={{ minWidth: '12rem' }} body={statusBodyTemplate} filter filterElement={statusRowFilterTemplate} />
-                {/* <Column field="status" header="Status" body={statusBodyTemplate} filter filterElement={statusRowFilterTemplate} /> */}
+            <DataTable value={projects} paginator rows={10} dataKey="user_id" globalFilter={globalFilterValue} header={header} emptyMessage="No projects found.">
+                <Column field="project_name" header="Project Name" filter filterPlaceholder="Search by name" />
+                <Column field="subcounty" header="Subcounty" filter filterPlaceholder="Search by subcounty" />
+                <Column field="ward" header="Ward" filter filterPlaceholder="Search by ward" />
+                {/* <Column field="description" header="Description" /> */}
+                <Column field="contract_sum" header="Contract Sum" />
+                <Column field="contractor_details" header="Contractor Details" />
+                <Column field="certificate_number" header="Certificate Number" />
+                <Column field="amount_certified" header="Amount Certified" />
+                <Column field="status" header="Status" body={statusBodyTemplate} filter filterElement={statusRowFilterTemplate} />
                 {/* <Column field="remarks" header="Remarks" /> */}
-                {/* Add more columns as needed */}
+                {/* <Column field="recommendations" header="Recommendations" /> */}
+                {/* You may add more columns as needed */}
             </DataTable>
         </div>
     );

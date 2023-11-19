@@ -15,70 +15,73 @@ export default function InputForm() {
     const { user } = useAuth();
     const [selectedSubCounty, setSelectedSubCounty] = useState('');
     const [wards, setWards] = useState([]);
-    const [fileData, setFileData] = useState({
-        before_images : null,
-        after_images : null
-    })
     const [formData, setFormData] = useState({
         project_name: '',
+        user_id: user.id,
         subcounty: '',
         ward: '',
         description: '',
         contract_sum: '',
         time_frame: '',
         contractor_details: '',
+        certificate_number: '',
+        amount_certified: '',
         status: '',
         remarks: '',
         recommendations: '',
-        // Images will be handled separately since they are files
+        before_images_url: 'http://example.com/images/before_dummy.jpg', // Dummy URL for prefilling
+        after_images_url: 'http://example.com/images/after_dummy.jpg', // Dummy URL for prefilling
     });
-
     const handleSubCountyChange = (event) => {
         const subCounty = event.target.value;
         setSelectedSubCounty(subCounty);
         setWards(subCountyWards[subCounty] || []);
         setFormData({ ...formData, subcounty: subCounty });
     };
-
+   
     const handleWardChange = (event) => {
         setFormData({ ...formData, ward: event.target.value });
     };
 
-    const handleInputChange = (event) => {
-        const { name, type, files, value } = event.target;
-        if (type !== 'file') {
-            setFormData({ ...formData, [name]: value });
-        } else {
-            // Store the File object directly
-            setFileData({ ...fileData, [name]: files[0] });  // Assuming single file upload
-        }
-    };
     
     const handleSubmit = (event) => {
         event.preventDefault();
         saveData();
     };
 
+    const handleInputChange = (event) => {
+        const { name, value } = event.target;
+        setFormData({ ...formData, [name]: value });
+    };
+    
+    const handleFileChange = (event) => {
+        setFormData({ ...formData, [event.target.name]: event.target.files });
+    };
+    
+
     const saveData = () => {
-        const postData = new FormData();
-        Object.entries(formData).forEach(([key, value]) => {
-            postData.append(key, value);
-        });
+        // Assuming you've uploaded the files elsewhere and have their URLs, 
+        // you will include those URLs in the JSON payload
+        const jsonPayload = {
+            ...formData,
+            before_images_url: 'http://example.com/images/before.jpg',
+            after_images_url: 'http://example.com/images/before.jpg',
+            user_id: user.id // Assuming 'user' object has an 'id' field
+        };
     
-        // Append file data to the FormData if files are present
-        if (fileData.before_images) {
-            postData.append('before_images', fileData.before_images);
-        }
-        if (fileData.after_images) {
-            postData.append('after_images', fileData.after_images);
-        }
-    
-        // Remove content-type header so that browser sets it with the boundary
-        fetch('http://127.0.0.1:5000/forms', {
+        fetch('http://127.0.0.1:5000/form', {
             method: 'POST',
-            body: postData  // No headers field, let the browser set the Content-Type
+            body: JSON.stringify(jsonPayload),
+            headers: {
+                'Content-Type': 'application/json' // Indicate that you're sending a JSON payload
+            }
         })
-        .then(response => response.json())
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+        })
         .then(data => {
             console.log("Successfully submitted", data);
             // Handle success
@@ -245,7 +248,7 @@ export default function InputForm() {
                         id="beforeImages"
                         name="before_images"
                         type="file"
-                        onChange={handleInputChange}
+                        onChange={handleFileChange}
                         multiple
                     />
                 </FormGroup>
@@ -255,7 +258,7 @@ export default function InputForm() {
                         id="afterImages"
                         name="after_images"
                         type="file"
-                        onChange={handleInputChange}
+                        onChange={handleFileChange}
                         multiple
                     />
                 </FormGroup>
