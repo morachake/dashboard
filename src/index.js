@@ -20,21 +20,21 @@ root.render(
   <BrowserRouter>
   <AuthProvider>
     <Routes>
-       {/* <Route path="/admin/*" element={
+       <Route path="/admin/*" element={
         <ProtectedRoute userType="admin">
          <AdminLayout />
         </ProtectedRoute>       
-      } /> */}
+      } />
       {/* <Route path="/executive/*" element={
         <ProtectedRoute >
           <ExLayout />
         </ProtectedRoute>       
       } /> */}
-      <Route path="/cabinet/*" element={
-        <ProtectedRoute >
+      {/* <Route path="/cabinet/*" element={
+        <ProtectedRoute userType="cs">
           <CabinetLayout />
         </ProtectedRoute>       
-      } />
+      } /> */}
      
       <Route path="/auth/*" element={<AuthLayout />} />
       <Route path="*" element={<Navigate to="/auth/login" replace />} />
