@@ -1,0 +1,45 @@
+.notification-modal {
+    max-width: 360px; /* Set a max-width for the modal */
+    position: fixed;
+    top: 20px; /* Position from the top */
+    right: 20px; /* Position from the right */
+    border-radius: 8px; /* Rounded corners */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+    overflow: hidden; /* Ensures the border radius applies to children elements */
+  }
+  
+  .notification-button {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1030; /* Above other page elements */
+  }
+  
+  .notification-item {
+    padding: 10px 15px;
+    border-bottom: 1px solid #eaecef; /* Border for each message */
+    background-color: #ffffff; /* You can set a background color for each message */
+    transition: background-color 0.3s; /* Transition for hover effect */
+  }
+  
+  .notification-item:hover {
+    background-color: #f6f8fa; /* Slightly different color on hover */
+  }
+  
+  .notification-item:last-child {
+    border-bottom: none; /* Remove the border for the last item */
+  }
+  
+  .notification-modal .modal-header,
+  .notification-modal .modal-footer {
+    border-bottom: 1px solid #eaecef; /* Add border to header and footer for separation */
+    background-color: #f7f7f7; /* Different background for header and footer */
+    padding: 10px 20px;
+  }
+  
+  .notification-modal .modal-body {
+    padding: 0; /* Remove padding to allow full-width message items */
+    max-height: calc(100vh - 210px); /* Height management for overflow */
+    overflow-y: auto; /* Scroll for overflow content */
+  }
+  
