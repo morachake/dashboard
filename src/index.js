@@ -26,7 +26,7 @@ root.render(
   <AuthProvider>
     <Routes>
        <Route path="/admin/*" element={
-        <ProtectedRoute userType="admin">
+        <ProtectedRoute >
          <AdminLayout />
         </ProtectedRoute>       
       } />

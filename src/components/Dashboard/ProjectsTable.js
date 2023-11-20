@@ -15,7 +15,7 @@ export default function ProjectsTable() {
         // ... other filters
     });
     useEffect(() => {
-        fetch('http://127.0.0.1:5000/form')
+        fetch('http://127.0.0.1:5000/forms')
             .then(response => response.json())
             .then(data => setProjects(data))
             .catch(error => console.error('Error fetching data:', error));
@@ -71,7 +71,7 @@ export default function ProjectsTable() {
 
     return (
         <div className="card">
-            <DataTable value={projects} paginator rows={10} dataKey="user_id" globalFilter={globalFilterValue} header={header} emptyMessage="No projects found.">
+            <DataTable value={projects} paginator rows={10} dataKey="id" globalFilter={globalFilterValue} header={header} emptyMessage="No projects found.">
                 <Column field="project_name" header="Project Name" filter filterPlaceholder="Search by name" />
                 <Column field="subcounty" header="Subcounty" filter filterPlaceholder="Search by subcounty" />
                 <Column field="ward" header="Ward" filter filterPlaceholder="Search by ward" />
