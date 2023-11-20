@@ -26,9 +26,7 @@ import {
 
 import Header from "components/Headers/Header.js";
 import ProjectsTable from "components/Dashboard/ProjectsTable";
-import Departments from "components/Dashboard/Departments";
 import projectsData from "data/projectdata";
-import BudgetChart from "components/Dashboard/BudgetChart";
 import BudgetBars from "components/Dashboard/BudgetBars";
 
 const Index = (props) => {
@@ -83,7 +81,7 @@ const Index = (props) => {
       {/* Page content */}
       <Container className="mt--7" fluid>
         <Row>
-          <Col className="mb-5 mb-xl-0" xl="8">
+          <Col className="mb-5 mb-xl-0" xl="12">
             <Card className="bg-gradient-default shadow">
               <CardHeader className="bg-transparent">
                 <Row className="align-items-center">
@@ -134,32 +132,12 @@ const Index = (props) => {
               </CardBody>
             </Card>
           </Col>
-          <Col xl="4">
-            <Card className="shadow">
-              <CardHeader className="bg-transparent">
-                <Row className="align-items-center">
-                  <div className="col">
-                    <h6 className="text-uppercase text-muted ls-1 mb-1">
-                      Performance
-                    </h6>
-                  </div>
-                </Row>
-              </CardHeader>
-              <CardBody>
-                <div className="chart">
-                  <BudgetChart projectsData={filteredData}/>
-                </div>
-              </CardBody>
-            </Card>
-          </Col>
+         
         </Row>
         <Row className="mt-5">
-          {/* <Col className="mb-5 mb-xl-0" xl="8"> */}
+          <Col className="mb-5 mb-xl-0" xl="12">
             <ProjectsTable/>
-          {/* </Col> */}
-          {/* <Col xl="4">
-            <Departments/>
-          </Col> */}
+          </Col>
         </Row>
       </Container>
     </>

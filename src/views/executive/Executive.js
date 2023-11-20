@@ -28,7 +28,6 @@ import {
 
 import Header from "components/Headers/Header.js";
 import ProjectsTable from "components/Dashboard/ProjectsTable";
-import Departments from "components/Dashboard/Departments";
 import projectsData from "data/projectdata";
 import BudgetChart from "components/Dashboard/BudgetChart";
 import BudgetBars from "components/Dashboard/BudgetBars";
@@ -160,7 +159,7 @@ const Executive = (props) => {
             <ProjectsTable/>
           </Col>
           <Col xl="4">
-            <Departments/>
+            
           </Col>
         </Row>
       </Container>

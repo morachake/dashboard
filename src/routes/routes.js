@@ -3,7 +3,7 @@ import Index from "views/Index.js";
 import Profile from "views/admin/Profile.js";
 import Notes from "views/admin/Notes.js";
 import Tables from "views/admin/Tables.js";
-import Departments from "views/admin/Departments.js";
+import Messaging from "views/admin/Messaging.js";
 import DataForm from "views/admin/DataForm.js";
 
 import Executive from "views/executive/Executive";
@@ -32,10 +32,10 @@ const adminRoutes = [
     layout: "/admin",
   },
   {
-    path: "/departments",
-    name: "Departments",
+    path: "/Messaging",
+    name: "Messages",
     icon: "ni ni-planet text-blue",
-    component: <Departments />,
+    component: <Messaging />,
     layout: "/admin",
   },
   {

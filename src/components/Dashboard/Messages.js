@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button, Card, CardHeader, Progress, Row, Table } from 'reactstrap';
 
-export default function Departments() {
+export default function Messages() {
   return (
     <>
         <Card className="shadow">

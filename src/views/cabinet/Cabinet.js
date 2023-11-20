@@ -26,7 +26,7 @@ import {
 
 import Header from "components/Headers/Header.js";
 import ProjectsTable from "components/Dashboard/ProjectsTable";
-import Departments from "components/Dashboard/Departments";
+// import Departments from "components/Dashboard/Departments";
 import projectsData from "data/projectdata";
 import BudgetChart from "components/Dashboard/BudgetChart";
 import BudgetBars from "components/Dashboard/BudgetBars";
@@ -157,9 +157,7 @@ const Cabinet = (props) => {
           <Col className="mb-5 mb-xl-0" xl="8">
             <ProjectsTable/>
           </Col>
-          <Col xl="4">
-            <Departments/>
-          </Col>
+       
         </Row>
       </Container>
     </>
