@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { 
-  Card, CardHeader, CardBody, FormGroup, Input, Label, Button, Alert, Row 
+import {
+    Card, CardHeader, CardBody, FormGroup, Input, Label, Button, Alert, Row
 } from 'reactstrap';
 
 export default function NoteTaker() {
@@ -9,7 +9,7 @@ export default function NoteTaker() {
     const [details, setDetails] = useState('');
     const [errors, setErrors] = useState({});
 
-    const handleAssignedToChange = (e) => setAssignedTo(e.currentTarget.textContent);
+    const handleAssignedToChange = (e) => setAssignedTo(e.target.value);
     const handleSubjectChange = (e) => setSubject(e.target.value);
     const handleDetailsChange = (e) => setDetails(e.target.value);
 
@@ -37,7 +37,7 @@ export default function NoteTaker() {
         }
 
         const noteData = {
-            body: details ,
+            body: details,
             subject: subject
         };
 
@@ -49,18 +49,29 @@ export default function NoteTaker() {
             },
             body: JSON.stringify(noteData),
         })
-        .then(response => response.json())
-        .then(data => {
-            console.log('Success:', data);
-            setDetails(''); // Clear the textarea after successfully creating the note
-            setSubject('');  // Clear the subject input after successfully creating the note
-            setErrors({});   // Clear any errors
-        })
-        .catch((error) => {
-            console.error('Error:', error);
-            // Implement error handling logic here
-        });
+            .then(response => response.json())
+            .then(data => {
+                console.log('Success:', data);
+                setDetails(''); // Clear the textarea after successfully creating the note
+                setSubject('');  // Clear the subject input after successfully creating the note
+                setErrors({});   // Clear any errors
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+                // Implement error handling logic here
+            });
     };
+    const departments = [
+        "Health",
+        "Water, Natural Resources & Climate ",
+        "PSA, Youth, Gender, Social Services & Sports",
+        "Blue Economy, Agriculture & Livestock",
+        "Education & Digital Transformation",
+        "Tourism, Culture & Trade",
+        "Transport & Infrastructure",
+        "Lands, Housing & Urban Planning"
+    ];
+
 
     return (
         <Card className="shadow">
@@ -71,12 +82,19 @@ export default function NoteTaker() {
             </CardHeader>
             <CardBody>
                 <FormGroup>
-                    <Row>
-                        <Label>Asssigned To(optional)</Label>
-                        <Input 
-                            type='select'
-                        />
-                    </Row>
+                   
+                        <Label>Assigned To (optional)</Label>
+                        <Input
+                            type="select"
+                            value={assignedTo}
+                            onChange={handleAssignedToChange}
+                        >
+                            <option value="">Select Department</option>
+                            {departments.map((dept, index) => (
+                                <option key={index} value={dept}>{dept}</option>
+                            ))}
+                        </Input>
+                    
                 </FormGroup>
                 {errors.subject && <Alert color="danger">{errors.subject}</Alert>}
                 <FormGroup>

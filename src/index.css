@@ -3,3 +3,10 @@
     color: #FFF; /* Dark text color for contrast */
   }
   
+  /* This will ensure that the sidebar stacks on top of the chat area on smaller screens */
+@media (max-width: 767px) {
+  .chat-box {
+    max-height: 200px;
+    overflow-y: auto;
+  }
+}
