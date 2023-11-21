@@ -57,7 +57,7 @@ const adminRoutes = [
 // Executive-specific routes
 const executiveRoutes = [
   {
-    path: "/executive",
+    path: "/",
     name: "Executive",
     icon: "ni ni-tv-2 text-primary",
     component: <Executive />,

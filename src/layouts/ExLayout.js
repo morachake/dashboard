@@ -59,10 +59,10 @@ const ExLayout = (props) => {
           {...props}
           brandText={getBrandText(props?.location?.pathname)}
         />
-        {/* <Routes>
+        <Routes>
           {getRoutes(executiveRoutes)}
           <Route path="*" element={<Navigate to="/executive/index" replace />} />
-        </Routes> */}
+        </Routes>
         <Container fluid>
           <AdminFooter />
         </Container>

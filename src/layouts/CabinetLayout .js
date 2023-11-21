@@ -60,10 +60,10 @@ const CabinetLayout = (props) => {
           {...props}
           brandText={getBrandText(props?.location?.pathname)}
         />
-        {/* <Routes>
+        <Routes>
           {getRoutes(cabinetRoutes)}
           <Route path="*" element={<Navigate to="/cabinet" replace />} />
-        </Routes> */}
+        </Routes>
         <Container fluid>
           <AdminFooter />
         </Container>
