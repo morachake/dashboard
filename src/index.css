@@ -11,6 +11,14 @@
   }
 }
 /* MessagingStyles.css */
+/* In your component's CSS file */
+.username-large {
+  font-size: 0.9rem; /* or any size you prefer */
+}
+.centered-heading {
+  text-align: center;
+}
+
 
 .user-container {
   height: 400px;

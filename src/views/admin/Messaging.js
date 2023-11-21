@@ -134,16 +134,19 @@ export default function Messaging() {
           <Col xl="3" lg="4" md="4" className="mb-4 mb-xl-0">
             <Card className="bg-secondary shadow">
               <CardBody className="px-0 user-container" >
-                <h2>Available Users</h2>
                 <ListGroup flush>
+                <h2 className="centered-heading">Available Users</h2>
                   {users.map((user) => (
+                    
                     <ListGroupItem 
                       key={user.id} 
                       className={`list-group-item-action ${user.id === activeChat?.id ? 'active' : ''}`}
                       onClick={() => selectChat(user.id)}
                     >
+                      
                       <div className="py-2">
-                        <h5 className="h6 mb-0">{user.username}</h5>
+                        
+                        <h5 className="h6 mb-0 username-large">{user.username}</h5>
                       </div>
                     </ListGroupItem>
                   ))}
