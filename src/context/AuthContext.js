@@ -33,7 +33,16 @@ export const AuthProvider = ({ children }) => {
         localStorage.setItem('user', JSON.stringify(data.user)); 
         localStorage.setItem('authToken', data.token);
         // Redirect or perform additional actions
-        navigate('/admin/index')
+        if (data.user.user_type === 'admin') {
+          navigate('/admin/index');
+        } else if (data.user.user_type === 'cec') {
+          navigate('/executive');
+        } else if (data.user.user_type === 'cs') {
+          navigate('/cabinet');
+        } else {
+          navigate('/login');
+        }
+        
       } else {
         console.log("Login failed");
         // Handle login failure
@@ -52,14 +61,41 @@ export const AuthProvider = ({ children }) => {
       
     }
   };
-  const logout = () => {
-    // Clear auth token and update state
-    localStorage.removeItem('authToken');
-    setIsAuthenticated(false);
+
+  const resetPassword = async (username, oldPassword, newPassword) => {
+    try {
+      const response = await fetch("/reset_password", {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ username, old_password: oldPassword, new_password: newPassword }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        console.log("Password reset successfully", data);
+        // Perform additional actions on success, like navigating to a login page
+      } else {
+        // Handle password reset failure
+        const errorData = await response.json();
+        console.log("Password reset failed", errorData.message);
+      }
+    } catch (error) {
+      console.error("An error occurred:", error);
+    }
   };
+  const logout = () => {
+    localStorage.removeItem('authToken');
+    localStorage.removeItem('user'); // Clear the user from local storage
+    setUser(null); // Reset the user state
+    setIsAuthenticated(false);
+    navigate('/auth/login'); // Navigate back to the login page
+  };
+  
 
   return (
-    <AuthContext.Provider value={{user, isAuthenticated, login, logout }}>
+    <AuthContext.Provider value={{user, isAuthenticated, login, logout,resetPassword }}>
       {children}
     </AuthContext.Provider>
   );

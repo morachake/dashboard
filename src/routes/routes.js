@@ -63,20 +63,20 @@ const executiveRoutes = [
     component: <Executive />,
     layout: "/executive",
   },
-  // {
-  //   path: "/user-profile",
-  //   name: "User Profile",
-  //   icon: "ni ni-single-02 text-yellow",
-  //   component: <Profile />,
-  //   layout: "/executive",
-  // },
-  // {
-  //   path: "/adddata",
-  //   name: "Add Data",
-  //   icon: "ni ni-tv-2 text-primary",
-  //   component: <DataForm />,
-  //   layout: "/executive",
-  // },
+  {
+    path: "/user-profile",
+    name: "User Profile",
+    icon: "ni ni-single-02 text-yellow",
+    component: <Profile />,
+    layout: "/executive",
+  },
+  {
+    path: "/adddata",
+    name: "Add Data",
+    icon: "ni ni-tv-2 text-primary",
+    component: <DataForm />,
+    layout: "/executive",
+  },
 ];
 
 // Cabinet-specific routes
@@ -88,19 +88,19 @@ const cabinetRoutes = [
     component: <Cabinet />,
     layout: "/cabinet",
   },
-  // {
-  //   path: "/user-profile",
-  //   name: "User Profile",
-  //   icon: "ni ni-single-02 text-yellow",
-  //   component: <Profile />,
-  //   layout: "/cabinet",
-  // },
-  // {
-  //   path: "/adddata",
-  //   name: "Add Data",
-  //   icon: "ni ni-tv-2 text-primary",
-  //   component: <DataForm />,
-  //   layout: "/cabinet",
-  // },
+  {
+    path: "/user-profile",
+    name: "User Profile",
+    icon: "ni ni-single-02 text-yellow",
+    component: <Profile />,
+    layout: "/cabinet",
+  },
+  {
+    path: "/adddata",
+    name: "Add Data",
+    icon: "ni ni-tv-2 text-primary",
+    component: <DataForm />,
+    layout: "/cabinet",
+  },
 ];
 export   { adminRoutes, executiveRoutes, cabinetRoutes };

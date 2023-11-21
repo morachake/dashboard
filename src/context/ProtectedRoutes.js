@@ -1,24 +1,21 @@
 import React from 'react';
 import { Navigate } from 'react-router-dom';
-import { useAuth } from './AuthContext'; // Adjust the import path as necessary
+import { useAuth } from './AuthContext'; // Make sure the path is correct
 
-
-
-const ProtectedRoute = ({ children }) => {
-  const { isAuthenticated, user } = useAuth();
+const ProtectedRoute = ({ children, allowedUserTypes }) => {
+  const { user, isAuthenticated } = useAuth();
 
   if (!isAuthenticated) {
-    // User is not authenticated, redirect to login page
+    // Redirect to login if the user is not authenticated
     return <Navigate to="/auth/login" replace />;
   }
 
-  // // Check if the user type from the user matches the required userType for this route
-  // if (userType && user.user_type !== userType) {
-  //   // User type is not authorized for this route, redirect accordingly
-  //   return <Navigate to="/auth/unauthorized" replace />;
-  // }
+  if (!allowedUserTypes.includes(user.user_type)) {
+    // Redirect to an unauthorized page if the user doesn't have the correct role
+    return <Navigate to="/unauthorized" replace />;
+  }
 
-  // User is authenticated and authorized, render the children
+  // If the user is authenticated and has the correct role, render the children
   return children;
 };
 
