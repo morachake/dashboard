@@ -8,6 +8,8 @@ import DataForm from "views/admin/DataForm.js";
 
 import Executive from "views/executive/Executive";
 import Cabinet from "views/cabinet/Cabinet";
+import CabinetMsg from "views/cabinet/CabinetMsg";
+import ExcNotes from "views/executive/ExcNotes";
 
 const adminRoutes = [
   {
@@ -63,7 +65,20 @@ const executiveRoutes = [
     component: <Executive />,
     layout: "/executive",
   },
-  
+  {
+    path: "/messaging",
+    name: "Messages",
+    icon: "ni ni-chat-round",
+    component: <CabinetMsg />,
+    layout: "/executive",
+  },
+  {
+    path: "/notes",
+    name: "Governor's Notes",
+    icon: "ni ni-note-03",
+    component: <ExcNotes />,
+    layout: "/executive",
+  },
   {
     path: "/adddata",
     name: "Add Data",
@@ -87,6 +102,13 @@ const cabinetRoutes = [
     name: "Cabinet",
     icon: "ni ni-tv-2 text-primary",
     component: <Cabinet />,
+    layout: "/cabinet",
+  },
+  {
+    path: "/messaging",
+    name: "Messages",
+    icon: "ni ni-chat-round",
+    component: <CabinetMsg />,
     layout: "/cabinet",
   },
   {

@@ -50,6 +50,42 @@
   margin-right: auto;
   border-bottom-left-radius: 0;
 }
+.message-outgoing {
+  background-color: #dcf8c6; /* Light green background for outgoing messages */
+  /* Additional styles for outgoing messages */
+}
+
+.message-incoming {
+  background-color: #ffffff; /* White or a different color for incoming messages */
+  /* Additional styles for incoming messages */
+}
+
+.message-outgoing, .message-incoming {
+  padding: 10px 20px;
+  border-radius: 20px;
+  margin-bottom: 8px;
+  display: inline-block;
+  max-width: 80%;
+}
+
+.message-outgoing {
+  background-color: #dcf8c6; /* Light green background for outgoing messages */
+  float: right; /* Align to the right */
+  /* Additional styles for outgoing messages */
+}
+
+.message-incoming {
+  background-color: #ffffff; /* White or a different color for incoming messages */
+  float: left; /* Align to the left */
+  /* Additional styles for incoming messages */
+}
+.chat-box::after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+
 /* MessagingStyles.css */
 
 .no-messages {

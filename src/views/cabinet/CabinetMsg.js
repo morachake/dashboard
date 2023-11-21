@@ -13,12 +13,12 @@ import {
 } from "reactstrap";
 import { useAuth } from 'context/AuthContext';
 
-export default function Messaging() {
+export default function CabinetMsg() {
   const { user } = useAuth();
   const [message, setMessage] = useState('');
   const [activeChat, setActiveChat] = useState(null);
-  const [users, setUsers] = useState([]); // Store users from the backend
-  const [chats, setChats] = useState({}); // Store chats indexed by user id
+  const [users, setUsers] = useState([]);
+  const [chats, setChats] = useState({});
 
   useEffect(() => {
     // Fetch users when the component mounts
@@ -41,12 +41,10 @@ export default function Messaging() {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
-        // Include authorization headers if needed
       }
     })
       .then(response => response.json())
       .then(data => {
-        // Group messages by chat
         const groupedChats = data.reduce((acc, msg) => {
           const chatId = msg.sender_id === user.id ? msg.recipient_id : msg.sender_id;
           acc[chatId] = acc[chatId] || [];
@@ -71,12 +69,10 @@ export default function Messaging() {
       recipient_id: recipientId,
       body: messageBody,
     };
-
     fetch('http://localhost:5000/messages', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        // Include authorization headers if needed
       },
       body: JSON.stringify(messageData),
     })
@@ -87,16 +83,13 @@ export default function Messaging() {
         return response.json();
       })
       .then(sentMessage => {
-        // Assuming the server responds with the sent message
-        // Update the local chat state to include the new message
         setChats(prevChats => {
           const updatedChats = { ...prevChats };
           const messages = updatedChats[recipientId] ? [...updatedChats[recipientId]] : [];
-          messages.push(sentMessage.body); // Append the new message to the array
+          messages.push(sentMessage.body);
           updatedChats[recipientId] = messages;
           return updatedChats;
         });
-        // Update the active chat to show the new message
         setActiveChat(prevActiveChat => ({
           ...prevActiveChat,
           messages: [...prevActiveChat.messages, sentMessage.body]
@@ -106,9 +99,6 @@ export default function Messaging() {
         console.error('Error sending message:', error);
       });
   };
-
-
-
   const selectChat = (userId) => {
     const selectedUser = users.find(u => u.id === userId);
     setActiveChat({
@@ -118,12 +108,12 @@ export default function Messaging() {
     });
   };
   const userContainerStyle = {
-    height: '400px', // Adjust as needed
+    height: '400px',
     overflowY: 'scroll'
   };
 
   const messageContainerStyle = {
-    height: '500px', // Adjust as needed
+    height: '500px',
     overflowY: 'scroll'
   };
   return (
@@ -155,10 +145,10 @@ export default function Messaging() {
           <Col xl="9" lg="8" md="8">
             <Card className="shadow">
               <CardBody>
-                <div className="chat-box" style={messageContainerStyle}>
+                <div className="chat-box message-container">
                   {activeChat && activeChat.messages.length > 0 ? (
                     activeChat.messages.map((msg, index) => (
-                      <div key={index} className={`mb-3 message ${user.id === msg.sender_id ? 'message-outgoing' : 'message-incoming'}`}>
+                      <div key={index} className={`mb-3 message ${user.id === msg.sender_id ? 'sender-message' : 'receiver-message'}`}>
                         <p>{msg}</p>
                       </div>
                     ))

@@ -27,8 +27,7 @@ const Index = () => {
     const filteredByLocation = selectedLocation
       ? projects.filter(project => project.location === selectedLocation)
       : projects;
-  
-    // If a sector filter is already applied, apply it on top of the location filter
+      
     const finalFiltered = sectorFilter
       ? filteredByLocation.filter(project => project.sector === sectorFilter)
       : filteredByLocation;
@@ -56,8 +55,6 @@ const Index = () => {
     e.preventDefault();
     setActiveNav(index);
   };
-
-  // This should be set once, based on the fetched projects or passed from elsewhere
   const uniqueSectors = Array.from(new Set(projects.map(project => project.sector)));
   const uniqueLocations = Array.from(new Set(projects.map(project => project.location)));
 
