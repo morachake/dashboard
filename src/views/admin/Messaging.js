@@ -117,7 +117,15 @@ export default function Messaging() {
       messages: chats[userId] || []
     });
   };
+  const userContainerStyle = {
+    height: '400px', // Adjust as needed
+    overflowY: 'scroll'
+  };
 
+  const messageContainerStyle = {
+    height: '500px', // Adjust as needed
+    overflowY: 'scroll'
+  };
   return (
     <>
       <UserHeader />
@@ -125,7 +133,7 @@ export default function Messaging() {
         <Row>
           <Col xl="3" lg="4" md="4" className="mb-4 mb-xl-0">
             <Card className="bg-secondary shadow">
-              <CardBody className="px-0">
+              <CardBody className="px-0 user-container" >
                 <h2>Available Users</h2>
                 <ListGroup flush>
                   {users.map((user) => (
@@ -146,13 +154,19 @@ export default function Messaging() {
           <Col xl="9" lg="8" md="8">
             <Card className="shadow">
               <CardBody>
-                <div className="chat-box">
-                  {activeChat?.messages.map((msg, index) => (
-                    <div key={index} className="mb-3">
+              <div className="chat-box message-container">
+                {activeChat && activeChat.messages.length > 0 ? (
+                  activeChat.messages.map((msg, index) => (
+                    <div key={index} className={`mb-3 message ${user.id === msg.sender_id ? 'sender-message' : 'receiver-message'}`}>
                       <p>{msg}</p>
                     </div>
-                  ))}
-                </div>
+                  ))
+                ) : (
+                  <div className="no-messages">
+                    <p>No chat history with this user.</p>
+                  </div>
+                )}
+              </div>
                 {activeChat && (
                   <Row form>
                     <Col md="10">

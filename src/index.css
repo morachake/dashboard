@@ -10,3 +10,44 @@
     overflow-y: auto;
   }
 }
+/* MessagingStyles.css */
+
+.user-container {
+  height: 400px;
+  overflow-y: scroll;
+}
+
+.message-container {
+  height: 500px;
+  overflow-y: scroll;
+  padding: 10px;
+}
+
+.message {
+  padding: 10px 15px;
+  border-radius: 20px;
+  max-width: 75%;
+  word-wrap: break-word;
+  margin-bottom: 10px;
+}
+
+.sender-message {
+  background-color: #d1ecf1;
+  margin-left: auto;
+  border-bottom-right-radius: 0;
+}
+
+.receiver-message {
+  background-color: #e2e3e5;
+  margin-right: auto;
+  border-bottom-left-radius: 0;
+}
+/* MessagingStyles.css */
+
+.no-messages {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: #6c757d; /* Bootstrap's text-muted color */
+}
