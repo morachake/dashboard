@@ -1,47 +1,54 @@
 import React, { useState } from 'react';
 import {
-    Card, CardHeader, CardBody, FormGroup, Input, Label, Button, Alert, Row
+    Card, CardHeader, CardBody, FormGroup, Label, Button, Alert, CustomInput,Input
 } from 'reactstrap';
 
 export default function NoteTaker() {
-    const [assignedTo, setAssignedTo] = useState('');
+    const [assignedTo, setAssignedTo] = useState([]);
     const [subject, setSubject] = useState('');
     const [details, setDetails] = useState('');
     const [errors, setErrors] = useState({});
 
-    const handleAssignedToChange = (e) => setAssignedTo(e.target.value);
+    const handleDepartmentToggle = (dept) => {
+        if (assignedTo.includes(dept)) {
+            setAssignedTo(assignedTo.filter(d => d !== dept));
+        } else {
+            setAssignedTo([...assignedTo, dept]);
+        }
+    };
+    
     const handleSubjectChange = (e) => setSubject(e.target.value);
     const handleDetailsChange = (e) => setDetails(e.target.value);
 
     const validateForm = () => {
         let isValid = true;
-        let errors = {};
+        let newErrors = {};
 
         if (!subject.trim()) {
-            errors.subject = 'Subject is required';
+            newErrors.subject = 'Subject is required';
             isValid = false;
         }
 
         if (!details.trim()) {
-            errors.details = 'Details are required';
+            newErrors.details = 'Details are required';
             isValid = false;
         }
 
-        setErrors(errors);
+        setErrors(newErrors);
         return isValid;
     };
 
     const createNote = () => {
         if (!validateForm()) {
-            return; // If the form is not valid, do not submit
+            return;
         }
 
         const noteData = {
+            assignedTo: assignedTo,
             body: details,
             subject: subject
         };
 
-        // Send the POST request to create a new note with only the 'body'
         fetch('http://127.0.0.1:5000/note', {
             method: 'POST',
             headers: {
@@ -49,21 +56,22 @@ export default function NoteTaker() {
             },
             body: JSON.stringify(noteData),
         })
-            .then(response => response.json())
-            .then(data => {
-                console.log('Success:', data);
-                setDetails(''); // Clear the textarea after successfully creating the note
-                setSubject('');  // Clear the subject input after successfully creating the note
-                setErrors({});   // Clear any errors
-            })
-            .catch((error) => {
-                console.error('Error:', error);
-                // Implement error handling logic here
-            });
+        .then(response => response.json())
+        .then(data => {
+            console.log('Success:', data);
+            setAssignedTo([]); // Clear the assigned departments
+            setDetails(''); // Clear the details
+            setSubject(''); // Clear the subject
+            setErrors({}); // Clear any errors
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+        });
     };
+
     const departments = [
         "Health",
-        "Water, Natural Resources & Climate ",
+        "Water, Natural Resources & Climate",
         "PSA, Youth, Gender, Social Services & Sports",
         "Blue Economy, Agriculture & Livestock",
         "Education & Digital Transformation",
@@ -71,7 +79,6 @@ export default function NoteTaker() {
         "Transport & Infrastructure",
         "Lands, Housing & Urban Planning"
     ];
-
 
     return (
         <Card className="shadow">
@@ -82,19 +89,19 @@ export default function NoteTaker() {
             </CardHeader>
             <CardBody>
                 <FormGroup>
-                   
-                        <Label>Assigned To (optional)</Label>
-                        <Input
-                            type="select"
-                            value={assignedTo}
-                            onChange={handleAssignedToChange}
-                        >
-                            <option value="">Select Department</option>
-                            {departments.map((dept, index) => (
-                                <option key={index} value={dept}>{dept}</option>
-                            ))}
-                        </Input>
-                    
+                    <Label>Assigned To (optional)</Label>
+                    <div style={{ maxHeight: '200px', overflowY: 'auto' }}>
+                        {departments.map((dept, index) => (
+                            <CustomInput
+                                key={index}
+                                type="checkbox"
+                                id={`department-${index}`}
+                                label={dept}
+                                onChange={() => handleDepartmentToggle(dept)}
+                                checked={assignedTo.includes(dept)}
+                            />
+                        ))}
+                    </div>
                 </FormGroup>
                 {errors.subject && <Alert color="danger">{errors.subject}</Alert>}
                 <FormGroup>
@@ -125,4 +132,4 @@ export default function NoteTaker() {
             </CardBody>
         </Card>
     );
-};
+}
