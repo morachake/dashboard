@@ -6,8 +6,7 @@ import { Dropdown } from 'primereact/dropdown';
 import { Tag } from 'primereact/tag';
 import { FilterMatchMode } from 'primereact/api';
 import UserHeader from 'components/Headers/UserHeader';
-import { Form, FormGroup, FormText, Input, Label, Button, CardHeader } from 'reactstrap';
-import { Card } from 'primereact/card';
+import {  Container } from 'reactstrap';
 
 export default function Tables() {
   const [projects, setProjects] = useState(null);
@@ -73,27 +72,32 @@ export default function Tables() {
   const header = renderHeader();
 
   return (
-    <Card>
-    <CardHeader>
-      <UserHeader />
-      <div className="card">
-        <DataTable value={projects} paginator rows={10} dataKey="id" globalFilter={globalFilterValue} header={header} emptyMessage="No projects found.">
-          <Column field="project_name" header="Project Name" filter filterPlaceholder="Search by name" />
-          <Column field="subcounty" header="Subcounty" filter filterPlaceholder="Search by subcounty" />
-          <Column field="ward" header="Ward" filter filterPlaceholder="Search by ward" />
-          {/* <Column field="description" header="Description" /> */}
-          <Column field="contract_sum" header="Contract Sum" />
-          <Column field="contractor_details" header="Contractor Details" />
-          <Column field="certificate_number" header="Certificate Number" />
-          <Column field="amount_certified" header="Amount Certified" />
-          <Column field="status" header="Status" body={statusBodyTemplate} filter filterElement={statusRowFilterTemplate} />
-          {/* <Column field="remarks" header="Remarks" /> */}
-          {/* <Column field="recommendations" header="Recommendations" /> */}
-          {/* You may add more columns as needed */}
-        </DataTable>
-      </div>
-    </CardHeader>
-    </Card>
+    <>
+      
+      
+          <UserHeader />
+          <Container className="mt--7" fluid>
+          <div className="card">
+            <DataTable value={projects} paginator rows={10} dataKey="id" globalFilter={globalFilterValue} header={header} emptyMessage="No projects found.">
+              <Column field="project_name" header="Project Name" filter filterPlaceholder="Search by name" />
+              <Column field="subcounty" header="Subcounty" filter filterPlaceholder="Search by subcounty" />
+              <Column field="ward" header="Ward" filter filterPlaceholder="Search by ward" />
+              {/* <Column field="description" header="Description" /> */}
+              <Column field="contract_sum" header="Contract Sum" />
+              <Column field="contractor_details" header="Contractor Details" />
+              <Column field="certificate_number" header="Certificate Number" />
+              <Column field="amount_certified" header="Amount Certified" />
+              <Column field="status" header="Status" body={statusBodyTemplate} filter filterElement={statusRowFilterTemplate} />
+              {/* <Column field="remarks" header="Remarks" /> */}
+              {/* <Column field="recommendations" header="Recommendations" /> */}
+              {/* You may add more columns as needed */}
+            </DataTable>
+          </div>
+          </Container>
+       
+    
+    </>
+
 
   );
 }

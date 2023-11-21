@@ -5,6 +5,7 @@ import { InputText } from 'primereact/inputtext';
 import { Dropdown } from 'primereact/dropdown';
 import { Tag } from 'primereact/tag';
 import { FilterMatchMode } from 'primereact/api';
+import { CardHeader, Row, CardBody, Col } from 'reactstrap';
 
 export default function ProjectsTable() {
     const [projects, setProjects] = useState(null);
@@ -70,21 +71,26 @@ export default function ProjectsTable() {
     const header = renderHeader();
 
     return (
-        <div className="card">
-            <DataTable value={projects} paginator rows={10} dataKey="user_id" globalFilter={globalFilterValue} header={header} emptyMessage="No projects found.">
-                <Column field="project_name" header="Project Name" filter filterPlaceholder="Search by name" />
-                <Column field="subcounty" header="Subcounty" filter filterPlaceholder="Search by subcounty" />
-                <Column field="ward" header="Ward" filter filterPlaceholder="Search by ward" />
-                {/* <Column field="description" header="Description" /> */}
-                <Column field="contract_sum" header="Contract Sum" />
-                <Column field="contractor_details" header="Contractor Details" />
-                <Column field="certificate_number" header="Certificate Number" />
-                <Column field="amount_certified" header="Amount Certified" />
-                <Column field="status" header="Status" body={statusBodyTemplate} filter filterElement={statusRowFilterTemplate} />
-                {/* <Column field="remarks" header="Remarks" /> */}
-                {/* <Column field="recommendations" header="Recommendations" /> */}
-                {/* You may add more columns as needed */}
-            </DataTable>
-        </div>
+        <CardHeader>
+
+            <div className="card">
+                <DataTable value={projects} paginator rows={10} dataKey="user_id" globalFilter={globalFilterValue} header={header} emptyMessage="No projects found.">
+                    <Column field="project_name" header="Project Name" filter filterPlaceholder="Search by name" />
+                    <Column field="subcounty" header="Subcounty" filter filterPlaceholder="Search by subcounty" />
+                    <Column field="ward" header="Ward" filter filterPlaceholder="Search by ward" />
+                    {/* <Column field="description" header="Description" /> */}
+                    <Column field="contract_sum" header="Contract Sum" />
+                    <Column field="contractor_details" header="Contractor Details" />
+                    <Column field="certificate_number" header="Certificate Number" />
+                    <Column field="amount_certified" header="Amount Certified" />
+                    <Column field="status" header="Status" body={statusBodyTemplate} filter filterElement={statusRowFilterTemplate} />
+                    {/* <Column field="remarks" header="Remarks" /> */}
+                    {/* <Column field="recommendations" header="Recommendations" /> */}
+                    {/* You may add more columns as needed */}
+                </DataTable>
+            </div>
+
+        </CardHeader>
+
     );
 }

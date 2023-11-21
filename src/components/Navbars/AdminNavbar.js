@@ -8,33 +8,42 @@ import {
   DropdownItem,
   UncontrolledDropdown,
   DropdownToggle,
-  Form,
-  FormGroup,
-  InputGroupAddon,
-  InputGroupText,
-  Input,
-  InputGroup,
   Navbar,
   Nav,
   Container,
-  Modal,
   Media,
-  Button,
+  Modal,
   ModalHeader,
   ModalBody,
   ModalFooter,
+  Button
 } from "reactstrap";
 import { useAuth } from "context/AuthContext";
+import PropTypes from 'prop-types';
+import NotificationModal from "./NotificationModal";
 
 const AdminNavbar = (props) => {
-
-
+  const { className } = props;
   const [modal, setModal] = useState(false);
-  const [governorModal, setGovernorModal] = useState(false);
-  const {logout,user} = useAuth()
-  console.log(user);
+  const [backdrop, setBackdrop] = useState(true);
+  const [keyboard, setKeyboard] = useState(true);
+
   const toggle = () => setModal(!modal);
-  const openModal = () => setGovernorModal(!governorModal)
+
+  const changeBackdrop = (e) => {
+    let { value } = e.target;
+    if (value !== 'static') {
+      value = JSON.parse(value);
+    }
+    setBackdrop(value);
+  };
+
+  const changeKeyboard = (e) => {
+    setKeyboard(e.currentTarget.checked);
+  };
+  const { logout, user } = useAuth()
+  console.log(user);
+  const handleNotification = () => { };
   return (
     <>
       <Navbar className="navbar-top navbar-dark" expand="md" id="navbar-main">
@@ -43,21 +52,14 @@ const AdminNavbar = (props) => {
             className="h4 mb-0 text-white text-uppercase d-none d-lg-inline-block"
             to="/"
           >
-            {/* {props.brandText} */}
             <h6 style={{ fontSize: '0.9em', color: '#FFFF' }}> Mombasa county service delivery unit</h6>
           </Link>
-          {/* <Form className="navbar-search navbar-search-dark form-inline mr-3 d-none d-md-flex ml-lg-auto">
-            <FormGroup className="mb-0">
-              <InputGroup className="input-group-alternative">
-                <InputGroupAddon addonType="prepend">
-                  <InputGroupText>
-                    <i className="fas fa-search" />
-                  </InputGroupText>
-                </InputGroupAddon>
-                <Input placeholder="Search" type="text" />
-              </InputGroup>
-            </FormGroup>
-          </Form> */}
+          <div className="navbar-search navbar-search-dark form-inline mr-3 d-none d-md-flex ml-lg-auto">
+            <div onClick={toggle} style={{ cursor: 'pointer' }}>
+              <i className="ni ni-bell-55 custom-icon" />
+            </div>
+          </div>
+          <NotificationModal isOpen={modal} toggle={toggle}/>
           <Nav className="align-items-center d-none d-md-flex" navbar>
             <UncontrolledDropdown nav>
               <DropdownToggle className="pr-0" nav>
