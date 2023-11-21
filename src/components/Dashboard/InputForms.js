@@ -1,6 +1,6 @@
 import { useAuth } from 'context/AuthContext';
 import React, { useState } from 'react';
-import { Form, FormGroup, FormText, Input, Label, Button, CardHeader } from 'reactstrap';
+import { Form, FormGroup, FormText, Input, Label, Button, CardHeader, Row, CardBody, Col } from 'reactstrap';
 
 const subCountyWards = {
     Mvita: ["Mji Wa Kale/Makadara", "Tudor", "Tononoka", "Shimanzi/Ganjoni", "Majengo"],
@@ -38,12 +38,12 @@ export default function InputForm() {
         setWards(subCountyWards[subCounty] || []);
         setFormData({ ...formData, subcounty: subCounty });
     };
-   
+
     const handleWardChange = (event) => {
         setFormData({ ...formData, ward: event.target.value });
     };
 
-    
+
     const handleSubmit = (event) => {
         event.preventDefault();
         saveData();
@@ -53,11 +53,11 @@ export default function InputForm() {
         const { name, value } = event.target;
         setFormData({ ...formData, [name]: value });
     };
-    
+
     const handleFileChange = (event) => {
         setFormData({ ...formData, [event.target.name]: event.target.files });
     };
-    
+
 
     const saveData = () => {
         // Assuming you've uploaded the files elsewhere and have their URLs, 
@@ -68,7 +68,7 @@ export default function InputForm() {
             after_images_url: 'http://example.com/images/before.jpg',
             user_id: user.id // Assuming 'user' object has an 'id' field
         };
-    
+
         fetch('http://127.0.0.1:5000/form', {
             method: 'POST',
             body: JSON.stringify(jsonPayload),
@@ -76,27 +76,30 @@ export default function InputForm() {
                 'Content-Type': 'application/json' // Indicate that you're sending a JSON payload
             }
         })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            return response.json();
-        })
-        .then(data => {
-            console.log("Successfully submitted", data);
-            // Handle success
-        })
-        .catch(err => {
-            console.error("Error during submission:", err.message);
-            // Handle errors
-        });
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log("Successfully submitted", data);
+                // Handle success
+            })
+            .catch(err => {
+                console.error("Error during submission:", err.message);
+                // Handle errors
+            });
     };
-    
-    
-    
+
+
+
 
     return (
         <CardHeader>
+            <CardBody>
+
+            </CardBody>
             <Form onSubmit={handleSubmit}>
                 <FormGroup>
                     <Label for="exampleEmail">
@@ -111,44 +114,52 @@ export default function InputForm() {
                         onChange={handleInputChange}
                     />
                 </FormGroup>
-                <FormGroup>
-                    <Label for="subCountySelect">Sub-County</Label>
-                    <Input
-                        id="subCountySelect"
-                        name="subcounty"
-                        type="select"
-                        onChange={handleSubCountyChange}
-                        value={selectedSubCounty}
-                    >
-                        <option value="">Select Sub-County</option>
-                        <option value="Mvita">Mvita</option>
-                        <option value="Likoni">Likoni</option>
-                        <option value="Changamwe">Changamwe</option>
-                        <option value="Kisauni">Kisauni</option>
-                        <option value="Nyali">Nyali</option>
-                        <option value="Jomvu">Jomvu</option>
-                    </Input>
-                </FormGroup>
-                <FormGroup>
-                    <Label for="wardsSelect">Wards</Label>
-                    <Input
-                        id="wardsSelect"
-                        name="ward"
-                        type="select"
-                        onChange={handleWardChange}
-                        value={wards.length === 0 ? '' : undefined}
-                    >
-                        {wards.length === 0 ? (
-                            <option>No wards available</option>
-                        ) : (
-                            wards.map((ward, index) => (
-                                <option key={index} value={ward}>
-                                    {ward}
-                                </option>
-                            ))
-                        )}
-                    </Input>
-                </FormGroup>
+
+                <Row lg={4} md={6} xs={12}>
+                    <Col md={6} lg={4}>
+                        <FormGroup>
+                            <Label for="subCountySelect">Sub-County</Label>
+                            <Input
+                                id="subCountySelect"
+                                name="subcounty"
+                                type="select"
+                                onChange={handleSubCountyChange}
+                                value={selectedSubCounty}
+                            >
+                                <option value="">Select Sub-County</option>
+                                <option value="Mvita">Mvita</option>
+                                <option value="Likoni">Likoni</option>
+                                <option value="Changamwe">Changamwe</option>
+                                <option value="Kisauni">Kisauni</option>
+                                <option value="Nyali">Nyali</option>
+                                <option value="Jomvu">Jomvu</option>
+                            </Input>
+                        </FormGroup>
+                    </Col>
+                    <Col md={6} lg={4}>
+                        <FormGroup>
+                            <Label for="wardsSelect">Wards</Label>
+                            <Input
+                                id="wardsSelect"
+                                name="ward"
+                                type="select"
+                                onChange={handleWardChange}
+                                value={wards.length === 0 ? '' : undefined}
+                            >
+                                {wards.length === 0 ? (
+                                    <option>No wards available</option>
+                                ) : (
+                                    wards.map((ward, index) => (
+                                        <option key={index} value={ward}>
+                                            {ward}
+                                        </option>
+                                    ))
+                                )}
+                            </Input>
+                        </FormGroup>
+                    </Col>
+
+                </Row>
 
                 <FormGroup>
                     <Label for="exampleText">
@@ -162,32 +173,54 @@ export default function InputForm() {
                         onChange={handleInputChange}
                     />
                 </FormGroup>
-                <FormGroup>
-                    <Label for="contractSum">
-                        Contract Sum
-                    </Label>
-                    <Input
-                        id="contractSum"
-                        name="contract_sum"
-                        placeholder="Enter the contract sum"
-                        type="number"
-                        value={formData.contract_sum}
-                        onChange={handleInputChange}
-                    />
-                </FormGroup>
-                <FormGroup>
-                    <Label for="timeFrame">
-                        Time Frame
-                    </Label>
-                    <Input
-                        id="timeFrame"
-                        name="time_frame"
-                        placeholder="Enter the project time frame"
-                        type="text"
-                        value={formData.time_frame}
-                        onChange={handleInputChange}
-                    />
-                </FormGroup>
+                <Row lg={4} md={6} xs={12}>
+                    <Col md={6} lg={4}>
+                        <FormGroup>
+                            <Label for="contractSum">
+                                Contract Sum
+                            </Label>
+                            <Input
+                                id="contractSum"
+                                name="contract_sum"
+                                placeholder="Enter the contract sum"
+                                type="number"
+                                value={formData.contract_sum}
+                                onChange={handleInputChange}
+                            />
+                        </FormGroup>
+                    </Col>
+                    <Col md={6} lg={4}>
+                        <FormGroup>
+                            <Label for="timeFrame">
+                                Time Frame
+                            </Label>
+                            <Input
+                                id="timeFrame"
+                                name="time_frame"
+                                placeholder="Enter the project time frame"
+                                type="text"
+                                value={formData.time_frame}
+                                onChange={handleInputChange}
+                            />
+                        </FormGroup>
+                    </Col>
+                    <Col md={6} lg={4}>
+                        <FormGroup>
+                            <Label for="status">
+                                Status
+                            </Label>
+                            <Input
+                                id="status"
+                                name="status"
+                                placeholder="Enter the project status"
+                                type="text"
+                                value={formData.status}
+                                onChange={handleInputChange}
+                            />
+                        </FormGroup>
+                    </Col>
+                </Row>
+
                 <FormGroup>
                     <Label for="contractorDetails">
                         Contractor Details
@@ -202,19 +235,7 @@ export default function InputForm() {
                     />
                 </FormGroup>
                 {/* ... Add other input fields as needed ... */}
-                <FormGroup>
-                    <Label for="status">
-                        Status
-                    </Label>
-                    <Input
-                        id="status"
-                        name="status"
-                        placeholder="Enter the project status"
-                        type="text"
-                        value={formData.status}
-                        onChange={handleInputChange}
-                    />
-                </FormGroup>
+
                 <FormGroup>
                     <Label for="remarks">
                         Remarks
@@ -242,27 +263,33 @@ export default function InputForm() {
                     />
                 </FormGroup>
                 {/* Assuming before_images and after_images are file uploads */}
-                <FormGroup>
-                    <Label for="beforeImages">Previous Images</Label>
-                    <Input
-                        id="beforeImages"
-                        name="before_images"
-                        type="file"
-                        onChange={handleFileChange}
-                        multiple
-                    />
-                </FormGroup>
-                <FormGroup>
-                    <Label for="afterImages">Current Image</Label>
-                    <Input
-                        id="afterImages"
-                        name="after_images"
-                        type="file"
-                        onChange={handleFileChange}
-                        multiple
-                    />
-                </FormGroup>
+                <Row lg={4} md={6} xs={12}>
+                    <Col md={6} lg={4}>
+                        <FormGroup>
+                            <Label for="beforeImages">Previous Images</Label>
+                            <Input
+                                id="beforeImages"
+                                name="before_images"
+                                type="file"
+                                onChange={handleFileChange}
+                                multiple
+                            />
+                        </FormGroup>
+                    </Col>
+                    <Col md={6} lg={4}>
+                        <FormGroup>
+                            <Label for="afterImages">Current Image</Label>
+                            <Input
+                                id="afterImages"
+                                name="after_images"
+                                type="file"
+                                onChange={handleFileChange}
+                                multiple
+                            />
+                        </FormGroup>
+                    </Col>
 
+                </Row>
                 <Button type="submit" >
                     Submit
                 </Button>
