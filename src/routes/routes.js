@@ -55,7 +55,7 @@ const adminRoutes = [
 const executiveRoutes = [
   {
     path: "/",
-    name: "Executive",
+    name: "Dashboard",
     icon: "ni ni-tv-2 text-primary",
     component: <Executive />,
     layout: "/executive",
@@ -100,8 +100,8 @@ const executiveRoutes = [
 // Cabinet-specific routes
 const cabinetRoutes = [
   {
-    path: "/cabinet",
-    name: "Cabinet",
+    path: "/",
+    name: "Dashboard",
     icon: "ni ni-tv-2 text-primary",
     component: <Cabinet />,
     layout: "/cabinet",

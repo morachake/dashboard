@@ -68,7 +68,7 @@ const AdminNavbar = (props) => {
                   <span className="ml-3 avatar avatar-sm rounded-circle">
                     <img
                       alt="..."
-                      src="https://web.mombasa.go.ke/wp-content/uploads/elementor/thumbs/msa-county-pvpwt97u9pzd6lh7rs4eyuajx9c5n3tbhn01h7rg14.png"
+                      src="https://mwanasiasa.com/wp-content/uploads/2022/02/Abdulswamad-Shariff-Nassir.jpg"
                     />
                   </span>
 
