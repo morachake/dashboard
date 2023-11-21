@@ -1,43 +1,18 @@
 import React, { useEffect, useState } from "react";
 import Chart from "chart.js";
-import { Card, CardHeader, CardBody,  Container, Row, Col } from "reactstrap";
+import { Card, CardHeader, CardBody, Container, Row, Col } from "reactstrap";
 import { chartOptions, parseOptions } from "variables/charts.js";
 import Header from "components/Headers/Header.js";
 import ProjectsTable from "components/Dashboard/ProjectsTable";
 import BudgetBars from "components/Dashboard/BudgetBars";
 
 const Index = () => {
-  const [activeNav, setActiveNav] = useState(1);
-  const [projects, setProjects] = useState([]); // State for all projects
-  const [filteredProjects, setFilteredProjects] = useState([]); // State for filtered projects
+  const [projects, setProjects] = useState([]);
+  const [filteredProjects, setFilteredProjects] = useState([]);
   const [sectorFilter, setSectorFilter] = useState('');
-
-
-  // Handler functions for filter changes
-  const handleSectorChange = (e) => {
-    const selectedSector = e.target.value;
-    const projectsFilteredBySector = selectedSector
-      ? projects.filter(project => project.sector === selectedSector)
-      : projects;
-    setFilteredProjects(projectsFilteredBySector);
-  };
-
-  const handleLocationChange = (e) => {
-    const selectedLocation = e.target.value;
-    const filteredByLocation = selectedLocation
-      ? projects.filter(project => project.location === selectedLocation)
-      : projects;
-      
-    const finalFiltered = sectorFilter
-      ? filteredByLocation.filter(project => project.sector === sectorFilter)
-      : filteredByLocation;
-  
-    setFilteredProjects(finalFiltered);
-  };
-  
+  const [locationFilter, setLocationFilter] = useState('');
 
   useEffect(() => {
-    // Fetch all projects
     fetch('http://127.0.0.1:5000/projects')
       .then(response => response.json())
       .then(data => {
@@ -47,16 +22,45 @@ const Index = () => {
       .catch(error => console.error('Error fetching projects:', error));
   }, []);
 
-  if (window.Chart) {
-    parseOptions(Chart, chartOptions());
-  }
+  // Effect for Chart.js options
+  useEffect(() => {
+    if (window.Chart) {
+      parseOptions(Chart, chartOptions());
+    }
+  }, []);
 
-  const toggleNavs = (e, index) => {
-    e.preventDefault();
-    setActiveNav(index);
+  // Combined filter function that filters first by location and then by sector
+  const filterProjects = () => {
+    let result = projects;
+
+    if (locationFilter) {
+      result = result.filter(project => project.location === locationFilter);
+    }
+
+    if (sectorFilter) {
+      result = result.filter(project => project.sector === sectorFilter);
+    }
+
+    setFilteredProjects(result);
   };
-  const uniqueSectors = Array.from(new Set(projects.map(project => project.sector)));
-  const uniqueLocations = Array.from(new Set(projects.map(project => project.location)));
+
+  // Effect to filter projects whenever the filters change
+  useEffect(() => {
+    filterProjects();
+  }, [sectorFilter, locationFilter, projects]);
+
+  // Handlers for filter changes
+  const handleSectorChange = (e) => {
+    setSectorFilter(e.target.value);
+  };
+
+  const handleLocationChange = (e) => {
+    setLocationFilter(e.target.value);
+  };
+
+  // Get unique sectors and locations for the dropdowns
+  const uniqueSectors = [...new Set(projects.map(project => project.sector))];
+  const uniqueLocations = [...new Set(projects.map(project => project.location))];
 
   return (
     <>
@@ -66,16 +70,14 @@ const Index = () => {
         sectors={uniqueSectors}
         locations={uniqueLocations}
       />
-      {/* Page content */}
       <Container className="mt--7" fluid>
         <Row>
-          <Col className="mb-5 mb-xl-0" xl="12">
+          <Col xl="12">
             <Card className="bg-gradient-default shadow">
               <CardHeader className="bg-transparent">
                 {/* ... */}
               </CardHeader>
               <CardBody>
-                {/* Chart */}
                 <div className="chart">
                   <BudgetBars projectsData={filteredProjects} />
                 </div>
@@ -84,7 +86,7 @@ const Index = () => {
           </Col>
         </Row>
         <Row className="mt-5">
-          <Col className="mb-5 mb-xl-0" xl="12">
+          <Col xl="12">
             <ProjectsTable projectData={filteredProjects} />
           </Col>
         </Row>

@@ -9,24 +9,7 @@ const Header = ({ onSectorChange, onLocationChange, sectors, locations }) => {
         <Container fluid>
           <div className="header-body">
             <Row>
-              <Col>
-                <FormGroup>
-                  <Label for="sectorSelect">
-                    Filter by sector
-                  </Label>
-                  <Input
-                    id="sectorSelect"
-                    name="select"
-                    type="select"
-                    onChange={onSectorChange}
-                  >
-                    <option value="">All Sectors</option>
-                    {Array.isArray(sectors) && sectors.map((sector, index) => (
-                      <option key={index} value={sector}>{sector}</option>
-                    ))}
-                  </Input>
-                </FormGroup>
-              </Col>
+
               <Col>
                 <FormGroup>
                   <Label for="locationSelect">
@@ -41,6 +24,24 @@ const Header = ({ onSectorChange, onLocationChange, sectors, locations }) => {
                     <option value="">All Locations</option>
                     {Array.isArray(locations) && locations.map((location, index) => (
                       <option key={index} value={location}>{location}</option>
+                    ))}
+                  </Input>
+                </FormGroup>
+              </Col>
+              <Col>
+                <FormGroup>
+                  <Label for="sectorSelect">
+                    Filter by sector
+                  </Label>
+                  <Input
+                    id="sectorSelect"
+                    name="select"
+                    type="select"
+                    onChange={onSectorChange}
+                  >
+                    <option value="">All Sectors</option>
+                    {Array.isArray(sectors) && sectors.map((sector, index) => (
+                      <option key={index} value={sector}>{sector}</option>
                     ))}
                   </Input>
                 </FormGroup>
