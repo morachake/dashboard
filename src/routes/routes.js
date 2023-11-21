@@ -20,21 +20,21 @@ const adminRoutes = [
   {
     path: "/adddata",
     name: "Add Data",
-    icon: "ni ni-tv-2 text-primary",
+    icon: "ni ni-fat-add",
     component: <DataForm />,
     layout: "/admin",
   },
   {
     path: "/govnrnotes",
     name: "Governor's Notes",
-    icon: "ni ni-tv-2 text-primary",
+    icon: "ni ni-note-03",
     component: <Notes />,
     layout: "/admin",
   },
   {
     path: "/Messaging",
     name: "Messages",
-    icon: "ni ni-planet text-blue",
+    icon: "ni ni-chat-round",
     component: <Messaging />,
     layout: "/admin",
   },
@@ -63,18 +63,19 @@ const executiveRoutes = [
     component: <Executive />,
     layout: "/executive",
   },
+  
+  {
+    path: "/adddata",
+    name: "Add Data",
+    icon: "ni ni-fat-add",
+    component: <DataForm />,
+    layout: "/executive",
+  },
   {
     path: "/user-profile",
     name: "User Profile",
     icon: "ni ni-single-02 text-yellow",
     component: <Profile />,
-    layout: "/executive",
-  },
-  {
-    path: "/adddata",
-    name: "Add Data",
-    icon: "ni ni-tv-2 text-primary",
-    component: <DataForm />,
     layout: "/executive",
   },
 ];
@@ -89,17 +90,17 @@ const cabinetRoutes = [
     layout: "/cabinet",
   },
   {
+    path: "/adddata",
+    name: "Add Data",
+    icon: "ni ni-fat-add",
+    component: <DataForm />,
+    layout: "/cabinet",
+  },
+  {
     path: "/user-profile",
     name: "User Profile",
     icon: "ni ni-single-02 text-yellow",
     component: <Profile />,
-    layout: "/cabinet",
-  },
-  {
-    path: "/adddata",
-    name: "Add Data",
-    icon: "ni ni-tv-2 text-primary",
-    component: <DataForm />,
     layout: "/cabinet",
   },
 ];
