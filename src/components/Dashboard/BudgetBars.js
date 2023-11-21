@@ -1,8 +1,8 @@
 import React from 'react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
-import projectsData from '../../data/projectdata'; // Make sure to import your projectsData
 
-export default function BudgetBars(){
+
+export default function BudgetBars({projectsData}){
   // Transform projectsData into the format expected by Recharts
   const chartData = projectsData.map((project) => ({
     name: project.projectName, // Assuming you want to use the project name as the label on the x-axis

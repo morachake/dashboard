@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
-import classnames from "classnames";
 import Chart from "chart.js";
-import { Card, CardHeader, CardBody, NavItem, NavLink, Nav, Container, Row, Col } from "reactstrap";
+import { Card, CardHeader, CardBody,  Container, Row, Col } from "reactstrap";
 import { chartOptions, parseOptions } from "variables/charts.js";
 import Header from "components/Headers/Header.js";
 import ProjectsTable from "components/Dashboard/ProjectsTable";
@@ -12,7 +11,7 @@ const Index = () => {
   const [projects, setProjects] = useState([]); // State for all projects
   const [filteredProjects, setFilteredProjects] = useState([]); // State for filtered projects
   const [sectorFilter, setSectorFilter] = useState('');
-const [locationFilter, setLocationFilter] = useState('');
+
 
   // Handler functions for filter changes
   const handleSectorChange = (e) => {
