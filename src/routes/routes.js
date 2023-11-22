@@ -81,13 +81,13 @@ const executiveRoutes = [
     component: <Tables />,
     layout: "/executive",
   },
-  {
-    path: "/adddata",
-    name: "Add Data",
-    icon: "ni ni-fat-add",
-    component: <DataForm />,
-    layout: "/executive",
-  },
+  // {
+  //   path: "/adddata",
+  //   name: "Add Data",
+  //   icon: "ni ni-fat-add",
+  //   component: <DataForm />,
+  //   layout: "/executive",
+  // },
   {
     path: "/user-profile",
     name: "User Profile",
@@ -113,13 +113,13 @@ const cabinetRoutes = [
     component: <CabinetMsg />,
     layout: "/cabinet",
   },
-  {
-    path: "/adddata",
-    name: "Add Data",
-    icon: "ni ni-fat-add",
-    component: <DataForm />,
-    layout: "/cabinet",
-  },
+  // {
+  //   path: "/adddata",
+  //   name: "Add Data",
+  //   icon: "ni ni-fat-add",
+  //   component: <DataForm />,
+  //   layout: "/cabinet",
+  // },
   {
     path: "/tables",
     name: "Tables",
