@@ -51,21 +51,30 @@ export default function ProjectsTable({ projectData }) {
             <Dropdown value={options.value} options={statuses} onChange={(e) => options.filterApplyCallback(e.value)} placeholder="Select a Status" className="p-column-filter" showClear />
         );
     };
+    const budgetAllocationBodyTemplate = (rowData) => {
+        // Format numbers with commas
+        const formattedBudget = rowData.budgetAllocation.toLocaleString();
+        return <span>{formattedBudget}</span>;
+    };
 
+    const projectNameBodyTemplate = (rowData) => {
+        // Trim the project name to a specific length and add ellipsis if it's too long
+        const trimmedName = rowData.projectName.length > 25 ? `${rowData.projectName.substring(0, 25)}...` : rowData.projectName;
+        return <span title={rowData.projectName}>{trimmedName}</span>;
+    };
     const header = renderHeader();
 
     return (
         <CardHeader>
             <div className="card">
                 <DataTable value={projectData} paginator rows={10} dataKey="id" globalFilter={globalFilterValue} header={header} emptyMessage="No projects found.">
-                    <Column field="projectName" header="Project Name" filter filterPlaceholder="Search by name" />
+                    <Column field="projectName" header="Project Name" body={projectNameBodyTemplate} filter filterPlaceholder="Search by name" />
                     <Column field="location" header="Location" filter filterPlaceholder="Search by location" />
-                    <Column field="budgetAllocation" header="Budget Allocation" />
-                    <Column field="amountPaid" header="Amount Paid" />
+                    <Column field="budgetAllocation" header="Budget Allocation" body={budgetAllocationBodyTemplate} />
                     <Column field="sector" header="Sector" />
                     <Column field="sourceOfFunding" header="Source of Funding" />
                     <Column field="status" header="Status" body={statusBodyTemplate} filter filterElement={statusRowFilterTemplate} />
-                    {/* You may add more columns as needed based on your JSON */}
+                    {/* ... */}
                 </DataTable>
             </div>
         </CardHeader>
