@@ -6,11 +6,19 @@ const ProjectDetails = () => {
   const [projectDetails, setProjectDetails] = useState(null);
 
   useEffect(() => {
-    // Replace with the actual API call to fetch project details
     fetch(`http://127.0.0.1:5000/projects/${projectId}`)
-      .then(response => response.json())
-      .then(data => setProjectDetails(data))
-      .catch(error => console.error('Error:', error));
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json();
+      })
+      .then(data => {
+        setProjectDetails(data);
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      });
   }, [projectId]);
 
   if (!projectDetails) {
@@ -19,8 +27,13 @@ const ProjectDetails = () => {
 
   return (
     <div>
-      <h1>Project Details: {projectDetails.name}</h1>
-      {/* Render the details of the project */}
+      <h1>Project Details: {projectDetails.projectName}</h1>
+      <p>Location: {projectDetails.location}</p>
+      <p>Sector: {projectDetails.sector}</p>
+      <p>Status: {projectDetails.status}</p>
+      <p>Budget Allocation: {projectDetails.budgetAllocation?.toLocaleString()}</p>
+      <p>Amount Paid: {projectDetails.amountPaid?.toLocaleString()}</p>
+      {/* ...and so on for other details */}
     </div>
   );
 };

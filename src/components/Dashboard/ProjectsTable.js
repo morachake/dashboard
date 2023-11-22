@@ -4,7 +4,7 @@ import { Column } from 'primereact/column';
 import { InputText } from 'primereact/inputtext';
 import { Dropdown } from 'primereact/dropdown';
 import { Tag } from 'primereact/tag';
-import { FilterMatchMode } from 'primereact/api';
+import { useNavigate } from 'react-router-dom';
 import { CardHeader } from 'reactstrap';
 
 export default function ProjectsTable({ projectData }) {
@@ -26,7 +26,7 @@ export default function ProjectsTable({ projectData }) {
             </div>
         );
     };
-
+    console.log("project Data", projectData)
     const statusBodyTemplate = (rowData) => {
         return <Tag value={rowData.status} severity={getSeverity(rowData.status)} />;
     };
@@ -58,16 +58,28 @@ export default function ProjectsTable({ projectData }) {
     };
 
     const projectNameBodyTemplate = (rowData) => {
-        // Trim the project name to a specific length and add ellipsis if it's too long
         const trimmedName = rowData.projectName.length > 25 ? `${rowData.projectName.substring(0, 25)}...` : rowData.projectName;
         return <span title={rowData.projectName}>{trimmedName}</span>;
     };
+    const navigate = useNavigate();
+  
+    const onRowClick = (event) => {
+        const rowData = event.data; // Access the actual row data
+        console.log("Actual row data:", rowData); // This will log the actual row data
+        if (rowData.id) {
+          navigate(`/admin/project/${rowData.id}`);
+        } else {
+          console.error('The actual row data does not have an id property:', rowData);
+        }
+      };
+      
+      
     const header = renderHeader();
 
     return (
         <CardHeader>
             <div className="card">
-                <DataTable value={projectData} paginator rows={10} dataKey="id" globalFilter={globalFilterValue} header={header} emptyMessage="No projects found.">
+                <DataTable  value={projectData} paginator rows={10} dataKey="projectId" globalFilter={globalFilterValue} header={header} emptyMessage="No projects found.">
                     <Column field="projectName" header="Project Name" body={projectNameBodyTemplate} filter filterPlaceholder="Search by name" />
                     <Column field="location" header="Location" filter filterPlaceholder="Search by location" />
                     <Column field="budgetAllocation" header="Budget Allocation" body={budgetAllocationBodyTemplate} />

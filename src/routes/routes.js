@@ -11,6 +11,7 @@ import Cabinet from "views/cabinet/Cabinet";
 import CabinetMsg from "views/cabinet/CabinetMsg";
 import ExcNotes from "views/executive/ExcNotes";
 import CabinetTable from "views/cabinet/CabinetTable";
+import ProjectDetails from "components/Dashboard/ProjectDetails";
 
 const adminRoutes = [
   {
@@ -35,6 +36,11 @@ const adminRoutes = [
     component: <Messaging />,
     layout: "/admin",
   },
+  // {
+  //   path: "/project/:projectId",
+  //   component: <ProjectDetails />,
+  //   layout: "/admin",
+  // },
   {
     path: "/tables",
     name: "Tables",
@@ -81,13 +87,6 @@ const executiveRoutes = [
     component: <Tables />,
     layout: "/executive",
   },
-  // {
-  //   path: "/adddata",
-  //   name: "Add Data",
-  //   icon: "ni ni-fat-add",
-  //   component: <DataForm />,
-  //   layout: "/executive",
-  // },
   {
     path: "/user-profile",
     name: "User Profile",
