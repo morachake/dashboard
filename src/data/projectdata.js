@@ -9,7 +9,7 @@ const projectsData = [
     contractVariation: null,
     implementationStatus: null,
     sourceOfFunding: 'GoK',
-    status:"Cancelled",
+    status:"Stalled",
     remarks: null
   },
   {

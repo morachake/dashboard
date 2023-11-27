@@ -33,12 +33,10 @@ export default function ProjectsTable({ projectData }) {
 
     const getSeverity = (status) => {
         switch (status) {
-            case 'Cancelled':
-                return 'danger';
             case 'Complete':
                 return 'success';
             case 'Stalled':
-                return 'warning';
+                return 'danger';
             case 'Incomplete':
                 return 'info';
             default:

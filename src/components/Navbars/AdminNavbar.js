@@ -78,10 +78,7 @@ const AdminNavbar = (props) => {
                 <DropdownItem className="noti-title" header tag="div">
                   <h6 className="text-overflow m-0">Welcome! {user?.username}</h6>
                 </DropdownItem>
-                <DropdownItem to="/admin/user-profile" tag={Link}>
-                  <i className="ni ni-single-02" />
-                  <span>My profile </span>
-                </DropdownItem>
+               
                 <DropdownItem >
                   <i className="ni ni-notification-70" />
                   <span>Notifications </span>

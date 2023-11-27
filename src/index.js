@@ -18,6 +18,7 @@ import { PrimeReactProvider } from 'primereact/api';
 import "primereact/resources/themes/lara-light-indigo/theme.css";
               
 import "./index.css"
+import MinLayout from "layouts/MinLayout.js";
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
 root.render(
@@ -38,6 +39,11 @@ root.render(
         <Route path="/cabinet/*" element={
           <ProtectedRoute allowedUserTypes={['cs']}>
             <CabinetLayout />
+          </ProtectedRoute>
+        } />
+        <Route path="/ministry/*" element={
+          <ProtectedRoute allowedUserTypes={['min']}>
+            <MinLayout />
           </ProtectedRoute>
         } />
         <Route path="/auth/*" element={<AuthLayout />} />

@@ -39,6 +39,8 @@ export const AuthProvider = ({ children }) => {
           navigate('/executive');
         } else if (data.user.user_type === 'cs') {
           navigate('/cabinet');
+        } else if (data.user.user_type === 'min') {
+          navigate('/ministry')
         } else {
           navigate('/login');
         }

@@ -11,7 +11,7 @@ import Cabinet from "views/cabinet/Cabinet";
 import CabinetMsg from "views/cabinet/CabinetMsg";
 import ExcNotes from "views/executive/ExcNotes";
 import CabinetTable from "views/cabinet/CabinetTable";
-import ProjectDetails from "components/Dashboard/ProjectDetails";
+import Ministry from "views/ministry/Ministry";
 
 const adminRoutes = [
   {
@@ -112,13 +112,13 @@ const cabinetRoutes = [
     component: <CabinetMsg />,
     layout: "/cabinet",
   },
-  // {
-  //   path: "/adddata",
-  //   name: "Add Data",
-  //   icon: "ni ni-fat-add",
-  //   component: <DataForm />,
-  //   layout: "/cabinet",
-  // },
+  {
+    path: "/adddata",
+    name: "Add Data",
+    icon: "ni ni-fat-add",
+    component: <DataForm />,
+    layout: "/cabinet",
+  },
   {
     path: "/tables",
     name: "Tables",
@@ -133,6 +133,44 @@ const cabinetRoutes = [
     component: <Profile />,
     layout: "/cabinet",
   },
-  
 ];
-export   { adminRoutes, executiveRoutes, cabinetRoutes };
+
+const ministryRoutes = [ 
+  {
+    path: "/",
+    name: "Dashboard",
+    icon: "ni ni-tv-2 text-primary",
+    component: <Cabinet />,
+    layout: "/ministry",
+  },
+  {
+    path: "/messaging",
+    name: "Messages",
+    icon: "ni ni-chat-round",
+    component: <CabinetMsg />,
+    layout: "/ministry",
+  },
+  {
+    path: "/adddata",
+    name: "Add Data",
+    icon: "ni ni-fat-add",
+    component: <DataForm />,
+    layout: "/ministry",
+  },
+  // {
+  //   path: "/tables",
+  //   name: "Tables",
+  //   icon: "ni ni-bullet-list-67 text-red",
+  //   component: <CabinetTable />,
+  //   layout: "/ministry",
+  // },
+  // {
+  //   path: "/user-profile",
+  //   name: "User Profile",
+  //   icon: "ni ni-single-02 text-yellow",
+  //   component: <Profile />,
+  //   layout: "/ministry",
+  // },
+];
+
+export   { adminRoutes, executiveRoutes, cabinetRoutes , ministryRoutes};
