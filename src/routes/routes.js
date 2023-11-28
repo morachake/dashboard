@@ -11,7 +11,6 @@ import Cabinet from "views/cabinet/Cabinet";
 import CabinetMsg from "views/cabinet/CabinetMsg";
 import ExcNotes from "views/executive/ExcNotes";
 import CabinetTable from "views/cabinet/CabinetTable";
-import Ministry from "views/ministry/Ministry";
 
 const adminRoutes = [
   {

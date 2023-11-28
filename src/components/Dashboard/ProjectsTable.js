@@ -78,7 +78,7 @@ export default function ProjectsTable({ projectData }) {
         <CardHeader>
             <div className="card">
                 {projectData && projectData.length > 0 ? (
-                     <DataTable  value={projectData} paginator rows={10} dataKey="projectId" globalFilter={globalFilterValue} header={header} emptyMessage="No projects found.">
+                     <DataTable  value={projectData} paginator rows={10} dataKey="projectId" globalFilter={globalFilterValue}  emptyMessage="No projects found.">
                     <Column field="projectName" header="Project Name" body={projectNameBodyTemplate} filter filterPlaceholder="Search by name" />
                     <Column field="location" header="Location" filter filterPlaceholder="Search by location" />
                     <Column field="budgetAllocation" header="Budget Allocation" body={budgetAllocationBodyTemplate} />
