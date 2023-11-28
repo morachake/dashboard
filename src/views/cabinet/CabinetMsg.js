@@ -107,15 +107,6 @@ export default function CabinetMsg() {
       messages: chats[userId] || []
     });
   };
-  const userContainerStyle = {
-    height: '400px',
-    overflowY: 'scroll'
-  };
-
-  const messageContainerStyle = {
-    height: '500px',
-    overflowY: 'scroll'
-  };
   return (
     <>
       <UserHeader />

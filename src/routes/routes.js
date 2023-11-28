@@ -11,6 +11,7 @@ import Cabinet from "views/cabinet/Cabinet";
 import CabinetMsg from "views/cabinet/CabinetMsg";
 import ExcNotes from "views/executive/ExcNotes";
 import CabinetTable from "views/cabinet/CabinetTable";
+import MinTable from "views/ministry/MinTable";
 
 const adminRoutes = [
   {
@@ -150,26 +151,19 @@ const ministryRoutes = [
     layout: "/ministry",
   },
   {
-    path: "/adddata",
-    name: "Add Data",
-    icon: "ni ni-fat-add",
-    component: <DataForm />,
+    path: "/tables",
+    name: "Tables",
+    icon: "ni ni-bullet-list-67 text-red",
+    component: <MinTable />,
     layout: "/ministry",
   },
-  // {
-  //   path: "/tables",
-  //   name: "Tables",
-  //   icon: "ni ni-bullet-list-67 text-red",
-  //   component: <CabinetTable />,
-  //   layout: "/ministry",
-  // },
-  // {
-  //   path: "/user-profile",
-  //   name: "User Profile",
-  //   icon: "ni ni-single-02 text-yellow",
-  //   component: <Profile />,
-  //   layout: "/ministry",
-  // },
+  {
+    path: "/user-profile",
+    name: "User Profile",
+    icon: "ni ni-single-02 text-yellow",
+    component: <Profile />,
+    layout: "/ministry",
+  },
 ];
 
 export   { adminRoutes, executiveRoutes, cabinetRoutes , ministryRoutes};

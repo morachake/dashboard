@@ -85,7 +85,6 @@ export default function ProjectsTable({ projectData }) {
                     <Column field="sector" header="Sector" />
                     <Column field="sourceOfFunding" header="Source of Funding" />
                     <Column field="status" header="Status" body={statusBodyTemplate} filter filterElement={statusRowFilterTemplate} />
-                    {/* ... */}
                 </DataTable> 
                 ) :(
                     <div>No data available</div>

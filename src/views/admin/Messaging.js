@@ -153,12 +153,12 @@ export default function Messaging() {
             </Card>
           </Col>
           <Col xl="9" lg="8" md="8">
-            <Card className="shadow">
+          <Card className="shadow">
               <CardBody>
-                <div className="chat-box" style={messageContainerStyle}>
+                <div className="chat-box message-container">
                   {activeChat && activeChat.messages.length > 0 ? (
                     activeChat.messages.map((msg, index) => (
-                      <div key={index} className={`mb-3 message ${user.id === msg.sender_id ? 'message-outgoing' : 'message-incoming'}`}>
+                      <div key={index} className={`mb-3 message ${user.id === msg.sender_id ? 'sender-message' : 'receiver-message'}`}>
                         <p>{msg}</p>
                       </div>
                     ))

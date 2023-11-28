@@ -13,7 +13,7 @@ export default function CabinetTable() {
     const { user } = useAuth()
     const [projects, setProjects] = useState(null);
     const [globalFilterValue, setGlobalFilterValue] = useState('');
-    const [statuses] = useState(['Stalled', 'Complete', 'Incomplete', 'Cancelled']);
+    const [statuses] = useState(['Stalled', 'Complete', 'Incomplete']);
     const [filters, setFilters] = useState({
         global: { value: '', matchMode: FilterMatchMode.CONTAINS },
         // ... other filters
