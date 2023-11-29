@@ -2,7 +2,7 @@ import React from 'react';
 // reactstrap components
 import { Container, Row, Col, Input, FormGroup, Label } from "reactstrap";
 
-const Header = ({ onSectorChange, onLocationChange,onWardChange, sectors, locations,wards }) => {
+const Header = ({ onSectorChange, onLocationChange, sectors, locations }) => {
   return (
     <>
       <div className="header bg-gradient-info pb-8 pt-5 pt-md-8">
@@ -10,8 +10,7 @@ const Header = ({ onSectorChange, onLocationChange,onWardChange, sectors, locati
           <div className="header-body">
             <Row>
 
-             
-            <Col>
+              <Col>
                 <FormGroup>
                   <Label for="locationSelect">
                     Filter by Subcounty
@@ -22,7 +21,7 @@ const Header = ({ onSectorChange, onLocationChange,onWardChange, sectors, locati
                     type="select"
                     onChange={onLocationChange}
                   >
-                    <option value="">All Subcounties</option>
+                    <option value="">All Locations</option>
                     {Array.isArray(locations) && locations.map((location, index) => (
                       <option key={index} value={location}>{location}</option>
                     ))}
@@ -49,19 +48,19 @@ const Header = ({ onSectorChange, onLocationChange,onWardChange, sectors, locati
               </Col>
               <Col>
                 <FormGroup>
-                  <Label for="wardSelect">
+                  <Label for="sectorSelect">
                     Filter by Ward
                   </Label>
                   <Input
-                    id="wardSelect"
+                    id="sectorSelect"
                     name="select"
                     type="select"
-                    onChange={onWardChange}
+                    onChange={onSectorChange}
                   >
                     <option value="">All Wards</option>
-                    {Array.isArray(wards) && wards.map((ward, index) => (
-                      <option key={index} value={ward}>{ward}</option>
-                    ))}
+                    <option value="">Likoni</option>
+                    <option value="">Shika Adabu</option>
+                    <option value="">Mtongwe</option>                    
                   </Input>
                 </FormGroup>
               </Col>
