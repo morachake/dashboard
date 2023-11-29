@@ -21,15 +21,22 @@ export default function ProjectsTable() {
 
  
 
+  const formatCurrency = (value) => {
+    // Check if value is a number or can be converted to one
+    const num = parseFloat(value);
+    return isNaN(num) ? 'N/A' : num.toLocaleString();
+  };
   const rowExpansionTemplate = (data) => {
     const processRecommendations = (recommendations) => {
       return recommendations
         .split(/\d+\.\s*/)  // Split by the number followed by a period and space
         .filter(item => item.trim() !== '');  // Filter out empty strings
     };
-  
-    // Process the recommendations string
     const recommendationsList = processRecommendations(data.recommendations);
+  
+    
+  
+    const formattedContractSum = formatCurrency(data.contract_sum);
   
     // Render List Items
     const renderListItems = (items) => items.map((item, index) => <ListGroupItem key={index}>{item}</ListGroupItem>);
@@ -46,7 +53,7 @@ export default function ProjectsTable() {
             <Col lg="6" md="12">
               <p><h4>Description:</h4> {data.description}</p>
               <p><h4>Contractor Details:</h4> {data.contractor_details}</p>
-              <p><h4>Contract Sum:</h4> {data.contract_sum}</p>
+              <p><h4>Contract Sum:</h4> {formattedContractSum}</p>
               <p><h4>Status:</h4> {data.status}</p>
               <p><h4>Time Frame:</h4> {data.time_frame}</p>
               <p><h4>Certificates:</h4></p>
