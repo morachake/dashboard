@@ -46,6 +46,24 @@ const Header = ({ onSectorChange, onLocationChange, sectors, locations }) => {
                   </Input>
                 </FormGroup>
               </Col>
+              <Col>
+                <FormGroup>
+                  <Label for="sectorSelect">
+                    Filter by Ward
+                  </Label>
+                  <Input
+                    id="sectorSelect"
+                    name="select"
+                    type="select"
+                    onChange={onSectorChange}
+                  >
+                    <option value="">All Wards</option>
+                    <option value="">Likoni</option>
+                    <option value="">Shika Adabu</option>
+                    <option value="">Mtongwe</option>                    
+                  </Input>
+                </FormGroup>
+              </Col>
             </Row>
             <Row>
             </Row>
