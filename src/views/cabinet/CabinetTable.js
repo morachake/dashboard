@@ -13,8 +13,8 @@ export default function ProjectsTable() {
     fetch('http://127.0.0.1:5000/forms')
       .then(response => response.ok ? response.json() : Promise.reject('Network response was not ok'))
       .then(data => { 
-        const filteredProjects = data.filter(project => project.user_id === user.id);
-        setProjects(filteredProjects)
+        // const filteredProjects = data.filter(project => project.user_id === user.id);
+        setProjects(data)
       })
       .catch(error => console.error('Error fetching projects:', error));
   }, []);

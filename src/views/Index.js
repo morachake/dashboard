@@ -28,6 +28,7 @@ const Index = () => {
       })
       .catch(error => console.error('Error fetching projects:', error));
   }, []);
+  console.log('Project',projects)
   
   useEffect(() => {
     console.log("Unique subcounties:", uniqueSubcounties); // Check the unique subcounties
