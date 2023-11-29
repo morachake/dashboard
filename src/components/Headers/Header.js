@@ -10,7 +10,8 @@ const Header = ({ onSectorChange, onLocationChange, sectors, locations }) => {
           <div className="header-body">
             <Row>
 
-              <Col>
+             
+            <Col>
                 <FormGroup>
                   <Label for="locationSelect">
                     Filter by Subcounty
@@ -21,7 +22,7 @@ const Header = ({ onSectorChange, onLocationChange, sectors, locations }) => {
                     type="select"
                     onChange={onLocationChange}
                   >
-                    <option value="">All Locations</option>
+                    <option value="">All Subcounties</option>
                     {Array.isArray(locations) && locations.map((location, index) => (
                       <option key={index} value={location}>{location}</option>
                     ))}
