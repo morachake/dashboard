@@ -1,72 +1,68 @@
-// Cabinet.js
-import React, { useEffect, useState } from 'react';
-import { useAuth } from 'context/AuthContext'; // Make sure this import path is correct
-import BudgetChart from 'components/Dashboard/BudgetChart';
-import UserHeader from 'components/Headers/UserHeader';
-import {
-  Card,
-  CardHeader,
-  CardBody,
-  Container,
-  Row,
-  Col,
-} from 'reactstrap';
+import React, { useEffect, useState } from "react";
+import { Container, Row, Col, Card, CardHeader, CardBody } from "reactstrap";
+import BudgetChart from "components/Dashboard/BudgetChart";
+import UserHeader from "components/Headers/UserHeader";
 
 const Cabinet = () => {
-  const { user } = useAuth(); // Assuming useAuth provides the logged-in user's details
-  const [projectStatusData, setProjectStatusData] = useState([]);
+  const [projects, setProjects] = useState([]);
+  const [filteredProjects, setFilteredProjects] = useState([]);
 
   useEffect(() => {
-    fetch('http://127.0.0.1:5000/forms') // Replace with your actual API endpoint to fetch projects
+    fetch('http://127.0.0.1:5000/forms')
       .then(response => response.json())
       .then(data => {
-        // Filter the projects based on the logged-in user's ID
-        const userRelatedProjects = data.filter(project => project.user_id === user.id);
-        
-        // Count the number of projects for each status
-        const statusCounts = userRelatedProjects.reduce((acc, project) => {
-          acc[project.status] = (acc[project.status] || 0) + 1;
-          return acc;
-        }, {});
-
-        // Calculate the percentages for each status
-        const totalProjects = userRelatedProjects.length;
-        const statusPercentages = Object.keys(statusCounts).map(status => ({
-          name: status,
-          value: (statusCounts[status] / totalProjects) * 100,
+        const processedData = data.map(project => ({
+          ...project,
+          status: parseFloat(project.status)
         }));
-
-        setProjectStatusData(statusPercentages);
+        setProjects(processedData);
+        setFilteredProjects(processedData);
       })
-      .catch(error => console.error('Error fetching data:', error));
-  }, [user.id]); // Depend on user.id to refetch when it changes
+      .catch(error => console.error('Error fetching projects:', error));
+  }, []);
+
+  const getStatusCategoryData = (projects) => {
+    const categories = {
+      'Above 90%': 0,
+      '70% - 90%': 0,
+      '50% - 70%': 0,
+      '20% - 50%': 0,
+    };
+
+    projects.forEach(project => {
+      const status = project.status;
+      if (status > 90) categories['Above 90%']++;
+      else if (status > 70) categories['70% - 90%']++;
+      else if (status > 50) categories['50% - 70%']++;
+      else if (status > 20) categories['20% - 50%']++;
+    });
+
+    return Object.keys(categories).map(key => ({
+      name: key,
+      value: categories[key],
+    }));
+  };
+
+  const chartData = getStatusCategoryData(filteredProjects);
 
   return (
     <>
-    <UserHeader />
-    <Container className="mt--7" fluid>
-      <Row className="justify-content-center">
-        <Col xl="6" lg="8"> {/* Adjust the column sizes to fit your design */}
-          <Card className="shadow">
-            <CardHeader className="bg-transparent">
-              <h6 className="text-uppercase text-muted ls-1 mb-1">
-                Performance by Project Status
-              </h6>
-            </CardHeader>
-            <CardBody>
-              {/* Add padding within the chart container and center it */}
-              <div className="chart d-flex justify-content-center align-items-center" style={{ padding: '2rem' }}>
-                {projectStatusData.length > 0 && (
-                  <BudgetChart chartData={projectStatusData} />
-                )}
-              </div>
-            </CardBody>
-          </Card>
-        </Col>
-      </Row>
-    </Container>
-  </>
-  
+      <UserHeader />
+      <Container className="mt--7" fluid>
+        <Row>
+          <Col xl="12">
+            <Card className="bg-gradient-default shadow">
+              <CardHeader className="bg-transparent">
+                {/* Card Header if needed */}
+              </CardHeader>
+              <CardBody>
+                <BudgetChart chartData={chartData} />
+              </CardBody>
+            </Card>
+          </Col>
+        </Row>
+      </Container>
+    </>
   );
 };
 

@@ -1,10 +1,9 @@
-// BudgetChart.js
 import React from 'react';
 import { PieChart, Pie, Cell, ResponsiveContainer, Legend } from 'recharts';
 
 const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
 
-export default function BudgetChart ({ chartData }) {
+export default function BudgetChart({ chartData }) {
   return (
     <ResponsiveContainer width="100%" height={400}>
       <PieChart>

@@ -2,7 +2,9 @@ import React from 'react';
 // reactstrap components
 import { Container, Row, Col, Input, FormGroup, Label } from "reactstrap";
 
-const Header = ({ onSectorChange, onLocationChange, sectors, locations }) => {
+const Header = ({ onSectorChange, onLocationChange,onWardChange, sectors, locations,wards }) => {
+  console.log("Wards in Header:", wards);
+
   return (
     <>
       <div className="header bg-gradient-info pb-8 pt-5 pt-md-8">
@@ -10,7 +12,8 @@ const Header = ({ onSectorChange, onLocationChange, sectors, locations }) => {
           <div className="header-body">
             <Row>
 
-              <Col>
+             
+            <Col>
                 <FormGroup>
                   <Label for="locationSelect">
                     Filter by Subcounty
@@ -21,7 +24,7 @@ const Header = ({ onSectorChange, onLocationChange, sectors, locations }) => {
                     type="select"
                     onChange={onLocationChange}
                   >
-                    <option value="">All Locations</option>
+                    <option value="">All Subcounties</option>
                     {Array.isArray(locations) && locations.map((location, index) => (
                       <option key={index} value={location}>{location}</option>
                     ))}
@@ -48,19 +51,19 @@ const Header = ({ onSectorChange, onLocationChange, sectors, locations }) => {
               </Col>
               <Col>
                 <FormGroup>
-                  <Label for="sectorSelect">
+                  <Label for="wardSelect">
                     Filter by Ward
                   </Label>
                   <Input
-                    id="sectorSelect"
+                    id="wardSelect"
                     name="select"
                     type="select"
-                    onChange={onSectorChange}
+                    onChange={onWardChange}
                   >
                     <option value="">All Wards</option>
-                    <option value="">Likoni</option>
-                    <option value="">Shika Adabu</option>
-                    <option value="">Mtongwe</option>                    
+                    {Array.isArray(wards) && wards.map((ward, index) => (
+                      <option key={index} value={ward}>{ward}</option>
+                    ))}
                   </Input>
                 </FormGroup>
               </Col>
