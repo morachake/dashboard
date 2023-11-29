@@ -52,8 +52,8 @@ const Cabinet = () => {
         <Row>
           <Col xl="12">
             <Card className="bg-gradient-default shadow">
-              <CardHeader className="bg-transparent">
-                {/* Card Header if needed */}
+              <CardHeader className="bg-transparent color-white">
+              Project completion percentage
               </CardHeader>
               <CardBody>
                 <BudgetChart chartData={chartData} />
