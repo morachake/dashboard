@@ -1,11 +1,10 @@
 import React from 'react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 
-
-export default function BudgetBars({projectsData}){
-  // Transform projectsData into the format expected by Recharts
-  const chartData = projectsData.map((project) => ({
-    name: project.projectName, // Assuming you want to use the project name as the label on the x-axis
+export default function BudgetBars({ filteredProjects }) {
+  // Transform filteredProjects into the format expected by Recharts
+  const chartData = filteredProjects.map((project) => ({
+    name: project.project_name, // Assuming you want to use the project name as the label on the x-axis
     budgetAllocation: project.budgetAllocation, // The value to be represented by the bars
   }));
 

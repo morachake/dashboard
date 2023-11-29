@@ -42,28 +42,31 @@ const Index = () => {
 
   const filterProjects = () => {
     let result = projects;
-
+  
     if (sectorFilter) {
       result = result.filter(project => project.sector === sectorFilter);
     }
     if (subcountyFilter) {
       result = result.filter(project => project.subcounty === subcountyFilter);
-      console.log(result);
     }
     if (wardFilter) {
       result = result.filter(project => project.ward === wardFilter);
     }
-
+  
     setFilteredProjects(result);
   };
 
   useEffect(() => {
     filterProjects();
   }, [sectorFilter, subcountyFilter, wardFilter, projects]);
-
+  
   const handleSectorChange = (e) => {
     setSectorFilter(e.target.value);
   };
+
+
+
+
 
   const handleSubcountyChange = (e) => {
     console.log("Subcounty selected:", e.target.value);
@@ -76,14 +79,13 @@ const Index = () => {
   };
   return (
     <>
-       {projects.length > 0 && (
+         {projects.length > 0 && (
         <Header
-        onSectorChange={handleSectorChange}
-        onLocationChange={handleSubcountyChange} // Updated to handle subcounties
-        sectors={uniqueSectors}
-        locations={uniqueSubcounties} // Pass subcounties here
-      />
-      
+          onSectorChange={handleSectorChange}
+          onLocationChange={handleSubcountyChange} 
+          sectors={uniqueSectors}
+          locations={uniqueSubcounties} 
+        />
       )}
       <Container className="mt--7" fluid>
         <Row>
@@ -94,16 +96,16 @@ const Index = () => {
               </CardHeader>
               <CardBody>
                 <div className="chart">
-                  <BudgetBars projectsData={filteredProjects} />
+                <BudgetBars filteredProjects={filteredProjects} />
                 </div>
               </CardBody>
             </Card>
           </Col>
         </Row>
         <Row className="mt-5">
-          {/* <Col xl="12">
-            <ProjectsTable projectData={filteredProjects} />
-          </Col> */}
+          <Col xl="12">
+          <ProjectsTable projectData={filteredProjects} />
+          </Col>
         </Row>
       </Container>
     </>
