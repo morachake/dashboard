@@ -2,7 +2,7 @@ import React from 'react';
 // reactstrap components
 import { Container, Row, Col, Input, FormGroup, Label } from "reactstrap";
 
-const Header = ({ onSectorChange, onLocationChange, sectors, locations }) => {
+const Header = ({ onSectorChange, onLocationChange,onWardChange, sectors, locations,wards }) => {
   return (
     <>
       <div className="header bg-gradient-info pb-8 pt-5 pt-md-8">
@@ -49,19 +49,19 @@ const Header = ({ onSectorChange, onLocationChange, sectors, locations }) => {
               </Col>
               <Col>
                 <FormGroup>
-                  <Label for="sectorSelect">
+                  <Label for="wardSelect">
                     Filter by Ward
                   </Label>
                   <Input
-                    id="sectorSelect"
+                    id="wardSelect"
                     name="select"
                     type="select"
-                    onChange={onSectorChange}
+                    onChange={onWardChange}
                   >
                     <option value="">All Wards</option>
-                    <option value="">Likoni</option>
-                    <option value="">Shika Adabu</option>
-                    <option value="">Mtongwe</option>                    
+                    {Array.isArray(wards) && wards.map((ward, index) => (
+                      <option key={index} value={ward}>{ward}</option>
+                    ))}
                   </Input>
                 </FormGroup>
               </Col>

@@ -31,7 +31,7 @@ const Index = () => {
   console.log('Project',projects)
   
   useEffect(() => {
-    console.log("Unique subcounties:", uniqueSubcounties); // Check the unique subcounties
+    console.log("Unique subcounties:", uniqueSubcounties); 
   }, [projects]);
   
 
@@ -52,6 +52,7 @@ const Index = () => {
     }
     if (wardFilter) {
       result = result.filter(project => project.ward === wardFilter);
+      console.log(result);
     }
   
     setFilteredProjects(result);
@@ -76,8 +77,10 @@ const Index = () => {
   
 
   const handleWardChange = (e) => {
+    console.log("Ward selected:", e.target.value);
     setWardFilter(e.target.value);
   };
+  
   return (
     <>
          {projects.length > 0 && (
