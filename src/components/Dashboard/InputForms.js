@@ -23,11 +23,13 @@ export default function InputForm() {
         description: '',
         contract_sum: '',
         time_frame: '',
+        contract_sum:'',
         contractor_details: '',
         certificate_number: '',
         amount_certified: '',
         status: '',
         remarks: '',
+        time_frame:'',
         recommendations: '',
         before_images_url: 'http://example.com/images/before_dummy.jpg', // Dummy URL for prefilling
         after_images_url: 'http://example.com/images/after_dummy.jpg', // Dummy URL for prefilling
@@ -60,20 +62,18 @@ export default function InputForm() {
 
 
     const saveData = () => {
-        // Assuming you've uploaded the files elsewhere and have their URLs, 
-        // you will include those URLs in the JSON payload
         const jsonPayload = {
             ...formData,
             before_images_url: 'http://example.com/images/before.jpg',
             after_images_url: 'http://example.com/images/before.jpg',
-            user_id: user.id // Assuming 'user' object has an 'id' field
+            user_id: user.id 
         };
 
         fetch('http://127.0.0.1:5000/form', {
             method: 'POST',
             body: JSON.stringify(jsonPayload),
             headers: {
-                'Content-Type': 'application/json' // Indicate that you're sending a JSON payload
+                'Content-Type': 'application/json' 
             }
         })
             .then(response => {
@@ -84,11 +84,11 @@ export default function InputForm() {
             })
             .then(data => {
                 console.log("Successfully submitted", data);
-                // Handle success
+                
             })
             .catch(err => {
                 console.error("Error during submission:", err.message);
-                // Handle errors
+                
             });
     };
 
