@@ -72,13 +72,13 @@ export default function ProjectsTable() {
               <CardHeader>
   <div style={{ display: 'flex', justifyContent: 'space-between' }}>
     <div>
-      <h5>Before Images</h5>
+      <h5>Previous </h5>
       <Card style={{ width: '10rem', marginBottom: '1rem' }}>
         <img src={data.before_images} alt={data.project_name} style={{ width: '100%' }} />
       </Card>
     </div>
     <div>
-      <h5>After Images</h5>
+      <h5>Present</h5>
       <Card style={{ width: '10rem', marginBottom: '1rem' }}>
         <img src={data.after_images} alt={data.project_name} style={{ width: '100%' }} />
       </Card>
