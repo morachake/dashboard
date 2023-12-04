@@ -1,17 +1,26 @@
 import React from 'react';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+  ResponsiveContainer,
+} from 'recharts';
+
 export default function BudgetBars({ filteredProjects }) {
   const chartData = filteredProjects.map((project) => ({
-     name: project.project_name,
-     status: parseFloat(project.status)
+    name: project.project_name,
+    status: parseFloat(project.status),
   }));
 
   const getBarColor = (status) => {
     if (status < 30) return '#e74c3c';
-    if (status < 60) return '#f39c12'; 
-    return '#27ae60'; 
+    if (status < 60) return '#f39c12';
+    return '#27ae60';
   };
-  
 
   return (
     <ResponsiveContainer width="100%" height="100%">
@@ -29,9 +38,11 @@ export default function BudgetBars({ filteredProjects }) {
         <YAxis domain={[0, 100]} />
         <Tooltip />
         <Legend />
-        <Bar 
-          dataKey="status" 
-          fill={(entry) => getBarColor(entry.status)} 
+        <Bar
+          dataKey="status"
+          fill={(entry) => getBarColor(entry.status)}
+          stroke="#333" 
+          strokeWidth={2} 
         />
       </BarChart>
     </ResponsiveContainer>

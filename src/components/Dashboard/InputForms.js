@@ -1,7 +1,8 @@
 import { useAuth } from 'context/AuthContext';
 import React, { useCallback, useState } from 'react';
 import { Form, FormGroup, FormText, Input, Label, Button, CardHeader, Row, CardBody, Col } from 'reactstrap';
-import ImageUpload from "./ImageUpload";
+import ImageUpload from "../Reusable/ImageUpload";
+import ValidatedInput from 'components/Reusable/ValidatedInput';
 
 const subCountyWards = {
     Mvita: ["Mji Wa Kale/Makadara", "Tudor", "Tononoka", "Shimanzi/Ganjoni", "Majengo"],
@@ -92,7 +93,7 @@ export default function InputForm() {
         });
     };
 
-
+    const requiredValidator = (value) => value ? '' : 'This field is required';
 
 
     return (
@@ -161,7 +162,17 @@ export default function InputForm() {
 
                 </Row>
 
-                <FormGroup>
+
+
+                <ValidatedInput 
+                    label="Project Description"
+                    name="description"
+                    type="textarea"
+                    value={formData.description}
+                    onChange={handleInputChange}
+                    validator={requiredValidator}
+                />
+                {/* <FormGroup>
                     <Label for="exampleText">
                         Project Description
                     </Label>
@@ -172,7 +183,7 @@ export default function InputForm() {
                         value={formData.description}
                         onChange={handleInputChange}
                     />
-                </FormGroup>
+                </FormGroup> */}
                 <Row lg={4} md={6} xs={12}>
                     <Col md={6} lg={4}>
                         <FormGroup>

@@ -5,6 +5,7 @@ import { chartOptions, parseOptions } from "variables/charts.js";
 import Header from "components/Headers/Header.js";
 import ProjectsTable from "components/Dashboard/ProjectsTable";
 import BudgetBars from "components/Dashboard/BudgetBars";
+import BarChart from "components/Dashboard/BarChart";
 
 const Index = () => {
   const [projects, setProjects] = useState([]);
@@ -96,12 +97,16 @@ const Index = () => {
           <Col xl="12">
             <Card className="bg-gradient-default shadow">
               <CardHeader className="bg-transparent">
-                {/* ... */}
               </CardHeader>
-              <CardBody>
+              {/* <CardBody>
                 <div className="chart">
                 <BudgetBars filteredProjects={filteredProjects} />
                 </div>
+              </CardBody> */}
+              <CardBody>
+              <div className="chart">
+              <BarChart data={filteredProjects} />
+              </div>
               </CardBody>
             </Card>
           </Col>
