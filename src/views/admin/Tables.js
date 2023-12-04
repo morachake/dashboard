@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
-import { CardHeader, Container,Card, Col ,  CardBody, Row,ListGroup ,ListGroupItem} from 'reactstrap';
+import { CardHeader, Container, Card, Col, CardBody, Row, ListGroup, ListGroupItem } from 'reactstrap';
 import UserHeader from 'components/Headers/UserHeader';
 
 export default function ProjectsTable() {
@@ -19,7 +19,7 @@ export default function ProjectsTable() {
     setExpandedRows(e.data);
   };
 
- 
+
 
   const formatCurrency = (value) => {
     // Check if value is a number or can be converted to one
@@ -33,16 +33,16 @@ export default function ProjectsTable() {
         .filter(item => item.trim() !== '');  // Filter out empty strings
     };
     const recommendationsList = processRecommendations(data.recommendations);
-  
-    
-  
+
+
+
     const formattedContractSum = formatCurrency(data.contract_sum);
-  
+
     // Render List Items
     const renderListItems = (items) => items.map((item, index) => <ListGroupItem key={index}>{item}</ListGroupItem>);
-  
+
     const certificatesList = data.certificates.map(cert => `${cert.certificate_number}: ${cert.amount_certified}`);
-  
+
     return (
       <Card>
         <CardHeader>
@@ -69,6 +69,23 @@ export default function ProjectsTable() {
               <ListGroup>
                 {renderListItems(recommendationsList)}
               </ListGroup>
+              <CardHeader>
+  <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+    <div>
+      <h5>Before Images</h5>
+      <Card style={{ width: '10rem', marginBottom: '1rem' }}>
+        <img src={data.before_images} alt={data.project_name} style={{ width: '100%' }} />
+      </Card>
+    </div>
+    <div>
+      <h5>After Images</h5>
+      <Card style={{ width: '10rem', marginBottom: '1rem' }}>
+        <img src={data.after_images} alt={data.project_name} style={{ width: '100%' }} />
+      </Card>
+    </div>
+  </div>
+</CardHeader>
+
             </Col>
           </Row>
         </CardBody>
@@ -76,8 +93,8 @@ export default function ProjectsTable() {
     );
   };
 
-   
-  
+
+
 
   return (
     <>
@@ -86,10 +103,10 @@ export default function ProjectsTable() {
         <CardHeader>
           <div className="card">
             {projectData && projectData.length > 0 ? (
-              <DataTable 
+              <DataTable
                 value={projectData}
-                paginator 
-                rows={10} 
+                paginator
+                rows={10}
                 dataKey="id"
                 emptyMessage="No projects found."
                 expandedRows={expandedRows}
