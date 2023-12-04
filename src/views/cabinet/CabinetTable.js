@@ -30,6 +30,7 @@ export default function ProjectsTable() {
     const num = parseFloat(value);
     return isNaN(num) ? 'N/A' : num.toLocaleString();
   };
+  
   const rowExpansionTemplate = (data) => {
     const processRecommendations = (recommendations) => {
       return recommendations
