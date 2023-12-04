@@ -1,6 +1,7 @@
 import { useAuth } from 'context/AuthContext';
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { Form, FormGroup, FormText, Input, Label, Button, CardHeader, Row, CardBody, Col } from 'reactstrap';
+import ImageUpload from "./ImageUpload";
 
 const subCountyWards = {
     Mvita: ["Mji Wa Kale/Makadara", "Tudor", "Tononoka", "Shimanzi/Ganjoni", "Majengo"],
@@ -23,17 +24,23 @@ export default function InputForm() {
         description: '',
         contract_sum: '',
         time_frame: '',
-        contract_sum:'',
         contractor_details: '',
         certificate_number: '',
         amount_certified: '',
         status: '',
         remarks: '',
-        time_frame:'',
         recommendations: '',
-        before_images_url: 'http://example.com/images/before_dummy.jpg', // Dummy URL for prefilling
-        after_images_url: 'http://example.com/images/after_dummy.jpg', // Dummy URL for prefilling
+        before_images_url: '', 
+        after_images_url:'',
     });
+    const handleImageUpload = (url, imageType) => {
+        setFormData((prevFormData) => ({
+            ...prevFormData,
+            [imageType]: url
+        }));
+    };
+    
+
     const handleSubCountyChange = (event) => {
         const subCounty = event.target.value;
         setSelectedSubCounty(subCounty);
@@ -56,17 +63,12 @@ export default function InputForm() {
         setFormData({ ...formData, [name]: value });
     };
 
-    const handleFileChange = (event) => {
-        setFormData({ ...formData, [event.target.name]: event.target.files });
-    };
 
 
     const saveData = () => {
         const jsonPayload = {
             ...formData,
-            before_images_url: 'http://example.com/images/before.jpg',
-            after_images_url: 'http://example.com/images/before.jpg',
-            user_id: user.id 
+            user_id: user.id
         };
 
         fetch('http://127.0.0.1:5000/form', {
@@ -76,20 +78,18 @@ export default function InputForm() {
                 'Content-Type': 'application/json' 
             }
         })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                return response.json();
-            })
-            .then(data => {
-                console.log("Successfully submitted", data);
-                
-            })
-            .catch(err => {
-                console.error("Error during submission:", err.message);
-                
-            });
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log("Successfully submitted", data);
+        })
+        .catch(err => {
+            console.error("Error during submission:", err.message);
+        });
     };
 
 
@@ -265,27 +265,15 @@ export default function InputForm() {
                 {/* Assuming before_images and after_images are file uploads */}
                 <Row lg={4} md={6} xs={12}>
                     <Col md={6} lg={4}>
-                        <FormGroup>
+                    <FormGroup>
                             <Label for="beforeImages">Previous Images</Label>
-                            <Input
-                                id="beforeImages"
-                                name="before_images"
-                                type="file"
-                                onChange={handleFileChange}
-                                multiple
-                            />
+                            <ImageUpload onImageUpload={(url) => handleImageUpload(url, 'before_images_url')} />
                         </FormGroup>
                     </Col>
                     <Col md={6} lg={4}>
-                        <FormGroup>
+                    <FormGroup>
                             <Label for="afterImages">Current Image</Label>
-                            <Input
-                                id="afterImages"
-                                name="after_images"
-                                type="file"
-                                onChange={handleFileChange}
-                                multiple
-                            />
+                            <ImageUpload onImageUpload={(url) => handleImageUpload(url, 'after_images_url')} />
                         </FormGroup>
                     </Col>
 
