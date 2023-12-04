@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
-import { CardHeader, Container, Card, Col, CardBody, Row, ListGroup, ListGroupItem } from 'reactstrap';
+import { CardHeader, Container, Card, Col, CardBody, Row, ListGroup, ListGroupItem, CardImg } from 'reactstrap';
 import UserHeader from 'components/Headers/UserHeader';
+
 
 export default function ProjectsTable() {
   const [projectData, setProjects] = useState([]);
@@ -70,21 +71,26 @@ export default function ProjectsTable() {
                 {renderListItems(recommendationsList)}
               </ListGroup>
               <CardHeader>
-  <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-    <div>
-      <h5>Previous </h5>
-      <Card style={{ width: '10rem', marginBottom: '1rem' }}>
-        <img src={data.before_images} alt={data.project_name} style={{ width: '100%' }} />
-      </Card>
-    </div>
-    <div>
-      <h5>Present</h5>
-      <Card style={{ width: '10rem', marginBottom: '1rem' }}>
-        <img src={data.after_images} alt={data.project_name} style={{ width: '100%' }} />
-      </Card>
-    </div>
-  </div>
-</CardHeader>
+                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                  <div>
+                    <h5>Previous </h5>
+                    <Card style={{ width: '10rem', marginBottom: '1rem' }}>
+                      <img src={data.before_images} alt={data.project_name} style={{ width: '100%' }} />
+                    </Card>
+                  </div>
+                  <div>
+                    <h5>Present</h5>
+                    <Card style={{ width: '10rem', marginBottom: '1rem' }}>
+                      <CardImg
+                        top width="100%"
+                        style={{ width: '100%',  height: 150 }}
+                        src={data.after_images}
+                        alt={data.project_name}
+                      />
+                    </Card>
+                  </div>
+                </div>
+              </CardHeader>
 
             </Col>
           </Row>
