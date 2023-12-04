@@ -43,7 +43,7 @@ export default function ProjectsTable({ projectData }) {
     };
 
     const contractSumBodyTemplate = (rowData) => {
-        return <span>{parseFloat(rowData.contract_sum).toLocaleString('en-US', { style: 'currency', currency: 'USD' })}</span>;
+        return <span>{parseFloat(rowData.contract_sum).toLocaleString()}</span>;
     };
 
     const projectNameBodyTemplate = (rowData) => {
