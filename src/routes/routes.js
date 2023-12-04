@@ -36,11 +36,13 @@ const adminRoutes = [
     component: <Messaging />,
     layout: "/admin",
   },
-  // {
-  //   path: "/project/:projectId",
-  //   component: <ProjectDetails />,
-  //   layout: "/admin",
-  // },
+  {
+    path: "/adddata",
+    name: "Add Data",
+    icon: "ni ni-fat-add",
+    component: <DataForm />,
+    layout: "/admin",
+  },
   {
     path: "/tables",
     name: "Tables",
