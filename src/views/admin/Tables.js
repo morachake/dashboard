@@ -3,6 +3,7 @@ import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import { CardHeader, Container, Card, Col, CardBody, Row, ListGroup, ListGroupItem, CardImg } from 'reactstrap';
 import UserHeader from 'components/Headers/UserHeader';
+import config from 'config';
 
 
 export default function ProjectsTable() {
@@ -10,7 +11,7 @@ export default function ProjectsTable() {
   const [expandedRows, setExpandedRows] = useState(null);
 
   useEffect(() => {
-    fetch('http://127.0.0.1:5000/forms')
+    fetch(`${config.backendURL}/forms`)
       .then(response => response.ok ? response.json() : Promise.reject('Network response was not ok'))
       .then(data => setProjects(data))
       .catch(error => console.error('Error fetching projects:', error));
