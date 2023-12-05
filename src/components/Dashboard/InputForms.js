@@ -12,27 +12,30 @@ const subCountyWards = {
     Nyali: ["Frere Town", "Ziwa la Ng’ombe", "Mkomani", "Kongowea", "Kadzandani"],
     Jomvu: ["Jomvu Kuu", "Magongo", "Mikindini"]
 };
+const initialFormData = {
+    project_name: '',
+    subcounty: '',
+    ward: '',
+    description: '',
+    contract_sum: '',
+    time_frame: '',
+    contractor_details: '',
+    certificates: [],
+    status: '',
+    remarks: '',
+    recommendations: '',
+    before_images_url: '',
+    after_images_url: '',
+};
 
 export default function InputForm() {
     const { user } = useAuth();
     const [selectedSubCounty, setSelectedSubCounty] = useState('');
     const [wards, setWards] = useState([]);
+    const [formErrors, setFormErrors] = useState({});
     const [formData, setFormData] = useState({
-        project_name: '',
-        user_id: user.id,
-        subcounty: '',
-        ward: '',
-        description: '',
-        contract_sum: '',
-        time_frame: '',
-        contractor_details: '',
-        certificate_number: '',
-        amount_certified: '',
-        status: '',
-        remarks: '',
-        recommendations: '',
-        before_images_url: '', 
-        after_images_url:'',
+       ...initialFormData,
+       user_id: user.id
     });
     const handleImageUpload = (url, imageType) => {
         setFormData((prevFormData) => ({
@@ -40,7 +43,6 @@ export default function InputForm() {
             [imageType]: url
         }));
     };
-    
 
     const handleSubCountyChange = (event) => {
         const subCounty = event.target.value;
@@ -53,18 +55,20 @@ export default function InputForm() {
         setFormData({ ...formData, ward: event.target.value });
     };
 
-
     const handleSubmit = (event) => {
         event.preventDefault();
-        saveData();
+        if (canSubmit()) {
+            saveData();
+        } else {
+            console.error('Form validation failed');
+            // Optionally, display an error message in the UI
+        }
     };
 
     const handleInputChange = (event) => {
         const { name, value } = event.target;
         setFormData({ ...formData, [name]: value });
     };
-
-
 
     const saveData = () => {
         const jsonPayload = {
@@ -76,30 +80,98 @@ export default function InputForm() {
             method: 'POST',
             body: JSON.stringify(jsonPayload),
             headers: {
-                'Content-Type': 'application/json' 
+                'Content-Type': 'application/json'
             }
         })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log("Successfully submitted", data);
+                clearForm()
+            })
+            .catch(err => {
+                console.error("Error during submission:", err.message);
+            });
+    };
+    const clearForm = () => {
+        setFormData({ ...initialFormData, user_id: user.id });
+        setSelectedSubCounty('');
+        setWards([]);
+    }
+
+    const validateCertificateData = (certificate) => {
+        let errors = {};
+        if (!certificate.certificate_number) {
+            errors.certificate_number = 'Certificate number is required';
+        }
+        if (!certificate.amount_certified || isNaN(parseFloat(certificate.amount_certified))) {
+            errors.amount_certified = 'Valid amount certified is required';
+        }
+        return errors;
+    };
+    const canSubmit = () => {
+        for (let certificate of formData.certificates) {
+            if (Object.keys(validateCertificateData(certificate)).length > 0) {
+                return false;
             }
-            return response.json();
-        })
-        .then(data => {
-            console.log("Successfully submitted", data);
-        })
-        .catch(err => {
-            console.error("Error during submission:", err.message);
-        });
+        }
+        return true;
+    };
+    const handleCertificateItemChange = (event, index) => {
+        const { name, value } = event.target;
+        const updatedCertificates = [...formData.certificates];
+        updatedCertificates[index] = { ...updatedCertificates[index], [name]: value };
+        setFormData({ ...formData, certificates: updatedCertificates });
     };
 
-    const requiredValidator = (value) => value ? '' : 'This field is required';
+    const addCertificateItem = () => {
+        const newCertificate = { certificate_number: '', amount_certified: '' };
+        setFormData((prevFormData) => ({
+            ...prevFormData,
+            certificates: [...prevFormData.certificates, newCertificate],
+        }));
+    };
 
+    const removeCertificateItem = (index) => {
+        const updatedCertificates = [...formData.certificates];
+        updatedCertificates.splice(index, 1);
+        setFormData({ ...formData, certificates: updatedCertificates });
+    };
+    const validateField = (name, value) => {
+        if (!value) return 'This field is required';
+        if (name === 'contract_sum' && isNaN(value)) return 'Must be a number';
+        return '';
+    };
+
+    const validateForm = () => {
+        let errors = {};
+        Object.keys(formData).forEach(key => {
+            if (key !== 'certificates') {
+                errors[key] = validateField(key, formData[key]);
+            } else {
+                errors.certificates = formData.certificates.map(validateCertificate);
+            }
+        });
+        setFormErrors(errors);
+        return !Object.values(errors).some(error => error);
+    };
+    const validateCertificate = (certificate) => {
+        let errors = {};
+        if (!certificate.certificate_number) errors.certificate_number = 'Certificate number is required';
+        if (!certificate.amount_certified || isNaN(parseFloat(certificate.amount_certified))) {
+            errors.amount_certified = 'Valid amount certified is required';
+        }
+        return errors;
+    };
+    const requiredValidator = (value) => value ? '' : 'This field is required';
 
     return (
         <CardHeader>
             <CardBody>
-
             </CardBody>
             <Form onSubmit={handleSubmit}>
                 <FormGroup>
@@ -114,6 +186,7 @@ export default function InputForm() {
                         value={formData.project_name}
                         onChange={handleInputChange}
                     />
+                     {formErrors.project_name && <div className="text-danger">{formErrors.project_name}</div>}
                 </FormGroup>
 
                 <Row lg={4} md={6} xs={12}>
@@ -159,62 +232,6 @@ export default function InputForm() {
                             </Input>
                         </FormGroup>
                     </Col>
-
-                </Row>
-
-
-
-                <ValidatedInput 
-                    label="Project Description"
-                    name="description"
-                    type="textarea"
-                    value={formData.description}
-                    onChange={handleInputChange}
-                    validator={requiredValidator}
-                />
-                {/* <FormGroup>
-                    <Label for="exampleText">
-                        Project Description
-                    </Label>
-                    <Input
-                        id="description"
-                        name="description"
-                        type="textarea"
-                        value={formData.description}
-                        onChange={handleInputChange}
-                    />
-                </FormGroup> */}
-                <Row lg={4} md={6} xs={12}>
-                    <Col md={6} lg={4}>
-                        <FormGroup>
-                            <Label for="contractSum">
-                                Contract Sum
-                            </Label>
-                            <Input
-                                id="contractSum"
-                                name="contract_sum"
-                                placeholder="Enter the contract sum"
-                                type="number"
-                                value={formData.contract_sum}
-                                onChange={handleInputChange}
-                            />
-                        </FormGroup>
-                    </Col>
-                    <Col md={6} lg={4}>
-                        <FormGroup>
-                            <Label for="timeFrame">
-                                Time Frame
-                            </Label>
-                            <Input
-                                id="timeFrame"
-                                name="time_frame"
-                                placeholder="Enter the project time frame"
-                                type="text"
-                                value={formData.time_frame}
-                                onChange={handleInputChange}
-                            />
-                        </FormGroup>
-                    </Col>
                     <Col md={6} lg={4}>
                         <FormGroup>
                             <Label for="status">
@@ -232,20 +249,126 @@ export default function InputForm() {
                     </Col>
                 </Row>
 
+                <ValidatedInput
+                    label="Project Description"
+                    name="description"
+                    type="textarea"
+                    value={formData.description}
+                    onChange={handleInputChange}
+                    validator={requiredValidator}
+                />
+
+                <Row lg={4} md={6} xs={12}>
+                    <Col md={6} lg={4}>
+                        <FormGroup>
+                            <Label for="contractor_details">
+                                Contractor Details
+                            </Label>
+                            <Input
+                                id="contractor_details"
+                                name="contractor_details"
+                                placeholder="Enter the contractor's details"
+                                type="text"
+                                value={formData.contractor_details}
+                                onChange={handleInputChange}
+                            />
+                        </FormGroup>
+                    </Col>
+                    <Col md={6} lg={4}>
+                        <FormGroup>
+                            <Label for="contract_sum">
+                                Contract Sum
+                            </Label>
+                            <Input
+                                id="contract_sum"
+                                name="contract_sum"
+                                placeholder="Enter the contract sum"
+                                type="number"
+                                value={formData.contract_sum}
+                                onChange={handleInputChange}
+                            />
+                        </FormGroup>
+                    </Col>
+                    <Col md={6} lg={4}>
+                        <FormGroup>
+                            <Label for="time_frame">
+                                Time Frame
+                            </Label>
+                            <Input
+                                id="time_frame"
+                                name="time_frame"
+                                placeholder="Enter the project time frame"
+                                type="text"
+                                value={formData.time_frame}
+                                onChange={handleInputChange}
+                            />
+                        </FormGroup>
+                    </Col>
+
+                </Row>
+
+
+
                 <FormGroup>
-                    <Label for="contractorDetails">
-                        Contractor Details
-                    </Label>
-                    <Input
-                        id="contractorDetails"
-                        name="contractor_details"
-                        placeholder="Enter the contractor's details"
-                        type="text"
-                        value={formData.contractor_details}
-                        onChange={handleInputChange}
-                    />
+                    <Label for="certificates">Certificates</Label>
+                    {formData.certificates.map((certificate, index) => (
+                        <div key={index}>
+                            <Row lg={4} md={6} xs={12}>
+                                <Col md={6} lg={4}>
+                                    <FormGroup>
+                                        <Label for={`certificateNumber-${index}`}>Certificate Number</Label>
+                                        <Input
+                                            id={`certificateNumber-${index}`}
+                                            name="certificate_number"
+                                            placeholder="Certificate Number"
+                                            type="text"
+                                            value={certificate.certificate_number}
+                                            onChange={(e) => handleCertificateItemChange(e, index)}
+                                        />
+                                        {/* Display validation error if any */}
+                                        {validateCertificateData(certificate).certificate_number && (
+                                            <div className="text-danger">
+                                                {validateCertificateData(certificate).certificate_number}
+                                            </div>
+                                        )}
+                                    </FormGroup>
+                                </Col>
+                                <Col md={6} lg={4}>
+                                    <FormGroup>
+                                        <Label for={`amountCertified-${index}`}>Amount Certified</Label>
+                                        <Input
+                                            id={`amountCertified-${index}`}
+                                            name="amount_certified"
+                                            placeholder="Amount Certified"
+                                            type="text"
+                                            value={certificate.amount_certified}
+                                            onChange={(e) => handleCertificateItemChange(e, index)}
+                                        />
+                                        {/* Display validation error if any */}
+                                        {validateCertificateData(certificate).amount_certified && (
+                                            <div className="text-danger">
+                                                {validateCertificateData(certificate).amount_certified}
+                                            </div>
+                                        )}
+                                    </FormGroup>
+                                </Col>
+                            </Row>
+                            {index > 0 && (
+                                <Col>
+                                    <Button type="button" onClick={() => removeCertificateItem(index)}>
+                                        Remove Certificate
+                                    </Button>
+                                </Col>
+
+                            )}
+                        </div>
+                    ))}
+                    <Col>
+                        <Button type="button" onClick={addCertificateItem}>
+                            Add Certificate
+                        </Button>
+                    </Col>
                 </FormGroup>
-                {/* ... Add other input fields as needed ... */}
 
                 <FormGroup>
                     <Label for="remarks">
@@ -260,6 +383,7 @@ export default function InputForm() {
                         onChange={handleInputChange}
                     />
                 </FormGroup>
+
                 <FormGroup>
                     <Label for="recommendations">
                         Recommendations
@@ -273,23 +397,23 @@ export default function InputForm() {
                         onChange={handleInputChange}
                     />
                 </FormGroup>
-                {/* Assuming before_images and after_images are file uploads */}
+
                 <Row lg={4} md={6} xs={12}>
                     <Col md={6} lg={4}>
-                    <FormGroup>
-                            <Label for="beforeImages">Previous Images</Label>
+                        <FormGroup>
+                            <Label for="before_images_url">Previous Images</Label>
                             <ImageUpload onImageUpload={(url) => handleImageUpload(url, 'before_images_url')} />
                         </FormGroup>
                     </Col>
                     <Col md={6} lg={4}>
-                    <FormGroup>
-                            <Label for="afterImages">Current Image</Label>
+                        <FormGroup>
+                            <Label for="after_images_url">Current Image</Label>
                             <ImageUpload onImageUpload={(url) => handleImageUpload(url, 'after_images_url')} />
                         </FormGroup>
                     </Col>
-
                 </Row>
-                <Button type="submit" >
+
+                <Button type="submit">
                     Submit
                 </Button>
             </Form>
