@@ -1,9 +1,10 @@
+import config from 'config';
 import React, { useState } from 'react';
 import {
     Card, CardHeader, CardBody, FormGroup, Label, Button, Alert, CustomInput,Input
 } from 'reactstrap';
 
-export default function NoteTaker() {
+export default function NoteTaker({}) {
     const [assignedTo, setAssignedTo] = useState([]);
     const [subject, setSubject] = useState('');
     const [details, setDetails] = useState('');
@@ -49,7 +50,7 @@ export default function NoteTaker() {
             subject: subject
         };
 
-        fetch('http://127.0.0.1:5000/note', {
+        fetch(`${config.backendURL}/note`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -59,10 +60,13 @@ export default function NoteTaker() {
         .then(response => response.json())
         .then(data => {
             console.log('Success:', data);
-            setAssignedTo([]); // Clear the assigned departments
-            setDetails(''); // Clear the details
-            setSubject(''); // Clear the subject
-            setErrors({}); // Clear any errors
+            setAssignedTo([]); 
+            setDetails(''); 
+            setSubject(''); 
+            setErrors({}); 
+            // if (onNoteCreated) {
+            //     onNoteCreated();
+            // }
         })
         .catch((error) => {
             console.error('Error:', error);

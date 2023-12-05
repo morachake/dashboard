@@ -1,3 +1,4 @@
+import config from 'config';
 import React, { useEffect, useState } from 'react';
 import {
     Card,
@@ -12,8 +13,8 @@ import {
 export default function NoteList() {
     const [notes, setNotes] = useState([]);
     useEffect(() => {
-        fetch('http://127.0.0.1:5000/notes')
-        .then(response => response.json()) // Corrected: json is a method, so it needs to be called with ()
+        fetch(`${config.backendURL}/notes`)
+        .then(response => response.json())  
         .then(data => {
             const sortedData = data.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
             setNotes(sortedData);

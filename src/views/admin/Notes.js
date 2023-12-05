@@ -2,15 +2,8 @@ import UserHeader from 'components/Headers/UserHeader';
 import NoteList from 'components/Notes/NoteList';
 import NoteTaker from 'components/Notes/Notetaker';
 import React, { useState } from 'react';
-import { NavLink } from 'react-router-dom';
 import {
-    Accordion,
-    AccordionBody,
-    AccordionHeader,
-    AccordionItem,
-    Card,
-    CardBody,
-    CardHeader,
+
     Col,
     Container,
     Row,
@@ -36,7 +29,7 @@ export default function Notes() {
                         </>
                     </Col>
                     <Col xl="4">
-                       <NoteTaker/>
+                    <NoteTaker  />
                     </Col>
                 </Row>
             </Container>
