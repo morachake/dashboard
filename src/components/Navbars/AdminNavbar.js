@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 // reactstrap components
 import "./admidbar.css"
@@ -12,15 +12,28 @@ import {
   Nav,
   Container,
   Media,
+  Badge
 } from "reactstrap";
 import { useAuth } from "context/AuthContext";
 import NotificationModal from "./NotificationModal";
+import config from "config";
+
 
 const AdminNavbar = (props) => {
   const [modal, setModal] = useState(false);
   const toggle = () => setModal(!modal);
   const { logout, user } = useAuth()
-  console.log(user);
+  const [notifications, setNotifications] = useState([]);
+  const [readNotifications, setReadNotifications] = useState(new Set(JSON.parse(localStorage.getItem('readNotifications') || '[]')));
+  useEffect(() => {
+    fetch(`${config.backendURL}/notes`)
+      .then(response => response.json())
+      .then(data => {
+        const sortedData = data.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+        setNotifications(sortedData);
+      });
+  }, []); console.log(user);
+  const unreadCount = notifications.filter(notification => !readNotifications.has(notification.id)).length;
 
   return (
     <>
@@ -33,11 +46,16 @@ const AdminNavbar = (props) => {
             <h6 style={{ fontSize: '0.9em', color: '#FFFF' }}> Mombasa county service delivery unit</h6>
           </Link>
           <div className="navbar-search navbar-search-dark form-inline mr-3 d-none d-md-flex ml-lg-auto">
-            <div onClick={toggle} style={{ cursor: 'pointer' }}>
+            <div onClick={toggle} style={{ cursor: 'pointer', position: 'relative' }}>
               <i className="ni ni-bell-55 custom-icon" />
+              {unreadCount > 0 && (
+                <Badge color="danger" className="notification-badge">
+                  {unreadCount}
+                </Badge>
+              )}
             </div>
           </div>
-          <NotificationModal isOpen={modal} toggle={toggle}/>
+          <NotificationModal isOpen={modal} toggle={toggle} notifications={notifications} />
           <Nav className="align-items-center d-none d-md-flex" navbar>
             <UncontrolledDropdown nav>
               <DropdownToggle className="pr-0" nav>
@@ -56,7 +74,7 @@ const AdminNavbar = (props) => {
                 <DropdownItem className="noti-title" header tag="div">
                   <h6 className="text-overflow m-0">Welcome! {user?.username}</h6>
                 </DropdownItem>
-               
+
                 <DropdownItem >
                   <i className="ni ni-notification-70" />
                   <span>Notifications </span>

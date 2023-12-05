@@ -1,19 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Modal, ModalHeader, ModalBody, ListGroup, ListGroupItem, Badge } from "reactstrap";
-import config from 'config';
 
-const NotificationModal = ({ isOpen, toggle }) => {
+
+const NotificationModal = ({ isOpen, toggle, notifications }) => {
     const [expandedNotificationId, setExpandedNotificationId] = useState(null);
-    const [notifications, setNotifications] = useState([]);
     const [readNotifications, setReadNotifications] = useState(new Set(JSON.parse(localStorage.getItem('readNotifications') || '[]')));
-    useEffect(() => {
-        fetch(`${config.backendURL}/notes`)
-            .then(response => response.json())  
-            .then(data => {
-                const sortedData = data.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
-                setNotifications(sortedData);
-            });
-    }, []);
+    
 
     const handleNotificationClick = (id) => {
         setExpandedNotificationId(expandedNotificationId === id ? null : id);

@@ -43,3 +43,12 @@
     overflow-y: auto; /* Scroll for overflow content */
   }
   
+  /* adminbar.css */
+.notification-badge {
+  background-color: #eaecef;
+  position: absolute;
+  top: -12px;
+  right: -5px;
+  font-size: 17px; /* Adjust as needed */
+  border-radius: 50%;
+}
