@@ -23,7 +23,6 @@ const Login = () => {
   const {login} = useAuth()
 
   const handleLogin = async () => {
-    console.log("DETAILS", username, password);
     await login(username, password); 
   };
   return (

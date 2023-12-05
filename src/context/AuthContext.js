@@ -1,3 +1,4 @@
+import config from 'config';
 import React, { createContext, useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -17,7 +18,7 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (username, password) => {
     try {
-      const response = await fetch("http://127.0.0.1:5000/login", {
+      const response = await fetch(`${config.backendURL}/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -29,10 +30,8 @@ export const AuthProvider = ({ children }) => {
         const data = await response.json();        
         setUser(data.user);
         setIsAuthenticated(true);
-        console.log("Login successfully completed", data);
         localStorage.setItem('user', JSON.stringify(data.user)); 
         localStorage.setItem('authToken', data.token);
-        // Redirect or perform additional actions
         if (data.user.user_type === 'admin') {
           navigate('/admin/index');
         } else if (data.user.user_type === 'cec') {
@@ -47,7 +46,6 @@ export const AuthProvider = ({ children }) => {
         
       } else {
         console.log("Login failed");
-        // Handle login failure
         const errorData = await response.json();
         console.log("error data is", errorData.message);
       }
@@ -56,17 +54,10 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const register = async (username,email,password) => {
-    try {
-      
-    } catch (error) {
-      
-    }
-  };
 
   const resetPassword = async (username, oldPassword, newPassword) => {
     try {
-      const response = await fetch("/reset_password", {
+      const response = await fetch(`${config.backendURL}/reset_password`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -77,9 +68,7 @@ export const AuthProvider = ({ children }) => {
       if (response.ok) {
         const data = await response.json();
         console.log("Password reset successfully", data);
-        // Perform additional actions on success, like navigating to a login page
       } else {
-        // Handle password reset failure
         const errorData = await response.json();
         console.log("Password reset failed", errorData.message);
       }
