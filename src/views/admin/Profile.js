@@ -13,13 +13,34 @@ import {
 import UserHeader from "components/Headers/UserHeader.js";
 import { useAuth } from "context/AuthContext";
 import { useState } from "react";
+import config from "config";
 
 const Profile = () => {
   const {user} = useAuth()
   const [oldPassword,setOldPassword] = useState('')
   const [newPassword,setNewPassword] = useState('')
-  const handlePasswordReset = () => {}
-
+  const handlePasswordReset = async() => {
+    try {
+      const response = await fetch(`${config.backendURL}/reset_password`,{
+        method:'POST',
+        headers :{
+          'Content-Type':'application/json'
+        },
+        body:JSON.stringify({
+          username:user.username,
+          old_password:oldPassword,
+          new_password:newPassword
+        }) 
+      });
+      const data = await response.json();
+      if (response.ok) {
+        console.log('reset successfule', data);
+      } else {
+        console.log('reset failed', data);
+      }
+    } catch (error) {
+      console.error('Error', error);
+    }}
   return (
     <>
       <UserHeader />
