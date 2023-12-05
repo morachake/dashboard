@@ -1,6 +1,3 @@
-
-
-// reactstrap components
 import {
   Button,
   Card,
@@ -15,9 +12,13 @@ import {
 } from "reactstrap";
 import UserHeader from "components/Headers/UserHeader.js";
 import { useAuth } from "context/AuthContext";
+import { useState } from "react";
 
 const Profile = () => {
   const {user} = useAuth()
+  const [oldPassword,setOldPassword] = useState('')
+  const [newPassword,setNewPassword] = useState('')
+  const handlePasswordReset = () => {}
 
   return (
     <>
@@ -81,22 +82,12 @@ const Profile = () => {
                   <Col xs="8">
                     <h3 className="mb-0">My account</h3>
                   </Col>
-                  <Col className="text-right" xs="4">
-                    <Button
-                      color="primary"
-                      href="#pablo"
-                      onClick={(e) => e.preventDefault()}
-                      size="sm"
-                    >
-                      Settings
-                    </Button>
-                  </Col>
                 </Row>
               </CardHeader>
               <CardBody>
                 <Form>
                   <h6 className="heading-small text-muted mb-4">
-                    User information
+                  Reset Password
                   </h6>
                   <div className="pl-lg-4">
                     <Row>
@@ -110,10 +101,11 @@ const Profile = () => {
                           </label>
                           <Input
                             className="form-control-alternative"
-                            defaultValue="Lucky"
                             id="input-first-name"
                             placeholder="First name"
                             type="text"
+                            value={oldPassword}
+                            onChange={(e)=>setOldPassword(e.target.value)}
                           />
                         </FormGroup>
                       </Col>
@@ -127,14 +119,16 @@ const Profile = () => {
                           </label>
                           <Input
                             className="form-control-alternative"
-                            defaultValue="Jesse"
                             id="input-last-name"
                             placeholder="Last name"
                             type="text"
+                            value={newPassword}
+                            onChange={(e) => setNewPassword(e.target.value)}
                           />
                         </FormGroup>
                       </Col>
                     </Row>
+                    <Button color="primary" onClick={handlePasswordReset}>Reset Password</Button>
                   </div>    
                 </Form>
               </CardBody>
