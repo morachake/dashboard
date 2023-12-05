@@ -3,6 +3,7 @@ import React, { useCallback, useState } from 'react';
 import { Form, FormGroup, FormFeedback, Input, Label, Button, CardHeader, Row, CardBody, Col } from 'reactstrap';
 import ImageUpload from "../Reusable/ImageUpload";
 import ValidatedInput from 'components/Reusable/ValidatedInput';
+import config from 'config';
 
 const subCountyWards = {
     Mvita: ["Mji Wa Kale/Makadara", "Tudor", "Tononoka", "Shimanzi/Ganjoni", "Majengo"],
@@ -76,7 +77,7 @@ export default function InputForm() {
             user_id: user.id
         };
 
-        fetch('http://127.0.0.1:5000/form', {
+        fetch(`${config.backendURL}/form`, {
             method: 'POST',
             body: JSON.stringify(jsonPayload),
             headers: {

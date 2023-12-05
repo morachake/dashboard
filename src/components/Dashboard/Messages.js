@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Card, CardHeader, Progress, Row, Table } from 'reactstrap';
+import { Button, Card, CardHeader,  Row, Table } from 'reactstrap';
 
 export default function Messages() {
   return (

@@ -13,7 +13,6 @@ import {
   Container,
   Media,
   Badge,
-  Button
 } from "reactstrap";
 import { useAuth } from "context/AuthContext";
 import NotificationModal from "./NotificationModal";
