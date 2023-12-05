@@ -4,8 +4,9 @@ import { Card, CardHeader, CardBody, Container, Row, Col } from "reactstrap";
 import { chartOptions, parseOptions } from "variables/charts.js";
 import Header from "components/Headers/Header.js";
 import ProjectsTable from "components/Dashboard/ProjectsTable";
-import BudgetBars from "components/Dashboard/BudgetBars";
+// import BudgetBars from "components/Dashboard/BudgetBars";
 import BarChart from "components/Dashboard/BarChart";
+import config from "config";
 
 const Index = () => {
   const [projects, setProjects] = useState([]);
@@ -18,7 +19,7 @@ const Index = () => {
   const [uniqueWards, setUniqueWards] = useState([]);
 
   useEffect(() => {
-    fetch('http://127.0.0.1:5000/forms')
+    fetch(`${config.backendURL}/forms`)
       .then(response => response.json())
       .then(data => {
         setProjects(data);
