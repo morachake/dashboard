@@ -9,7 +9,9 @@ import config from 'config';
 export default function ProjectsTable() {
   const [projectData, setProjects] = useState([]);
   const [expandedRows, setExpandedRows] = useState(null);
-
+  const contractSumTemplate = (rowData) => {
+    return formatCurrency(rowData.contract_sum);
+  };
   useEffect(() => {
     fetch(`${config.backendURL}/forms`)
       .then(response => response.ok ? response.json() : Promise.reject('Network response was not ok'))
@@ -20,11 +22,7 @@ export default function ProjectsTable() {
   const onRowToggle = (e) => {
     setExpandedRows(e.data);
   };
-
-
-
   const formatCurrency = (value) => {
-    // Check if value is a number or can be converted to one
     const num = parseFloat(value);
     return isNaN(num) ? 'N/A' : num.toLocaleString();
   };
@@ -34,15 +32,14 @@ export default function ProjectsTable() {
         .split(/\d+\.\s*/)  
         .filter(item => item.trim() !== '');  
     };
+    
     const recommendationsList = processRecommendations(data.recommendations);
-
-
-
     const formattedContractSum = formatCurrency(data.contract_sum);
     const renderListItems = (items) => items.map((item, index) => <ListGroupItem key={index}>{item}</ListGroupItem>);
-
-    const certificatesList = data.certificates.map(cert => `${cert.certificate_number}: ${cert.amount_certified}`);
-
+    const certificatesList = data.certificates.map(cert => 
+      `${cert.certificate_number}: ${formatCurrency(cert.amount_certified)}`);
+    const totalAmountPaid = data.certificates.reduce((sum, cert) => sum + parseFloat(cert.amount_certified), 0);
+    const formattedTotalAmountPaid = formatCurrency(totalAmountPaid);
     return (
       <Card>
         <CardHeader>
@@ -57,9 +54,11 @@ export default function ProjectsTable() {
               <p><h4>Status:</h4> {data.status}</p>
               <p><h4>Time Frame:</h4> {data.time_frame}</p>
               <p><h4>Certificates:</h4></p>
+              <p><h4>Total Amount Paid: {formattedTotalAmountPaid}</h4></p>
               <ListGroup>
                 {renderListItems(certificatesList)}
               </ListGroup>
+             
             </Col>
             <Col lg="6" md="12">
               <p><h4>Subcounty:</h4> {data.subcounty}</p>
@@ -123,7 +122,7 @@ export default function ProjectsTable() {
                 <Column field="status" header="Status" />
                 <Column field="subcounty" header="Subcounty" />
                 <Column field="ward" header="Ward" />
-                <Column field="contract_sum" header="Contract Sum" />
+                <Column field="contract_sum" header="Contract Sum" body={contractSumTemplate} />
               </DataTable>
             ) : (
               <div>No data available</div>
