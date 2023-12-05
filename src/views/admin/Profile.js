@@ -13,17 +13,16 @@ import {
   Row,
   Col,
 } from "reactstrap";
-// core components
 import UserHeader from "components/Headers/UserHeader.js";
 import { useAuth } from "context/AuthContext";
 
 const Profile = () => {
   const {user} = useAuth()
-  console.log(user)
+
   return (
     <>
       <UserHeader />
-      {/* Page content */}
+     
       <Container className="mt--7" fluid>
         <Row>
           <Col className="order-xl-2 mb-5 mb-xl-0" xl="4">
@@ -105,44 +104,9 @@ const Profile = () => {
                         <FormGroup>
                           <label
                             className="form-control-label"
-                            htmlFor="input-username"
-                          >
-                            Username
-                          </label>
-                          <Input
-                            className="form-control-alternative"
-                            defaultValue="lucky.jesse"
-                            id="input-username"
-                            placeholder="Username"
-                            type="text"
-                          />
-                        </FormGroup>
-                      </Col>
-                      <Col lg="6">
-                        <FormGroup>
-                          <label
-                            className="form-control-label"
-                            htmlFor="input-email"
-                          >
-                            Email address
-                          </label>
-                          <Input
-                            className="form-control-alternative"
-                            id="input-email"
-                            placeholder="jesse@example.com"
-                            type="email"
-                          />
-                        </FormGroup>
-                      </Col>
-                    </Row>
-                    <Row>
-                      <Col lg="6">
-                        <FormGroup>
-                          <label
-                            className="form-control-label"
                             htmlFor="input-first-name"
                           >
-                            First name
+                            Old Password
                           </label>
                           <Input
                             className="form-control-alternative"
@@ -159,7 +123,7 @@ const Profile = () => {
                             className="form-control-label"
                             htmlFor="input-last-name"
                           >
-                            Last name
+                            New Password
                           </label>
                           <Input
                             className="form-control-alternative"
@@ -174,6 +138,9 @@ const Profile = () => {
                   </div>    
                 </Form>
               </CardBody>
+            </Card>
+            <Card>
+              
             </Card>
           </Col>
         </Row>
