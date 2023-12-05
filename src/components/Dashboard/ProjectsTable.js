@@ -62,8 +62,6 @@ export default function ProjectsTable({ projectData }) {
         }
     };
 
-    const header = renderHeader();
-
     function shortDesc(text) {
         return text.length > 50 ? `${text.slice(0, 50)}...` : text;
     }
@@ -82,10 +80,10 @@ export default function ProjectsTable({ projectData }) {
         <CardHeader>
             <div className="card">
                 {projectData && projectData.length > 0 ? (
-                    <DataTable value={projectData} paginator rows={10} dataKey="id" globalFilter={globalFilterValue} header={header} onRowClick={onRowClick} emptyMessage="No projects found.">
-                        <Column field="project_name" header="Project Name" body={projectNameBodyTemplate} filter filterPlaceholder="Search by name" />
+                    <DataTable value={projectData} paginator rows={10} dataKey="id"  onRowClick={onRowClick} emptyMessage="No projects found.">
+                        <Column field="project_name" header="Project Name" body={projectNameBodyTemplate} />
                         <Column field="description" header="Description" body={descriptionWithTooltip} />
-                        <Column field="sector" header="Sector" />
+                        {/* <Column field="sector" header="Sector" /> */}
                         <Column field="status" header="Status" body={statusBodyTemplate} />
                         <Column field="subcounty" header="Subcounty" />
                         <Column field="ward" header="Ward" />

@@ -82,14 +82,8 @@ const Profile = () => {
                 <Row>
                   <div className="col">
                     <div className="card-profile-stats d-flex justify-content-center mt-md-5">
-                      <div>
-                        <span className="heading">10</span>
-                        <span className="description">Notifications</span>
-                      </div>
-                      <div>
-                        <span className="heading">89</span>
-                        <span className="description">Messages</span>
-                      </div>
+                      
+                      
                     </div>
                   </div>
                 </Row>

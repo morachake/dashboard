@@ -12,6 +12,8 @@ import {
   Nav,
   Container,
   Media,
+  Badge,
+  Button
 } from "reactstrap";
 import { useAuth } from "context/AuthContext";
 import NotificationModal from "./NotificationModal";
@@ -34,10 +36,12 @@ const AdminNavbar = (props) => {
           </Link>
           <div className="navbar-search navbar-search-dark form-inline mr-3 d-none d-md-flex ml-lg-auto">
             <div onClick={toggle} style={{ cursor: 'pointer' }}>
-              <i className="ni ni-bell-55 custom-icon" />
+                <Badge>
+                <i className="ni ni-bell-55 custom-icon" />{' '}4
+                </Badge>
             </div>
           </div>
-          <NotificationModal isOpen={modal} toggle={toggle}/>
+          <NotificationModal isOpen={modal} toggle={toggle} />
           <Nav className="align-items-center d-none d-md-flex" navbar>
             <UncontrolledDropdown nav>
               <DropdownToggle className="pr-0" nav>
@@ -56,10 +60,9 @@ const AdminNavbar = (props) => {
                 <DropdownItem className="noti-title" header tag="div">
                   <h6 className="text-overflow m-0">Welcome! {user?.username}</h6>
                 </DropdownItem>
-               
+
                 <DropdownItem >
                   <i className="ni ni-notification-70" />
-                  <span>Notifications </span>
                 </DropdownItem>
                 <DropdownItem href="#pablo" onClick={logout}>
                   <i className="ni ni-user-run" />
