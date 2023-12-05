@@ -16,7 +16,7 @@ const UserHeader = () => {
           backgroundPosition: "center top",
         }}
       >
-        {/* Mask */}
+   
         <span className="mask bg-gradient-default opacity-8" />
         <Container className="d-flex align-items-center" fluid>
           <Row>

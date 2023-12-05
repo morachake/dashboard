@@ -12,38 +12,16 @@ import {
   Nav,
   Container,
   Media,
-  Modal,
-  ModalHeader,
-  ModalBody,
-  ModalFooter,
-  Button
 } from "reactstrap";
 import { useAuth } from "context/AuthContext";
-import PropTypes from 'prop-types';
 import NotificationModal from "./NotificationModal";
 
 const AdminNavbar = (props) => {
-  const { className } = props;
   const [modal, setModal] = useState(false);
-  const [backdrop, setBackdrop] = useState(true);
-  const [keyboard, setKeyboard] = useState(true);
-
   const toggle = () => setModal(!modal);
-
-  const changeBackdrop = (e) => {
-    let { value } = e.target;
-    if (value !== 'static') {
-      value = JSON.parse(value);
-    }
-    setBackdrop(value);
-  };
-
-  const changeKeyboard = (e) => {
-    setKeyboard(e.currentTarget.checked);
-  };
   const { logout, user } = useAuth()
   console.log(user);
-  const handleNotification = () => { };
+
   return (
     <>
       <Navbar className="navbar-top navbar-dark" expand="md" id="navbar-main">
@@ -68,7 +46,7 @@ const AdminNavbar = (props) => {
                   <span className="ml-3 avatar avatar-sm rounded-circle">
                     <img
                       alt="..."
-                      src="https://mwanasiasa.com/wp-content/uploads/2022/02/Abdulswamad-Shariff-Nassir.jpg"
+                      src={`https://ui-avatars.com/api/?name=${user.username.charAt(0)}&background=random&color=fff&size=128`}
                     />
                   </span>
 
