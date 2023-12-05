@@ -41,7 +41,7 @@ export default function ImageUpload({ onImageUpload }) {
                 <Button onClick={handleUpload}>Upload</Button>
             </form>
             {uploadError && <p className="error-message">{uploadError}</p>}
-            <Card style={{width:'10rem'}}>
+            <Card style={{width:'18rem'}}>
                 {cloudinaryImage && 
                 <img src={cloudinaryImage} alt="Uploaded" />
                 

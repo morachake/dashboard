@@ -34,8 +34,8 @@ export default function InputForm() {
     const [wards, setWards] = useState([]);
     const [formErrors, setFormErrors] = useState({});
     const [formData, setFormData] = useState({
-       ...initialFormData,
-       user_id: user.id
+        ...initialFormData,
+        user_id: user.id
     });
     const handleImageUpload = (url, imageType) => {
         setFormData((prevFormData) => ({
@@ -114,13 +114,42 @@ export default function InputForm() {
         return errors;
     };
     const canSubmit = () => {
-        for (let certificate of formData.certificates) {
-            if (Object.keys(validateCertificateData(certificate)).length > 0) {
-                return false;
+        let isValid = true;
+        let newErrors = {};
+    
+        // Validate each field in formData
+        Object.keys(formData).forEach(key => {
+            let error = '';
+            switch (key) {
+                case 'project_name':
+                case 'description':
+                case 'contractor_details':
+                case 'status':
+                case 'remarks':
+                case 'recommendations':
+                    error = requiredValidator(formData[key]);
+                    break;
+                case 'contract_sum':
+                case 'time_frame':
+                    error = numberValidator(formData[key]);
+                    break;
+                case 'certificates':
+                    newErrors.certificates = formData.certificates.map(validateCertificateData);
+                    if (newErrors.certificates.some(certError => Object.values(certError).some(e => e))) {
+                        isValid = false;
+                    }
+                    return;
+                default:
+                    break;
             }
-        }
-        return true;
+            newErrors[key] = error;
+            if (error) isValid = false;
+        });
+    
+        setFormErrors(newErrors);
+        return isValid;
     };
+    
     const handleCertificateItemChange = (event, index) => {
         const { name, value } = event.target;
         const updatedCertificates = [...formData.certificates];
@@ -167,85 +196,80 @@ export default function InputForm() {
         }
         return errors;
     };
-    const requiredValidator = (value) => value ? '' : 'This field is required';
+    const requiredValidator = value => value.trim() ? '' : 'required';
+    const numberValidator = value => !isNaN(value) && value.trim() !== '' ? '' : 'number';
+
 
     return (
         <CardHeader>
             <CardBody>
             </CardBody>
             <Form onSubmit={handleSubmit}>
-                <FormGroup>
-                    <Label for="exampleEmail">
-                        Project Name
-                    </Label>
-                    <Input
-                        id="project_name"
-                        name="project_name"
-                        placeholder="Project Name"
-                        type="text"
-                        value={formData.project_name}
-                        onChange={handleInputChange}
-                    />
-                     {formErrors.project_name && <div className="text-danger">{formErrors.project_name}</div>}
-                </FormGroup>
-
+                <ValidatedInput
+                    label="Project Name"
+                    id="project_name"
+                    name="project_name"
+                    placeholder="Project Name"
+                    type="text"
+                    value={formData.project_name}
+                    onChange={handleInputChange}
+                    validator={requiredValidator}
+                />
                 <Row lg={4} md={6} xs={12}>
                     <Col md={6} lg={4}>
-                        <FormGroup>
-                            <Label for="subCountySelect">Sub-County</Label>
-                            <Input
-                                id="subCountySelect"
-                                name="subcounty"
-                                type="select"
-                                onChange={handleSubCountyChange}
-                                value={selectedSubCounty}
-                            >
-                                <option value="">Select Sub-County</option>
-                                <option value="Mvita">Mvita</option>
-                                <option value="Likoni">Likoni</option>
-                                <option value="Changamwe">Changamwe</option>
-                                <option value="Kisauni">Kisauni</option>
-                                <option value="Nyali">Nyali</option>
-                                <option value="Jomvu">Jomvu</option>
-                            </Input>
-                        </FormGroup>
+                        <Label>
+                            Select Sub-County
+                        </Label>
+                        <Input
+
+                            id="subCountySelect"
+                            name="subcounty"
+                            type="select"
+                            onChange={handleSubCountyChange}
+                            value={selectedSubCounty}
+                        >
+                            <option value="">Select Sub-County</option>
+                            <option value="Mvita">Mvita</option>
+                            <option value="Likoni">Likoni</option>
+                            <option value="Changamwe">Changamwe</option>
+                            <option value="Kisauni">Kisauni</option>
+                            <option value="Nyali">Nyali</option>
+                            <option value="Jomvu">Jomvu</option>
+                        </Input>
                     </Col>
                     <Col md={6} lg={4}>
-                        <FormGroup>
-                            <Label for="wardsSelect">Wards</Label>
-                            <Input
-                                id="wardsSelect"
-                                name="ward"
-                                type="select"
-                                onChange={handleWardChange}
-                                value={wards.length === 0 ? '' : undefined}
-                            >
-                                {wards.length === 0 ? (
-                                    <option>No wards available</option>
-                                ) : (
-                                    wards.map((ward, index) => (
-                                        <option key={index} value={ward}>
-                                            {ward}
-                                        </option>
-                                    ))
-                                )}
-                            </Input>
-                        </FormGroup>
+                        <Label>Select Ward</Label>
+                        <Input
+                            label="Wards"
+                            id="wardsSelect"
+                            name="ward"
+                            type="select"
+                            onChange={handleWardChange}
+                            value={wards.length === 0 ? '' : undefined}
+                        >
+                            {wards.length === 0 ? (
+                                <option>No wards available</option>
+                            ) : (
+                                wards.map((ward, index) => (
+                                    <option key={index} value={ward}>
+                                        {ward}
+                                    </option>
+                                ))
+                            )}
+                        </Input>
                     </Col>
                     <Col md={6} lg={4}>
-                        <FormGroup>
-                            <Label for="status">
-                                Status
-                            </Label>
-                            <Input
-                                id="status"
-                                name="status"
-                                placeholder="Enter the project status"
-                                type="text"
-                                value={formData.status}
-                                onChange={handleInputChange}
-                            />
-                        </FormGroup>
+                        <ValidatedInput
+                            label="Status"
+                            id="status"
+                            name="status"
+                            placeholder="Enter the project status"
+                            type="text"
+                            value={formData.status}
+                            onChange={handleInputChange}
+                            validator={requiredValidator}
+                        />
+
                     </Col>
                 </Row>
 
@@ -260,49 +284,40 @@ export default function InputForm() {
 
                 <Row lg={4} md={6} xs={12}>
                     <Col md={6} lg={4}>
-                        <FormGroup>
-                            <Label for="contractor_details">
-                                Contractor Details
-                            </Label>
-                            <Input
-                                id="contractor_details"
-                                name="contractor_details"
-                                placeholder="Enter the contractor's details"
-                                type="text"
-                                value={formData.contractor_details}
-                                onChange={handleInputChange}
-                            />
-                        </FormGroup>
+
+                        <ValidatedInput
+                            id="contractor_details"
+                            name="contractor_details"
+                            label="Contractor Details"
+                            type="text"
+                            value={formData.contractor_details}
+                            onChange={handleInputChange}
+                            validator={requiredValidator}
+                        />
                     </Col>
                     <Col md={6} lg={4}>
-                        <FormGroup>
-                            <Label for="contract_sum">
-                                Contract Sum
-                            </Label>
-                            <Input
-                                id="contract_sum"
-                                name="contract_sum"
-                                placeholder="Enter the contract sum"
-                                type="number"
-                                value={formData.contract_sum}
-                                onChange={handleInputChange}
-                            />
-                        </FormGroup>
+                        <ValidatedInput
+                            label="Contract Sum"
+                            id="contract_sum"
+                            name="contract_sum"
+                            placeholder="Enter the contract sum"
+                            type="number"
+                            value={formData.contract_sum}
+                            onChange={handleInputChange}
+                            validator={numberValidator}
+                        />
                     </Col>
                     <Col md={6} lg={4}>
-                        <FormGroup>
-                            <Label for="time_frame">
-                                Time Frame
-                            </Label>
-                            <Input
-                                id="time_frame"
-                                name="time_frame"
-                                placeholder="Enter the project time frame"
-                                type="text"
-                                value={formData.time_frame}
-                                onChange={handleInputChange}
-                            />
-                        </FormGroup>
+                        <ValidatedInput
+                            label="Time Frame"
+                            id="time_frame"
+                            name="time_frame"
+                            placeholder="Enter the project time frame"
+                            type="text"
+                            value={formData.time_frame}
+                            onChange={handleInputChange}
+                            validator={numberValidator}
+                        />
                     </Col>
 
                 </Row>
@@ -371,30 +386,30 @@ export default function InputForm() {
                 </FormGroup>
 
                 <FormGroup>
-                    <Label for="remarks">
-                        Remarks
-                    </Label>
-                    <Input
+
+                    <ValidatedInput
+                        label="Remarks"
                         id="remarks"
                         name="remarks"
                         placeholder="Enter any remarks"
                         type="textarea"
                         value={formData.remarks}
                         onChange={handleInputChange}
+                        validator={requiredValidator}
                     />
                 </FormGroup>
 
                 <FormGroup>
-                    <Label for="recommendations">
-                        Recommendations
-                    </Label>
-                    <Input
+
+                    <ValidatedInput
+                        label="Recommendations"
                         id="recommendations"
                         name="recommendations"
                         placeholder="Enter any recommendations"
                         type="textarea"
                         value={formData.recommendations}
                         onChange={handleInputChange}
+                        validator={requiredValidator}
                     />
                 </FormGroup>
 
