@@ -1,6 +1,6 @@
 import { useAuth } from 'context/AuthContext';
 import React, { useCallback, useState } from 'react';
-import { Form, FormGroup, FormText, Input, Label, Button, CardHeader, Row, CardBody, Col } from 'reactstrap';
+import { Form, FormGroup, FormFeedback, Input, Label, Button, CardHeader, Row, CardBody, Col } from 'reactstrap';
 import ImageUpload from "../Reusable/ImageUpload";
 import ValidatedInput from 'components/Reusable/ValidatedInput';
 
@@ -236,6 +236,7 @@ export default function InputForm() {
                             <option value="Nyali">Nyali</option>
                             <option value="Jomvu">Jomvu</option>
                         </Input>
+                        <FormFeedback>{formErrors.subcounty}</FormFeedback>
                     </Col>
                     <Col md={6} lg={4}>
                         <Label>Select Ward</Label>
@@ -257,6 +258,7 @@ export default function InputForm() {
                                 ))
                             )}
                         </Input>
+                        <FormFeedback>{formErrors.ward}</FormFeedback>
                     </Col>
                     <Col md={6} lg={4}>
                         <ValidatedInput

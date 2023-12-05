@@ -30,16 +30,14 @@ export default function ProjectsTable() {
   const rowExpansionTemplate = (data) => {
     const processRecommendations = (recommendations) => {
       return recommendations
-        .split(/\d+\.\s*/)  // Split by the number followed by a period and space
-        .filter(item => item.trim() !== '');  // Filter out empty strings
+        .split(/\d+\.\s*/)  
+        .filter(item => item.trim() !== '');  
     };
     const recommendationsList = processRecommendations(data.recommendations);
 
 
 
     const formattedContractSum = formatCurrency(data.contract_sum);
-
-    // Render List Items
     const renderListItems = (items) => items.map((item, index) => <ListGroupItem key={index}>{item}</ListGroupItem>);
 
     const certificatesList = data.certificates.map(cert => `${cert.certificate_number}: ${cert.amount_certified}`);
@@ -71,26 +69,26 @@ export default function ProjectsTable() {
                 {renderListItems(recommendationsList)}
               </ListGroup>
               <CardHeader>
-                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                  <div>
-                    <h5>Previous </h5>
-                    <Card style={{ width: '10rem', marginBottom: '1rem' }}>
-                      <img src={data.before_images} alt={data.project_name} style={{ width: '100%' }} />
-                    </Card>
-                  </div>
-                  <div>
-                    <h5>Present</h5>
-                    <Card style={{ width: '10rem', marginBottom: '1rem' }}>
-                      <CardImg
-                        top width="100%"
-                        style={{ width: '100%',  height: 150 }}
-                        src={data.after_images}
-                        alt={data.project_name}
-                      />
-                    </Card>
-                  </div>
+              <div style={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center' }}>
+                <div>
+                  <h5>Previous </h5>
+                  <Card style={{ width: '18rem', marginBottom: '1rem' }}>
+                    <img src={data.before_images} alt={data.project_name} style={{ width: '100%', height: 'auto' }} />
+                  </Card>
                 </div>
-              </CardHeader>
+                <div>
+                  <h5>Present</h5>
+                  <Card style={{ width: '18rem', marginBottom: '1rem' }}>
+                    <CardImg
+                      top
+                      style={{ width: '100%', height: 'auto' }}
+                      src={data.after_images}
+                      alt={data.project_name}
+                    />
+                  </Card>
+                </div>
+              </div>
+            </CardHeader>
 
             </Col>
           </Row>

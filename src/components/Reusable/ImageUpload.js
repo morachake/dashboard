@@ -29,24 +29,25 @@ export default function ImageUpload({ onImageUpload }) {
     };
 
     return (
-        <Card>
-            <label>Upload Current Condition Image</label>
-            <form>
-                <Input
-                    id="afterImages"
-                    name="after_images"
-                    type="file"
-                    onChange={(event) => setUploadFile(event.target.files[0])}
-                />
-                <Button onClick={handleUpload}>Upload</Button>
-            </form>
-            {uploadError && <p className="error-message">{uploadError}</p>}
-            <Card style={{width:'18rem'}}>
-                {cloudinaryImage && 
-                <img src={cloudinaryImage} alt="Uploaded" />
-                
-                }
-            </Card>
+        <Card style={{ margin: '20px', padding: '20px' }}>
+        <label htmlFor="afterImages" style={{ display: 'block', marginBottom: '10px' }}>Upload Current Condition Image</label>
+        <form style={{ marginBottom: '20px' }}>
+            <Input
+                id="afterImages"
+                name="after_images"
+                type="file"
+                onChange={(event) => setUploadFile(event.target.files[0])}
+                style={{ marginBottom: '10px' }}
+            />
+            <Button onClick={handleUpload} style={{ display: 'block' }}>Upload</Button>
+        </form>
+        {uploadError && <p className="error-message" style={{ color: 'red', marginBottom: '10px' }}>{uploadError}</p>}
+        <Card style={{ width: '18rem', margin: '0 auto' }}>
+            {cloudinaryImage && 
+                <img src={cloudinaryImage} alt="Uploaded" style={{ width: '100%', height: 'auto' }} />
+            }
         </Card>
+    </Card>
+    
     );
 }
