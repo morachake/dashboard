@@ -1,43 +1,30 @@
 import React, { useEffect, useState } from 'react';
 import UserHeader from 'components/Headers/UserHeader';
-import {
-  Container,
-  Row,
-  Col,
-  Card,
-  CardBody,
-  Input,
-  Button,
-  ListGroup,
-  ListGroupItem
-} from "reactstrap";
+import { Container, Row, Col, Card, CardBody, Input, Button, ListGroup, ListGroupItem } from "reactstrap";
 import { useAuth } from 'context/AuthContext';
+import config from 'config';
 
-export default function CabinetMsg() {
+export default function Messaging() {
   const { user } = useAuth();
   const [message, setMessage] = useState('');
   const [activeChat, setActiveChat] = useState(null);
-  const [users, setUsers] = useState([]);
-  const [chats, setChats] = useState({});
+  const [users, setUsers] = useState([]); 
+  const [chats, setChats] = useState({}); 
 
   useEffect(() => {
-    // Fetch users when the component mounts
-    fetch('http://localhost:5000/users', {
+    fetch(`${config.backendURL}/users`, {
       headers: {
         'Content-Type': 'application/json',
-        // Include authorization headers if needed
       }
     })
       .then(response => response.json())
-      .then(setUsers) // Assuming the backend returns an array of users
+      .then(setUsers)
       .catch(console.error);
-
-    // Fetch messages when the component mounts
     fetchMessages();
   }, []);
 
-  function fetchMessages(selectChatId) {
-    fetch('http://localhost:5000/messages', {
+  function fetchMessages() {
+    fetch(`${config.backendURL}/messages`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -46,18 +33,20 @@ export default function CabinetMsg() {
       .then(response => response.json())
       .then(data => {
         const groupedChats = data.reduce((acc, msg) => {
-          const chatId = msg.sender_id === user.id ? msg.recipient_id : msg.sender_id;
-          acc[chatId] = acc[chatId] || [];
-          acc[chatId].push(msg.body);
+          if (msg.sender_id === user.id || msg.recipient_id === user.id) {
+            const chatId = msg.sender_id === user.id ? msg.recipient_id : msg.sender_id;
+            acc[chatId] = acc[chatId] || [];
+            acc[chatId].push(msg); 
+          }
           return acc;
         }, {});
         setChats(groupedChats);
       })
       .catch(console.error);
   }
-
+  
   const handleSendMessage = () => {
-    if (activeChat) {
+    if (activeChat && message.trim()) { 
       sendMessage(user.id, activeChat.id, message);
       setMessage('');
     }
@@ -69,7 +58,8 @@ export default function CabinetMsg() {
       recipient_id: recipientId,
       body: messageBody,
     };
-    fetch('http://localhost:5000/messages', {
+
+    fetch(`${config.backendURL}/messages`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -86,19 +76,20 @@ export default function CabinetMsg() {
         setChats(prevChats => {
           const updatedChats = { ...prevChats };
           const messages = updatedChats[recipientId] ? [...updatedChats[recipientId]] : [];
-          messages.push(sentMessage.body);
+          messages.push(sentMessage);
           updatedChats[recipientId] = messages;
           return updatedChats;
         });
         setActiveChat(prevActiveChat => ({
           ...prevActiveChat,
-          messages: [...prevActiveChat.messages, sentMessage.body]
+          messages: [...(prevActiveChat?.messages || []), sentMessage] 
         }));
       })
       .catch(error => {
         console.error('Error sending message:', error);
       });
   };
+
   const selectChat = (userId) => {
     const selectedUser = users.find(u => u.id === userId);
     setActiveChat({
@@ -107,6 +98,17 @@ export default function CabinetMsg() {
       messages: chats[userId] || []
     });
   };
+
+  const userContainerStyle = {
+    height: '400px', 
+    overflowY: 'scroll'
+  };
+
+  const messageContainerStyle = {
+    height: '500px', 
+    overflowY: 'scroll'
+  };
+
   return (
     <>
       <UserHeader />
@@ -117,7 +119,7 @@ export default function CabinetMsg() {
               <CardBody className="px-0 user-container" >
                 <ListGroup flush>
                   <h2 className="centered-heading">Available Users</h2>
-                  {users.filter(otherUser => otherUser.id !== user.id).map((otherUser) => ( // Filter out the current user
+                  {users.filter(otherUser => otherUser.id !== user.id).map((otherUser) => (
                     <ListGroupItem
                       key={otherUser.id}
                       className={`list-group-item-action ${otherUser.id === activeChat?.id ? 'active' : ''}`}
@@ -129,18 +131,17 @@ export default function CabinetMsg() {
                     </ListGroupItem>
                   ))}
                 </ListGroup>
-
               </CardBody>
             </Card>
           </Col>
           <Col xl="9" lg="8" md="8">
             <Card className="shadow">
               <CardBody>
-                <div className="chat-box message-container">
+                <div className="chat-box message-container" style={messageContainerStyle}>
                   {activeChat && activeChat.messages.length > 0 ? (
                     activeChat.messages.map((msg, index) => (
                       <div key={index} className={`mb-3 message ${user.id === msg.sender_id ? 'sender-message' : 'receiver-message'}`}>
-                        <p>{msg}</p>
+                        <p>{msg.body}</p>
                       </div>
                     ))
                   ) : (

@@ -1,56 +1,49 @@
 import React, { useEffect, useState } from 'react';
 import UserHeader from 'components/Headers/UserHeader';
-import {
-  Container,
-  Row,
-  Col,
-  Card,
-  CardBody,
-  Input,
-  Button,
-  ListGroup,
-  ListGroupItem
-} from "reactstrap";
+import { Container, Row, Col, Card, CardBody, Input, Button, ListGroup, ListGroupItem } from "reactstrap";
 import { useAuth } from 'context/AuthContext';
+import config from 'config';
 
 export default function Messaging() {
   const { user } = useAuth();
   const [message, setMessage] = useState('');
   const [activeChat, setActiveChat] = useState(null);
-  const [users, setUsers] = useState([]); // Store users from the backend
-  const [chats, setChats] = useState({}); // Store chats indexed by user id
+  const [users, setUsers] = useState([]);
+  const [chats, setChats] = useState({});
 
   useEffect(() => {
-    // Fetch users when the component mounts
-    fetch('http://localhost:5000/users', {
+    fetch(`${config.backendURL}/users`, {
       headers: {
         'Content-Type': 'application/json',
-        // Include authorization headers if needed
       }
     })
       .then(response => response.json())
-      .then(setUsers) // Assuming the backend returns an array of users
+      .then(setUsers)
       .catch(console.error);
-
-    // Fetch messages when the component mounts
     fetchMessages();
   }, []);
 
-  function fetchMessages(selectChatId) {
-    fetch('http://localhost:5000/messages', {
+  function fetchMessages() {
+    fetch(`${config.backendURL}/messages`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
-        // Include authorization headers if needed
       }
     })
       .then(response => response.json())
       .then(data => {
-        // Group messages by chat
         const groupedChats = data.reduce((acc, msg) => {
           const chatId = msg.sender_id === user.id ? msg.recipient_id : msg.sender_id;
-          acc[chatId] = acc[chatId] || [];
-          acc[chatId].push(msg.body);
+          if (!acc[chatId]) {
+            acc[chatId] = {
+              messages: [],
+              unreadCount: 0
+            };
+          }
+          acc[chatId].messages.push({...msg, isRead: false});
+          if (msg.recipient_id === user.id && !msg.isRead) {
+            acc[chatId].unreadCount += 1;
+          }
           return acc;
         }, {});
         setChats(groupedChats);
@@ -59,7 +52,7 @@ export default function Messaging() {
   }
 
   const handleSendMessage = () => {
-    if (activeChat) {
+    if (activeChat && message.trim()) {
       sendMessage(user.id, activeChat.id, message);
       setMessage('');
     }
@@ -72,11 +65,10 @@ export default function Messaging() {
       body: messageBody,
     };
 
-    fetch('http://localhost:5000/messages', {
+    fetch(`${config.backendURL}/messages`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        // Include authorization headers if needed
       },
       body: JSON.stringify(messageData),
     })
@@ -87,19 +79,16 @@ export default function Messaging() {
         return response.json();
       })
       .then(sentMessage => {
-        // Assuming the server responds with the sent message
-        // Update the local chat state to include the new message
         setChats(prevChats => {
           const updatedChats = { ...prevChats };
-          const messages = updatedChats[recipientId] ? [...updatedChats[recipientId]] : [];
-          messages.push(sentMessage.body); // Append the new message to the array
-          updatedChats[recipientId] = messages;
+          const messages = updatedChats[recipientId] ? [...updatedChats[recipientId].messages] : [];
+          messages.push(sentMessage);
+          updatedChats[recipientId] = { ...updatedChats[recipientId], messages };
           return updatedChats;
         });
-        // Update the active chat to show the new message
         setActiveChat(prevActiveChat => ({
           ...prevActiveChat,
-          messages: [...prevActiveChat.messages, sentMessage.body]
+          messages: [...(prevActiveChat?.messages || []), sentMessage]
         }));
       })
       .catch(error => {
@@ -107,25 +96,37 @@ export default function Messaging() {
       });
   };
 
-
+  // Sort chats into two groups: unread and read, then combine them
+  const sortedChats = Object.entries(chats)
+    .sort((a, b) => b[1].unreadCount - a[1].unreadCount)
+    .reduce((acc, [chatId, chatData]) => {
+      if (chatData.unreadCount > 0) {
+        acc.unread.push([chatId, chatData]);
+      } else {
+        acc.read.push([chatId, chatData]);
+      }
+      return acc;
+    }, { unread: [], read: [] });
 
   const selectChat = (userId) => {
     const selectedUser = users.find(u => u.id === userId);
     setActiveChat({
       id: userId,
       name: selectedUser.username,
-      messages: chats[userId] || []
+      messages: chats[userId] ? chats[userId].messages : []
     });
   };
+
   const userContainerStyle = {
-    height: '400px', // Adjust as needed
+    height: '400px',
     overflowY: 'scroll'
   };
 
   const messageContainerStyle = {
-    height: '500px', // Adjust as needed
+    height: '500px',
     overflowY: 'scroll'
   };
+
   return (
     <>
       <UserHeader />
@@ -136,30 +137,33 @@ export default function Messaging() {
               <CardBody className="px-0 user-container" >
                 <ListGroup flush>
                   <h2 className="centered-heading">Available Users</h2>
-                  {users.filter(otherUser => otherUser.id !== user.id).map((otherUser) => ( // Filter out the current user
-                    <ListGroupItem
-                      key={otherUser.id}
-                      className={`list-group-item-action ${otherUser.id === activeChat?.id ? 'active' : ''}`}
-                      onClick={() => selectChat(otherUser.id)}
-                    >
-                      <div className="py-2">
-                        <h5 className="h6 mb-0 username-large">{otherUser.username}</h5>
-                      </div>
-                    </ListGroupItem>
-                  ))}
+                  {[...sortedChats.unread, ...sortedChats.read].map(([userId, chatData]) => {
+                    const otherUser = users.find(u => u.id === parseInt(userId));
+                    return otherUser && (
+                      <ListGroupItem
+                        key={otherUser.id}
+                        className={`list-group-item-action ${otherUser.id === activeChat?.id ? 'active' : ''}`}
+                        onClick={() => selectChat(otherUser.id)}
+                      >
+                        <div className="py-2">
+                          <h5 className="h6 mb-0 username-large">{otherUser.username}</h5>
+                          {chatData.unreadCount > 0 ? <span className="badge badge-danger">Unread: {chatData.unreadCount}</span> : <span className="badge badge-success">Read</span>}
+                        </div>
+                      </ListGroupItem>
+                    );
+                  })}
                 </ListGroup>
-
               </CardBody>
             </Card>
           </Col>
           <Col xl="9" lg="8" md="8">
-          <Card className="shadow">
+            <Card className="shadow">
               <CardBody>
-                <div className="chat-box message-container">
+                <div className="chat-box message-container" style={messageContainerStyle}>
                   {activeChat && activeChat.messages.length > 0 ? (
                     activeChat.messages.map((msg, index) => (
                       <div key={index} className={`mb-3 message ${user.id === msg.sender_id ? 'sender-message' : 'receiver-message'}`}>
-                        <p>{msg}</p>
+                        <p>{msg.body}</p>
                       </div>
                     ))
                   ) : (
