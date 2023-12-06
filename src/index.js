@@ -13,10 +13,8 @@ import { AuthProvider } from "context/AuthContext";
 import ProtectedRoute from "context/ProtectedRoutes";
 import ExLayout from "./layouts/ExLayout.js";
 import CabinetLayout from "./layouts/CabinetLayout .js";
-
 import { PrimeReactProvider } from 'primereact/api';
-import "primereact/resources/themes/lara-light-indigo/theme.css";
-              
+import "primereact/resources/themes/lara-light-indigo/theme.css";            
 import "./index.css"
 import MinLayout from "layouts/MinLayout.js";
 const root = ReactDOM.createRoot(document.getElementById("root"));

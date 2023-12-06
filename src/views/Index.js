@@ -89,6 +89,7 @@ const Index = () => {
         <Header
           onSectorChange={handleSectorChange}
           onLocationChange={handleSubcountyChange} 
+          onWardChange={handleWardChange}
           sectors={uniqueSectors}
           locations={uniqueSubcounties} 
         />
@@ -99,11 +100,6 @@ const Index = () => {
             <Card className="bg-gradient-default shadow">
               <CardHeader className="bg-transparent">
               </CardHeader>
-              {/* <CardBody>
-                <div className="chart">
-                <BudgetBars filteredProjects={filteredProjects} />
-                </div>
-              </CardBody> */}
               <CardBody>
               <div className="chart">
               <BarChart data={filteredProjects} />

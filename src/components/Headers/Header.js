@@ -1,5 +1,4 @@
 import React from 'react';
-// reactstrap components
 import { Container, Row, Col, Input, FormGroup, Label } from "reactstrap";
 
 const Header = ({ onSectorChange, onLocationChange,onWardChange, sectors, locations,wards }) => {
@@ -11,8 +10,6 @@ const Header = ({ onSectorChange, onLocationChange,onWardChange, sectors, locati
         <Container fluid>
           <div className="header-body">
             <Row>
-
-             
             <Col>
                 <FormGroup>
                   <Label for="locationSelect">

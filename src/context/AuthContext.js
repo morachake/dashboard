@@ -20,6 +20,7 @@ export const AuthProvider = ({ children }) => {
     try {
       const response = await fetch(`${config.backendURL}/login`, {
         method: 'POST',
+        credentials: 'include', 
         headers: {
           'Content-Type': 'application/json'
         },
