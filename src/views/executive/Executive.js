@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Chart from "chart.js";
 import { Card, CardHeader, CardBody, Container, Row, Col } from "reactstrap";
-import { chartOptions, parseOptions } from "variables/charts.js";
+// import { chartOptions, parseOptions } from "variables/charts.js";
 import Header from "components/Headers/Header.js";
 import ProjectsTable from "components/Dashboard/ProjectsTable";
 import BudgetBars from "components/Dashboard/BudgetBars";
@@ -34,11 +34,11 @@ const Index = () => {
   }, [projects]);
   
 
-  useEffect(() => {
-    if (window.Chart) {
-      parseOptions(Chart, chartOptions());
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (window.Chart) {
+  //     parseOptions(Chart, chartOptions());
+  //   }
+  // }, []);
 
   const filterProjects = () => {
     let result = projects;
