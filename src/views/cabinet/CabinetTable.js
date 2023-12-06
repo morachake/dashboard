@@ -1,53 +1,45 @@
 import React, { useEffect, useState } from 'react';
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
-import { CardHeader, Container,Card, Col ,  CardBody, Row,ListGroup ,ListGroupItem} from 'reactstrap';
+import { CardHeader, Container, Card, Col, CardBody, Row, ListGroup, ListGroupItem, CardImg } from 'reactstrap';
 import UserHeader from 'components/Headers/UserHeader';
-import { useAuth } from 'context/AuthContext';
+import config from 'config';
 
-export default function ProjectsTable() {
+
+export default function CabinetTable() {
   const [projectData, setProjects] = useState([]);
   const [expandedRows, setExpandedRows] = useState(null);
-    const user = useAuth()
+  const contractSumTemplate = (rowData) => {
+    return formatCurrency(rowData.contract_sum);
+  };
   useEffect(() => {
-    fetch('http://127.0.0.1:5000/forms')
+    fetch(`${config.backendURL}/forms`)
       .then(response => response.ok ? response.json() : Promise.reject('Network response was not ok'))
-      .then(data => { 
-        // const filteredProjects = data.filter(project => project.user_id === user.id);
-        setProjects(data)
-      })
+      .then(data => setProjects(data))
       .catch(error => console.error('Error fetching projects:', error));
   }, []);
   console.log(projectData)
   const onRowToggle = (e) => {
     setExpandedRows(e.data);
   };
-
- 
-
   const formatCurrency = (value) => {
-    // Check if value is a number or can be converted to one
     const num = parseFloat(value);
     return isNaN(num) ? 'N/A' : num.toLocaleString();
   };
-  
   const rowExpansionTemplate = (data) => {
     const processRecommendations = (recommendations) => {
       return recommendations
-        .split(/\d+\.\s*/)  // Split by the number followed by a period and space
-        .filter(item => item.trim() !== '');  // Filter out empty strings
+        .split(/\d+\.\s*/)  
+        .filter(item => item.trim() !== '');  
     };
-    const recommendationsList = processRecommendations(data.recommendations);
-  
     
-  
+    const recommendationsList = processRecommendations(data.recommendations);
     const formattedContractSum = formatCurrency(data.contract_sum);
-  
-    // Render List Items
     const renderListItems = (items) => items.map((item, index) => <ListGroupItem key={index}>{item}</ListGroupItem>);
-  
-    const certificatesList = data.certificates.map(cert => `${cert.certificate_number}: ${cert.amount_certified}`);
-  
+    const certificatesList = data.certificates.map(cert => 
+      `${cert.certificate_number}: ${formatCurrency(cert.amount_certified)}`);
+    const totalAmountPaid = data.certificates.reduce((sum, cert) => sum + parseFloat(cert.amount_certified), 0);
+    const formattedTotalAmountPaid = formatCurrency(totalAmountPaid);
     return (
       <Card>
         <CardHeader>
@@ -62,9 +54,11 @@ export default function ProjectsTable() {
               <p><h4>Status:</h4> {data.status}</p>
               <p><h4>Time Frame:</h4> {data.time_frame}</p>
               <p><h4>Certificates:</h4></p>
+              <p><h4>Total Amount Paid: {formattedTotalAmountPaid}</h4></p>
               <ListGroup>
                 {renderListItems(certificatesList)}
               </ListGroup>
+             
             </Col>
             <Col lg="6" md="12">
               <p><h4>Subcounty:</h4> {data.subcounty}</p>
@@ -74,6 +68,28 @@ export default function ProjectsTable() {
               <ListGroup>
                 {renderListItems(recommendationsList)}
               </ListGroup>
+              <CardHeader>
+              <div style={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center' }}>
+                <div>
+                  <h5>Previous </h5>
+                  <Card style={{ width: '18rem', marginBottom: '1rem' }}>
+                    <img src={data.before_images} alt={data.project_name} style={{ width: '100%', height: 'auto' }} />
+                  </Card>
+                </div>
+                <div>
+                  <h5>Present</h5>
+                  <Card style={{ width: '18rem', marginBottom: '1rem' }}>
+                    <CardImg
+                      top
+                      style={{ width: '100%', height: 'auto' }}
+                      src={data.after_images}
+                      alt={data.project_name}
+                    />
+                  </Card>
+                </div>
+              </div>
+            </CardHeader>
+
             </Col>
           </Row>
         </CardBody>
@@ -81,8 +97,8 @@ export default function ProjectsTable() {
     );
   };
 
-   
-  
+
+
 
   return (
     <>
@@ -91,10 +107,10 @@ export default function ProjectsTable() {
         <CardHeader>
           <div className="card">
             {projectData && projectData.length > 0 ? (
-              <DataTable 
+              <DataTable
                 value={projectData}
-                paginator 
-                rows={10} 
+                paginator
+                rows={10}
                 dataKey="id"
                 emptyMessage="No projects found."
                 expandedRows={expandedRows}
@@ -106,17 +122,10 @@ export default function ProjectsTable() {
                 <Column field="status" header="Status" />
                 <Column field="subcounty" header="Subcounty" />
                 <Column field="ward" header="Ward" />
-                <Column field="contract_sum" header="Contract Sum" />
+                <Column field="contract_sum" header="Contract Sum" body={contractSumTemplate} />
               </DataTable>
             ) : (
-            <Card>
-                <CardHeader>
-                No data available
-                </CardHeader>
-                <CardBody>
-                    Please Proceed to add data to your account for it to be visible here
-                </CardBody>
-            </Card>
+              <div>No data available</div>
             )}
           </div>
         </CardHeader>

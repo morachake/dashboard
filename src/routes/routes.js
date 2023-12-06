@@ -8,7 +8,6 @@ import DataForm from "views/admin/DataForm.js";
 
 import Executive from "views/executive/Executive";
 import Cabinet from "views/cabinet/Cabinet";
-import CabinetMsg from "views/cabinet/CabinetMsg";
 import ExcNotes from "views/executive/ExcNotes";
 import CabinetTable from "views/cabinet/CabinetTable";
 import MinTable from "views/ministry/MinTable";
@@ -72,7 +71,7 @@ const executiveRoutes = [
     path: "/messaging",
     name: "Messages",
     icon: "ni ni-chat-round",
-    component: <CabinetMsg />,
+    component: <Messaging />,
     layout: "/executive",
   },
   {
@@ -111,7 +110,7 @@ const cabinetRoutes = [
     path: "/messaging",
     name: "Messages",
     icon: "ni ni-chat-round",
-    component: <CabinetMsg />,
+    component: <Messaging />,
     layout: "/cabinet",
   },
   {
@@ -149,7 +148,7 @@ const ministryRoutes = [
     path: "/messaging",
     name: "Messages",
     icon: "ni ni-chat-round",
-    component: <CabinetMsg />,
+    component: <Messaging />,
     layout: "/ministry",
   },
   {

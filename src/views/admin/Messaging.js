@@ -32,7 +32,8 @@ export default function Messaging() {
     })
       .then(response => response.json())
       .then(data => {
-        const groupedChats = data.reduce((acc, msg) => {
+        const relevantMessages = data.filter(msg => msg.sender_id === user.id || msg.recipient_id === user.id);
+        const groupedChats = relevantMessages.reduce((acc, msg) => {
           const chatId = msg.sender_id === user.id ? msg.recipient_id : msg.sender_id;
           if (!acc[chatId]) {
             acc[chatId] = {
@@ -50,6 +51,7 @@ export default function Messaging() {
       })
       .catch(console.error);
   }
+  
 
   const handleSendMessage = () => {
     if (activeChat && message.trim()) {
@@ -96,17 +98,23 @@ export default function Messaging() {
       });
   };
 
-  // Sort chats into two groups: unread and read, then combine them
-  const sortedChats = Object.entries(chats)
-    .sort((a, b) => b[1].unreadCount - a[1].unreadCount)
-    .reduce((acc, [chatId, chatData]) => {
-      if (chatData.unreadCount > 0) {
-        acc.unread.push([chatId, chatData]);
-      } else {
-        acc.read.push([chatId, chatData]);
+  function sortUsers(users, chats) {
+    const userWithChats = users.map(user => ({
+      ...user,
+      chatData: chats[user.id],
+    }));
+
+    userWithChats.sort((a, b) => {
+      if (a.chatData && b.chatData) {
+        return b.chatData.unreadCount - a.chatData.unreadCount || b.chatData.messages.length - a.chatData.messages.length;
       }
-      return acc;
-    }, { unread: [], read: [] });
+      if (a.chatData) return -1;
+      if (b.chatData) return 1;
+      return 0;
+    });
+
+    return userWithChats;
+  }
 
   const selectChat = (userId) => {
     const selectedUser = users.find(u => u.id === userId);
@@ -135,23 +143,24 @@ export default function Messaging() {
           <Col xl="3" lg="4" md="4" className="mb-4 mb-xl-0">
             <Card className="bg-secondary shadow">
               <CardBody className="px-0 user-container" >
-                <ListGroup flush>
+              <ListGroup flush>
                   <h2 className="centered-heading">Available Users</h2>
-                  {[...sortedChats.unread, ...sortedChats.read].map(([userId, chatData]) => {
-                    const otherUser = users.find(u => u.id === parseInt(userId));
-                    return otherUser && (
-                      <ListGroupItem
-                        key={otherUser.id}
-                        className={`list-group-item-action ${otherUser.id === activeChat?.id ? 'active' : ''}`}
-                        onClick={() => selectChat(otherUser.id)}
-                      >
-                        <div className="py-2">
-                          <h5 className="h6 mb-0 username-large">{otherUser.username}</h5>
-                          {chatData.unreadCount > 0 ? <span className="badge badge-danger">Unread: {chatData.unreadCount}</span> : <span className="badge badge-success">Read</span>}
-                        </div>
-                      </ListGroupItem>
-                    );
-                  })}
+                  {sortUsers(users, chats).map(user => (
+                    <ListGroupItem
+                      key={user.id}
+                      className={`list-group-item-action ${user.id === activeChat?.id ? 'active' : ''}`}
+                      onClick={() => selectChat(user.id)}
+                    >
+                      <div className="py-2">
+                        <h5 className="h6 mb-0 username-large">{user.username}</h5>
+                        {user.chatData && (
+                          user.chatData.unreadCount > 0 
+                            ? <span className="badge badge-danger">Unread: {user.chatData.unreadCount}</span> 
+                            : <span className="badge badge-success">Read</span>
+                        )}
+                      </div>
+                    </ListGroupItem>
+                  ))}
                 </ListGroup>
               </CardBody>
             </Card>
