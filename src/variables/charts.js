@@ -351,7 +351,6 @@ let chartExample1 = {
   },
 };
 
-// Example 2 of Chart inside src/views/Index.js (Total orders - Card)
 let chartExample2 = {
   options: {
     scales: {
