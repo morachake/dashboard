@@ -99,10 +99,10 @@ export default function Messaging() {
     });
   };
 
-  const userContainerStyle = {
-    height: '400px', 
-    overflowY: 'scroll'
-  };
+  // const userContainerStyle = {
+  //   height: '400px', 
+  //   overflowY: 'scroll'
+  // };
 
   const messageContainerStyle = {
     height: '500px', 
