@@ -8,8 +8,8 @@ export default function Messaging() {
   const { user } = useAuth();
   const [message, setMessage] = useState('');
   const [activeChat, setActiveChat] = useState(null);
-  const [users, setUsers] = useState([]);
-  const [chats, setChats] = useState({});
+  const [users, setUsers] = useState([]); 
+  const [chats, setChats] = useState({}); 
 
   useEffect(() => {
     fetch(`${config.backendURL}/users`, {
@@ -32,18 +32,11 @@ export default function Messaging() {
     })
       .then(response => response.json())
       .then(data => {
-        const relevantMessages = data.filter(msg => msg.sender_id === user.id || msg.recipient_id === user.id);
-        const groupedChats = relevantMessages.reduce((acc, msg) => {
-          const chatId = msg.sender_id === user.id ? msg.recipient_id : msg.sender_id;
-          if (!acc[chatId]) {
-            acc[chatId] = {
-              messages: [],
-              unreadCount: 0
-            };
-          }
-          acc[chatId].messages.push({...msg, isRead: false});
-          if (msg.recipient_id === user.id && !msg.isRead) {
-            acc[chatId].unreadCount += 1;
+        const groupedChats = data.reduce((acc, msg) => {
+          if (msg.sender_id === user.id || msg.recipient_id === user.id) {
+            const chatId = msg.sender_id === user.id ? msg.recipient_id : msg.sender_id;
+            acc[chatId] = acc[chatId] || [];
+            acc[chatId].push(msg); 
           }
           return acc;
         }, {});
@@ -52,9 +45,8 @@ export default function Messaging() {
       .catch(console.error);
   }
   
-
   const handleSendMessage = () => {
-    if (activeChat && message.trim()) {
+    if (activeChat && message.trim()) { 
       sendMessage(user.id, activeChat.id, message);
       setMessage('');
     }
@@ -83,14 +75,14 @@ export default function Messaging() {
       .then(sentMessage => {
         setChats(prevChats => {
           const updatedChats = { ...prevChats };
-          const messages = updatedChats[recipientId] ? [...updatedChats[recipientId].messages] : [];
+          const messages = updatedChats[recipientId] ? [...updatedChats[recipientId]] : [];
           messages.push(sentMessage);
-          updatedChats[recipientId] = { ...updatedChats[recipientId], messages };
+          updatedChats[recipientId] = messages;
           return updatedChats;
         });
         setActiveChat(prevActiveChat => ({
           ...prevActiveChat,
-          messages: [...(prevActiveChat?.messages || []), sentMessage]
+          messages: [...(prevActiveChat?.messages || []), sentMessage] 
         }));
       })
       .catch(error => {
@@ -98,40 +90,22 @@ export default function Messaging() {
       });
   };
 
-  function sortUsers(users, chats) {
-    const userWithChats = users.map(user => ({
-      ...user,
-      chatData: chats[user.id],
-    }));
-
-    userWithChats.sort((a, b) => {
-      if (a.chatData && b.chatData) {
-        return b.chatData.unreadCount - a.chatData.unreadCount || b.chatData.messages.length - a.chatData.messages.length;
-      }
-      if (a.chatData) return -1;
-      if (b.chatData) return 1;
-      return 0;
-    });
-
-    return userWithChats;
-  }
-
   const selectChat = (userId) => {
     const selectedUser = users.find(u => u.id === userId);
     setActiveChat({
       id: userId,
       name: selectedUser.username,
-      messages: chats[userId] ? chats[userId].messages : []
+      messages: chats[userId] || []
     });
   };
 
   const userContainerStyle = {
-    height: '400px',
+    height: '400px', 
     overflowY: 'scroll'
   };
 
   const messageContainerStyle = {
-    height: '500px',
+    height: '500px', 
     overflowY: 'scroll'
   };
 
@@ -143,21 +117,16 @@ export default function Messaging() {
           <Col xl="3" lg="4" md="4" className="mb-4 mb-xl-0">
             <Card className="bg-secondary shadow">
               <CardBody className="px-0 user-container" >
-              <ListGroup flush>
+                <ListGroup flush>
                   <h2 className="centered-heading">Available Users</h2>
-                  {sortUsers(users, chats).map(user => (
+                  {users.filter(otherUser => otherUser.id !== user.id).map((otherUser) => (
                     <ListGroupItem
-                      key={user.id}
-                      className={`list-group-item-action ${user.id === activeChat?.id ? 'active' : ''}`}
-                      onClick={() => selectChat(user.id)}
+                      key={otherUser.id}
+                      className={`list-group-item-action ${otherUser.id === activeChat?.id ? 'active' : ''}`}
+                      onClick={() => selectChat(otherUser.id)}
                     >
                       <div className="py-2">
-                        <h5 className="h6 mb-0 username-large">{user.username}</h5>
-                        {user.chatData && (
-                          user.chatData.unreadCount > 0 
-                            ? <span className="badge badge-danger">Unread: {user.chatData.unreadCount}</span> 
-                            : <span className="badge badge-success">Read</span>
-                        )}
+                        <h5 className="h6 mb-0 username-large">{otherUser.username}</h5>
                       </div>
                     </ListGroupItem>
                   ))}
