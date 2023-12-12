@@ -100,9 +100,9 @@ const MapWrapper = () => {
 const Maps = () => {
   return (
     <>
-      {/* <Header />
-      {/* Page content */}
-      {/* <Container className="mt--7" fluid>
+      <Header />
+     Page content 
+      <Container className="mt--7" fluid>
         <Row>
           <div className="col">
             <Card className="shadow border-0">
@@ -110,7 +110,7 @@ const Maps = () => {
             </Card>
           </div>
         </Row>
-      </Container> */}
+      </Container> 
     </>
   );
 };
