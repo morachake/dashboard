@@ -76,12 +76,13 @@ export default function InputForm() {
             ...formData,
             user_id: user.id
         };
-
+        const accessToken = localStorage.getItem('accessToken');
         fetch(`${config.backendURL}/form`, {
             method: 'POST',
             body: JSON.stringify(jsonPayload),
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer  ${accessToken}`
             }
         })
             .then(response => {

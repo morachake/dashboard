@@ -50,10 +50,13 @@ export default function NoteTaker({}) {
             subject: subject
         };
 
+        const accessToken = localStorage.getItem('accessToken')
+        
         fetch(`${config.backendURL}/note`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
+                'Authorization': `Bearer ${accessToken}`
             },
             body: JSON.stringify(noteData),
         })
