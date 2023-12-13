@@ -42,11 +42,9 @@ export const AuthProvider = ({ children }) => {
           navigate('/executive');
         } else if (data.user.user_type === 'cs') {
           navigate('/cabinet');
-        } else if (data.user.user_type === 'min' ) {
+        } else if (data.user.user_type === 'director' ) {
           navigate('/ministry')
-        } else if (data.user.user_type === 'director') {
-          navigate('/ministry'); 
-        } else {
+        }  else {
           navigate('/login');
         }
         

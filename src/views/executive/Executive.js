@@ -5,6 +5,7 @@ import { Card, CardHeader, CardBody, Container, Row, Col } from "reactstrap";
 import Header from "components/Headers/Header.js";
 import ProjectsTable from "components/Dashboard/ProjectsTable";
 import BudgetBars from "components/Dashboard/BudgetBars";
+import config from "config";
 
 const Index = () => {
   const [projects, setProjects] = useState([]);
@@ -18,7 +19,7 @@ const Index = () => {
 
   useEffect(() => {
     const accessToken = localStorage.getItem('accessToken');
-    fetch('http://127.0.0.1:5000/forms',{
+    fetch(`${config.backendURL}/forms`,{
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${accessToken}`

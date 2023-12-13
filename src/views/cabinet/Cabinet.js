@@ -2,13 +2,19 @@ import React, { useEffect, useState } from "react";
 import { Container, Row, Col, Card, CardHeader, CardBody } from "reactstrap";
 import BudgetChart from "components/Dashboard/BudgetChart";
 import UserHeader from "components/Headers/UserHeader";
+import config from "config";
 
 const Cabinet = () => {
   const [projects, setProjects] = useState([]);
   const [filteredProjects, setFilteredProjects] = useState([]);
 
   useEffect(() => {
-    fetch('http://127.0.0.1:5000/forms')
+    const accessToken = localStorage.getItem('accessToken');
+    fetch(`${config.backendURL}/forms`,{
+      headers: { 
+        'Authorization': `Bearer${accessToken}`
+      }
+    })
       .then(response => response.json())
       .then(data => {
         const processedData = data.map(project => ({
@@ -56,7 +62,7 @@ const Cabinet = () => {
               Project completion percentage
               </CardHeader>
               <CardBody>
-                <BudgetChart chartData={chartData} />
+                {/* <BudgetChart chartData={chartData} /> */}
               </CardBody>
             </Card>
           </Col>

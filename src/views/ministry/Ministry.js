@@ -6,6 +6,7 @@ import Header from "components/Headers/Header.js";
 import ProjectsTable from "components/Dashboard/ProjectsTable";
 import BudgetBars from "components/Dashboard/BudgetBars";
 import BudgetChart from "components/Dashboard/BudgetChart";
+import config from "config";
 
 const Index = () => {
   const [projects, setProjects] = useState([]);
@@ -18,7 +19,12 @@ const Index = () => {
   const [uniqueWards, setUniqueWards] = useState([]);
 
   useEffect(() => {
-    fetch('http://127.0.0.1:5000/forms')
+    const accessToken = localStorage.getItem('acessToken');
+    fetch(`${config.backendURL}/forms`,{
+      Header:{
+        'Authorization': `Bearer ${accessToken}`
+      }
+    })
       .then(response => response.json())
       .then(data => {
         setProjects(data);
