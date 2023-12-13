@@ -29,14 +29,14 @@ export default function CabinetTable() {
   const rowExpansionTemplate = (data) => {
     const processRecommendations = (recommendations) => {
       return recommendations
-        .split(/\d+\.\s*/)  
-        .filter(item => item.trim() !== '');  
+        .split(/\d+\.\s*/)
+        .filter(item => item.trim() !== '');
     };
-    
+
     const recommendationsList = processRecommendations(data.recommendations);
     const formattedContractSum = formatCurrency(data.contract_sum);
     const renderListItems = (items) => items.map((item, index) => <ListGroupItem key={index}>{item}</ListGroupItem>);
-    const certificatesList = data.certificates.map(cert => 
+    const certificatesList = data.certificates.map(cert =>
       `${cert.certificate_number}: ${formatCurrency(cert.amount_certified)}`);
     const totalAmountPaid = data.certificates.reduce((sum, cert) => sum + parseFloat(cert.amount_certified), 0);
     const formattedTotalAmountPaid = formatCurrency(totalAmountPaid);
@@ -58,7 +58,7 @@ export default function CabinetTable() {
               <ListGroup>
                 {renderListItems(certificatesList)}
               </ListGroup>
-             
+
             </Col>
             <Col lg="6" md="12">
               <p><h4>Subcounty:</h4> {data.subcounty}</p>
@@ -69,26 +69,38 @@ export default function CabinetTable() {
                 {renderListItems(recommendationsList)}
               </ListGroup>
               <CardHeader>
-              <div style={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center' }}>
-                <div>
-                  <h5>Previous </h5>
-                  <Card style={{ width: '18rem', marginBottom: '1rem' }}>
-                    <img src={data.before_images} alt={data.project_name} style={{ width: '100%', height: 'auto' }} />
-                  </Card>
+                <div style={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center' }}>
+                  {
+                    data.before_images && (
+                      <div>
+                        {/* <h5>Previous </h5> */}
+                        <Card style={{ width: '18rem', marginBottom: '1rem' }}>
+                          <img src={data.before_images} alt={data.project_name} style={{ width: '100%', height: 'auto' }} />
+                        </Card>
+                      </div>
+                    )
+                  }
+
+                  <div>
+                    {
+                      data.after_images && (
+                        <>
+                          <h5>Present</h5>
+                          <Card style={{ width: '18rem', marginBottom: '1rem' }}>
+                            <CardImg
+                              top
+                              style={{ width: '100%', height: 'auto' }}
+                              src={data.after_images}
+                              alt={data.project_name}
+                            />
+                          </Card>
+                        </>
+                      )
+                    }
+
+                  </div>
                 </div>
-                <div>
-                  <h5>Present</h5>
-                  <Card style={{ width: '18rem', marginBottom: '1rem' }}>
-                    <CardImg
-                      top
-                      style={{ width: '100%', height: 'auto' }}
-                      src={data.after_images}
-                      alt={data.project_name}
-                    />
-                  </Card>
-                </div>
-              </div>
-            </CardHeader>
+              </CardHeader>
 
             </Col>
           </Row>

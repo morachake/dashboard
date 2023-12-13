@@ -26,9 +26,13 @@ const AdminNavbar = (props) => {
   const [notifications, setNotifications] = useState([]);
   const [readNotifications, setReadNotifications] = useState(new Set(JSON.parse(localStorage.getItem('readNotifications') || '[]')));
   useEffect(() => {
-    fetch(`${config.backendURL}/notes`)
+    const accessToken = localStorage.getItem('accessToken');
+    fetch(`${config.backendURL}/notes`,{
+      headers: { 'Authorization': `Bearer  ${accessToken}`}
+    })
       .then(response => response.json())
       .then(data => {
+        console.log("Notifications",data)
         const sortedData = data.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
         setNotifications(sortedData);
       });
