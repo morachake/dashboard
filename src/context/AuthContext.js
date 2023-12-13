@@ -26,7 +26,7 @@ export const AuthProvider = ({ children }) => {
         },
         body: JSON.stringify({ username, password })
       });
-
+      console.log("user is authenticated",user);
       if (response.ok) {
         const data = await response.json();        
         setUser(data.user);
@@ -42,8 +42,10 @@ export const AuthProvider = ({ children }) => {
           navigate('/executive');
         } else if (data.user.user_type === 'cs') {
           navigate('/cabinet');
-        } else if (data.user.user_type === 'min') {
+        } else if (data.user.user_type === 'min' ) {
           navigate('/ministry')
+        } else if (data.user.user_type === 'director') {
+          navigate('/ministry'); 
         } else {
           navigate('/login');
         }

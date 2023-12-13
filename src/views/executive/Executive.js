@@ -17,7 +17,14 @@ const Index = () => {
   const [uniqueWards, setUniqueWards] = useState([]);
 
   useEffect(() => {
-    fetch('http://127.0.0.1:5000/forms')
+    const accessToken = localStorage.getItem('accessToken');
+    fetch('http://127.0.0.1:5000/forms',{
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${accessToken}`
+      },
+    }
+    )
       .then(response => response.json())
       .then(data => {
         setProjects(data);

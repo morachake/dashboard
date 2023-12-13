@@ -30,13 +30,13 @@ const initialFormData = {
 };
 
 export default function InputForm() {
-    const { user } = useAuth();
+    // const { user } = useAuth();
     const [selectedSubCounty, setSelectedSubCounty] = useState('');
     const [wards, setWards] = useState([]);
     const [formErrors, setFormErrors] = useState({});
     const [formData, setFormData] = useState({
         ...initialFormData,
-        user_id: user.id
+        // user_id: user.id
     });
     const handleImageUpload = (url, imageType) => {
         setFormData((prevFormData) => ({
@@ -74,7 +74,7 @@ export default function InputForm() {
     const saveData = () => {
         const jsonPayload = {
             ...formData,
-            user_id: user.id
+            // user_id: user.id
         };
         const accessToken = localStorage.getItem('accessToken');
         fetch(`${config.backendURL}/form`, {
@@ -92,7 +92,7 @@ export default function InputForm() {
                 return response.json();
             })
             .then(data => {
-                console.log("Successfully submitted", data);
+                 console.log("Successfully submitted", data);
                 clearForm()
             })
             .catch(err => {
@@ -100,7 +100,7 @@ export default function InputForm() {
             });
     };
     const clearForm = () => {
-        setFormData({ ...initialFormData, user_id: user.id });
+        setFormData({ ...initialFormData });
         setSelectedSubCounty('');
         setWards([]);
     }

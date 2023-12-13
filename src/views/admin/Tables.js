@@ -13,7 +13,12 @@ export default function ProjectsTable() {
     return formatCurrency(rowData.contract_sum);
   };
   useEffect(() => {
-    fetch(`${config.backendURL}/forms`)
+    const accessToken = localStorage.getItem('accessToken');
+    fetch(`${config.backendURL}/forms`,{
+      headers :{
+        'Authorization': `Bearer ${accessToken}`
+      }
+    })
       .then(response => response.ok ? response.json() : Promise.reject('Network response was not ok'))
       .then(data => setProjects(data))
       .catch(error => console.error('Error fetching projects:', error));
