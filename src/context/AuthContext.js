@@ -31,8 +31,11 @@ export const AuthProvider = ({ children }) => {
         const data = await response.json();        
         setUser(data.user);
         setIsAuthenticated(true);
+        const accessToken = data.access_token;
+        console.log("Access Token:", accessToken); // Log the access token
+        
         localStorage.setItem('user', JSON.stringify(data.user)); 
-        localStorage.setItem('authToken', data.token);
+        localStorage.setItem('accessToken', accessToken);
         if (data.user.user_type === 'admin') {
           navigate('/admin/index');
         } else if (data.user.user_type === 'cec') {

@@ -18,18 +18,24 @@ const Index = () => {
   const [uniqueSubcounties, setUniqueSubcounties] = useState([]);
   const [uniqueWards, setUniqueWards] = useState([]);
 
-  useEffect(() => {
-    fetch(`${config.backendURL}/forms`)
-      .then(response => response.json())
-      .then(data => {
-        setProjects(data);
-        setFilteredProjects(data);
-        setUniqueSectors([...new Set(data.map(project => project.sector))]);
-        setUniqueSubcounties([...new Set(data.map(project => project.subcounty))]);
-        setUniqueWards([...new Set(data.map(project => project.ward))]);
-      })
-      .catch(error => console.error('Error fetching projects:', error));
-  }, []);
+useEffect(() => {
+  const accessToken = localStorage.getItem('accessToken'); // Fetch the token from local storage
+
+  fetch(`${config.backendURL}/forms`, {
+    headers: {
+      'Authorization': `Bearer ${accessToken}` // Include the authorization header
+    }
+  })
+  .then(response => response.json())
+  .then(data => {
+    setProjects(data);
+    setFilteredProjects(data);
+    setUniqueSectors([...new Set(data.map(project => project.sector))]);
+    setUniqueSubcounties([...new Set(data.map(project => project.subcounty))]);
+    setUniqueWards([...new Set(data.map(project => project.ward))]);
+  })
+  .catch(error => console.error('Error fetching projects:', error));
+}, []);
   console.log('Project',projects)
   
   useEffect(() => {
