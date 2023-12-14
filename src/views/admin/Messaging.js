@@ -8,22 +8,22 @@ export default function Messaging() {
   const { user } = useAuth();
   const [message, setMessage] = useState('');
   const [activeChat, setActiveChat] = useState(null);
-  const [users, setUsers] = useState([]); 
-  const [chats, setChats] = useState({}); 
+  const [chats, setChats] = useState({});
+  const [projects, setProjects] = useState([]);
 
   useEffect(() => {
-    fetch(`${config.backendURL}/users`, {
+    const accessToken = localStorage.getItem('accessToken');
+    fetch(`${config.backendURL}/forms`, {
       headers: {
-        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${accessToken}`
       }
     })
-      .then(response => response.json())
-      .then(setUsers)
-      .catch(console.error);
-    fetchMessages();
+      .then(response => response.ok ? response.json() : Promise.reject('Network response was not ok'))
+      .then(data => setProjects(data))
+      .catch(error => console.error('Error fetching projects:', error));
   }, []);
 
-  function fetchMessages() {
+  function fetchRemarks() {
     fetch(`${config.backendURL}/messages`, {
       method: 'GET',
       headers: {
@@ -36,7 +36,7 @@ export default function Messaging() {
           if (msg.sender_id === user.id || msg.recipient_id === user.id) {
             const chatId = msg.sender_id === user.id ? msg.recipient_id : msg.sender_id;
             acc[chatId] = acc[chatId] || [];
-            acc[chatId].push(msg); 
+            acc[chatId].push(msg);
           }
           return acc;
         }, {});
@@ -46,7 +46,7 @@ export default function Messaging() {
   }
   
   const handleSendMessage = () => {
-    if (activeChat && message.trim()) { 
+    if (activeChat && message.trim()) {
       sendMessage(user.id, activeChat.id, message);
       setMessage('');
     }
@@ -82,7 +82,7 @@ export default function Messaging() {
         });
         setActiveChat(prevActiveChat => ({
           ...prevActiveChat,
-          messages: [...(prevActiveChat?.messages || []), sentMessage] 
+          messages: [...(prevActiveChat?.messages || []), sentMessage]
         }));
       })
       .catch(error => {
@@ -90,22 +90,22 @@ export default function Messaging() {
       });
   };
 
-  const selectChat = (userId) => {
-    const selectedUser = users.find(u => u.id === userId);
+  const selectChat = (projectId) => {
+    const selectedProject = projects.find(project => project.id === projectId);
     setActiveChat({
-      id: userId,
-      name: selectedUser.username,
-      messages: chats[userId] || []
+      id: projectId,
+      name: selectedProject.project_name,
+      messages: chats[projectId] || []
     });
   };
 
   const userContainerStyle = {
-    height: '400px', 
+    height: '400px',
     overflowY: 'scroll'
   };
 
   const messageContainerStyle = {
-    height: '500px', 
+    height: '500px',
     overflowY: 'scroll'
   };
 
@@ -118,15 +118,15 @@ export default function Messaging() {
             <Card className="bg-secondary shadow">
               <CardBody className="px-0 user-container" >
                 <ListGroup flush>
-                  <h2 className="centered-heading">Available Users</h2>
-                  {users.filter(otherUser => otherUser.id !== user.id).map((otherUser) => (
+                  <h2 className="centered-heading">Available Projects</h2>
+                  {projects.map((project) => (
                     <ListGroupItem
-                      key={otherUser.id}
-                      className={`list-group-item-action ${otherUser.id === activeChat?.id ? 'active' : ''}`}
-                      onClick={() => selectChat(otherUser.id)}
+                      key={project.id}
+                      className={`list-group-item-action ${project.id === activeChat?.id ? 'active' : ''}`}
+                      onClick={() => selectChat(project.id)}
                     >
                       <div className="py-2">
-                        <h5 className="h6 mb-0 username-large">{otherUser.username}</h5>
+                        <h5 className="h6 mb-0 username-large">{project.project_name}</h5>
                       </div>
                     </ListGroupItem>
                   ))}
@@ -146,7 +146,7 @@ export default function Messaging() {
                     ))
                   ) : (
                     <div className="no-messages">
-                      <p>No chat history with this user.</p>
+                      <p>No chat history with this project.</p>
                     </div>
                   )}
                 </div>

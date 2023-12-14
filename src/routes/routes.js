@@ -29,8 +29,8 @@ const adminRoutes = [
     layout: "/admin",
   },
   {
-    path: "/Messaging",
-    name: "Messages",
+    path: "/remarks",
+    name: "Remarks",
     icon: "ni ni-chat-round",
     component: <Messaging />,
     layout: "/admin",
@@ -68,8 +68,8 @@ const executiveRoutes = [
     layout: "/executive",
   },
   {
-    path: "/messaging",
-    name: "Messages",
+    path: "/remarks",
+    name: "Remarks",
     icon: "ni ni-chat-round",
     component: <Messaging />,
     layout: "/executive",
@@ -107,8 +107,8 @@ const cabinetRoutes = [
     layout: "/cabinet",
   },
   {
-    path: "/messaging",
-    name: "Messages",
+    path: "/remarks",
+    name: "Remarks",
     icon: "ni ni-chat-round",
     component: <Messaging />,
     layout: "/cabinet",
@@ -145,8 +145,8 @@ const ministryRoutes = [
     layout: "/ministry",
   },
   {
-    path: "/messaging",
-    name: "Messages",
+    path: "/remarks",
+    name: "Remarks",
     icon: "ni ni-chat-round",
     component: <Messaging />,
     layout: "/ministry",
