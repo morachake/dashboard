@@ -28,7 +28,9 @@ const Profile = () => {
       const response = await fetch(`${config.backendURL}/reset_password`, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+
         },
         body: JSON.stringify({
           username: user.username,

@@ -40,7 +40,7 @@ root.render(
           </ProtectedRoute>
         } />
         <Route path="/ministry/*" element={
-          <ProtectedRoute allowedUserTypes={['min']}>
+          <ProtectedRoute allowedUserTypes={['director']}>
             <MinLayout />
           </ProtectedRoute>
         } />

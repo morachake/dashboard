@@ -30,7 +30,12 @@ const AdminNavbar = (props) => {
     fetch(`${config.backendURL}/notes`,{
       headers: { 'Authorization': `Bearer  ${accessToken}`}
     })
-      .then(response => response.json())
+      .then(response => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+       return response.json()
+      })
       .then(data => {
         console.log("Notifications",data)
         const sortedData = data.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));

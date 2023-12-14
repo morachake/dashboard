@@ -1,6 +1,6 @@
 import { useAuth } from 'context/AuthContext';
 import React, { useCallback, useState } from 'react';
-import { Form, FormGroup, FormFeedback, Input, Label, Button, CardHeader, Row, CardBody, Col } from 'reactstrap';
+import { Card ,Form, FormGroup, FormFeedback, Input, Label, Button, CardHeader, Row, CardBody, Col } from 'reactstrap';
 import ImageUpload from "../Reusable/ImageUpload";
 import ValidatedInput from 'components/Reusable/ValidatedInput';
 import config from 'config';
@@ -24,19 +24,21 @@ const initialFormData = {
     certificates: [],
     status: '',
     remarks: '',
+    start_date:'',
+    end_date:'',
     recommendations: '',
     before_images_url: '',
     after_images_url: '',
 };
 
 export default function InputForm() {
-    // const { user } = useAuth();
+    const { user } = useAuth();
     const [selectedSubCounty, setSelectedSubCounty] = useState('');
     const [wards, setWards] = useState([]);
     const [formErrors, setFormErrors] = useState({});
     const [formData, setFormData] = useState({
         ...initialFormData,
-        // user_id: user.id
+        user_id: user.id
     });
     const handleImageUpload = (url, imageType) => {
         setFormData((prevFormData) => ({
@@ -74,10 +76,10 @@ export default function InputForm() {
     const saveData = () => {
         const jsonPayload = {
             ...formData,
-            // user_id: user.id
+             user_id: user.id
         };
         const accessToken = localStorage.getItem('accessToken');
-        fetch(`${config.backendURL}/form`, {
+        fetch(`${config.backendURL}/create_form`, {
             method: 'POST',
             body: JSON.stringify(jsonPayload),
             headers: {
@@ -92,7 +94,7 @@ export default function InputForm() {
                 return response.json();
             })
             .then(data => {
-                 console.log("Successfully submitted", data);
+                console.log("Successfully submitted", data);
                 clearForm()
             })
             .catch(err => {
@@ -118,7 +120,7 @@ export default function InputForm() {
     const canSubmit = () => {
         let isValid = true;
         let newErrors = {};
-    
+
         // Validate each field in formData
         Object.keys(formData).forEach(key => {
             let error = '';
@@ -147,11 +149,11 @@ export default function InputForm() {
             newErrors[key] = error;
             if (error) isValid = false;
         });
-    
+
         setFormErrors(newErrors);
         return isValid;
     };
-    
+
     const handleCertificateItemChange = (event, index) => {
         const { name, value } = event.target;
         const updatedCertificates = [...formData.certificates];
@@ -287,7 +289,29 @@ export default function InputForm() {
                 />
 
                 <Row lg={4} md={6} xs={12}>
-                    <Col md={6} lg={4}>
+                    <Col md={6} lg={6}>
+                            <ValidatedInput
+                                label="Start Date"
+                                name="start_date"
+                                type="date"
+                                value={formData.start_date}
+                                onChange={handleInputChange}
+                                validator={requiredValidator}
+                            />
+                    </Col>
+                    <Col md={6} lg={6}>
+                       <ValidatedInput
+                                label="End Date"
+                                name="end_date"
+                                type="date"
+                                value={formData.end_date}
+                                onChange={handleInputChange}
+                                validator={requiredValidator}
+                            />
+                    </Col>
+                </Row>
+                <Row lg={4} md={6} xs={12}>
+                    <Col md={6} lg={6}>
 
                         <ValidatedInput
                             id="contractor_details"
@@ -299,7 +323,7 @@ export default function InputForm() {
                             validator={requiredValidator}
                         />
                     </Col>
-                    <Col md={6} lg={4}>
+                    <Col md={6} lg={6}>
                         <ValidatedInput
                             label="Contract Sum"
                             id="contract_sum"
@@ -311,7 +335,7 @@ export default function InputForm() {
                             validator={numberValidator}
                         />
                     </Col>
-                    <Col md={6} lg={4}>
+                    {/* <Col md={6} lg={4}>
                         <ValidatedInput
                             label="Time Frame"
                             id="time_frame"
@@ -322,7 +346,7 @@ export default function InputForm() {
                             onChange={handleInputChange}
                             validator={numberValidator}
                         />
-                    </Col>
+                    </Col> */}
 
                 </Row>
 
@@ -333,7 +357,7 @@ export default function InputForm() {
                     {formData.certificates.map((certificate, index) => (
                         <div key={index}>
                             <Row lg={4} md={6} xs={12}>
-                                <Col md={6} lg={4}>
+                                <Col md={6} lg={6}>
                                     <FormGroup>
                                         <Label for={`certificateNumber-${index}`}>Certificate Number</Label>
                                         <Input
@@ -352,7 +376,7 @@ export default function InputForm() {
                                         )}
                                     </FormGroup>
                                 </Col>
-                                <Col md={6} lg={4}>
+                                <Col md={6} lg={6}>
                                     <FormGroup>
                                         <Label for={`amountCertified-${index}`}>Amount Certified</Label>
                                         <Input
@@ -373,7 +397,7 @@ export default function InputForm() {
                                 </Col>
                             </Row>
                             {index > 0 && (
-                                <Col>
+                                <Col className='m-4 '>
                                     <Button type="button" onClick={() => removeCertificateItem(index)}>
                                         Remove Certificate
                                     </Button>
@@ -382,7 +406,7 @@ export default function InputForm() {
                             )}
                         </div>
                     ))}
-                    <Col>
+                    <Col className=''>
                         <Button type="button" onClick={addCertificateItem}>
                             Add Certificate
                         </Button>
@@ -418,23 +442,26 @@ export default function InputForm() {
                 </FormGroup>
 
                 <Row lg={4} md={6} xs={12}>
-                    <Col md={6} lg={4}>
-                        <FormGroup>
+                    <Col md={6} lg={6}>
+                        
                             <Label for="before_images_url">Previous Images</Label>
                             <ImageUpload onImageUpload={(url) => handleImageUpload(url, 'before_images_url')} />
-                        </FormGroup>
+                        
                     </Col>
-                    <Col md={6} lg={4}>
-                        <FormGroup>
+                    <Col md={6} lg={6}>
+                    
                             <Label for="after_images_url">Current Image</Label>
                             <ImageUpload onImageUpload={(url) => handleImageUpload(url, 'after_images_url')} />
-                        </FormGroup>
+                    
                     </Col>
                 </Row>
 
-                <Button type="submit">
+                <Card>
+                <Button type="submit" color='primary'>
                     Submit
                 </Button>
+                    
+                </Card>
             </Form>
         </CardHeader>
     );

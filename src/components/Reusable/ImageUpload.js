@@ -29,9 +29,9 @@ export default function ImageUpload({ onImageUpload }) {
     };
 
     return (
-        <Card style={{ margin: '20px', padding: '20px' }}>
+        <Card style={{ margin: '20px' }}>
         <label htmlFor="afterImages" style={{ display: 'block', marginBottom: '10px' }}>Upload Current Condition Image</label>
-        <form style={{ marginBottom: '20px' }}>
+        <Card >
             <Input
                 id="afterImages"
                 name="after_images"
@@ -39,10 +39,10 @@ export default function ImageUpload({ onImageUpload }) {
                 onChange={(event) => setUploadFile(event.target.files[0])}
                 style={{ marginBottom: '10px' }}
             />
-            <Button onClick={handleUpload} style={{ display: 'block' }}>Upload</Button>
-        </form>
+            <Button onClick={handleUpload} style={{ display: 'block' }} color='primary'>Upload</Button>
+        </Card>
         {uploadError && <p className="error-message" style={{ color: 'red', marginBottom: '10px' }}>{uploadError}</p>}
-        <Card style={{ width: '18rem', margin: '0 auto' }}>
+        <Card style={{ width: '18rem', marginTop: '5' }}>
             {cloudinaryImage && 
                 <img src={cloudinaryImage} alt="Uploaded" style={{ width: '100%', height: 'auto' }} />
             }

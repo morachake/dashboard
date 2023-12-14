@@ -1,118 +1,71 @@
 import React, { useEffect, useState } from "react";
-import Chart from "chart.js";
-import { Card, CardHeader, CardBody, Container, Row, Col } from "reactstrap";
-import { chartOptions, parseOptions } from "variables/charts.js";
-import Header from "components/Headers/Header.js";
-import ProjectsTable from "components/Dashboard/ProjectsTable";
-import BudgetBars from "components/Dashboard/BudgetBars";
+import { Container, Row, Col, Card, CardHeader, CardBody } from "reactstrap";
 import BudgetChart from "components/Dashboard/BudgetChart";
+import UserHeader from "components/Headers/UserHeader";
 import config from "config";
 
-const Index = () => {
+const Cabinet = () => {
   const [projects, setProjects] = useState([]);
   const [filteredProjects, setFilteredProjects] = useState([]);
-  const [sectorFilter, setSectorFilter] = useState('');
-  const [subcountyFilter, setSubcountyFilter] = useState('');
-  const [wardFilter, setWardFilter] = useState('');
-  const [uniqueSectors, setUniqueSectors] = useState([]);
-  const [uniqueSubcounties, setUniqueSubcounties] = useState([]);
-  const [uniqueWards, setUniqueWards] = useState([]);
 
   useEffect(() => {
-    const accessToken = localStorage.getItem('acessToken');
+    const accessToken = localStorage.getItem('accessToken');
     fetch(`${config.backendURL}/forms`,{
-      Header:{
-        'Authorization': `Bearer ${accessToken}`
+      headers: { 
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer${accessToken}`
       }
     })
       .then(response => response.json())
       .then(data => {
-        setProjects(data);
-        setFilteredProjects(data);
-        setUniqueSectors([...new Set(data.map(project => project.sector))]);
-        setUniqueSubcounties([...new Set(data.map(project => project.subcounty))]);
-        setUniqueWards([...new Set(data.map(project => project.ward))]);
+        const processedData = data.map(project => ({
+          ...project,
+          status: parseFloat(project.status)
+        }));
+        setProjects(processedData);
+        setFilteredProjects(processedData);
       })
       .catch(error => console.error('Error fetching projects:', error));
   }, []);
-  
-  useEffect(() => {
-    console.log("Unique subcounties:", uniqueSubcounties); // Check the unique subcounties
-  }, [projects]);
-  
 
-  useEffect(() => {
-    if (window.Chart) {
-      parseOptions(Chart, chartOptions());
-    }
-  }, []);
+  const getStatusCategoryData = (projects) => {
+    const categories = {
+      'Above 90%': 0,
+      '70% - 90%': 0,
+      '50% - 70%': 0,
+      '20% - 50%': 0,
+    };
 
-  const filterProjects = () => {
-    let result = projects;
-  
-    if (sectorFilter) {
-      result = result.filter(project => project.sector === sectorFilter);
-    }
-    if (subcountyFilter) {
-      result = result.filter(project => project.subcounty === subcountyFilter);
-    }
-    if (wardFilter) {
-      result = result.filter(project => project.ward === wardFilter);
-    }
-  
-    setFilteredProjects(result);
+    projects.forEach(project => {
+      const status = project.status;
+      if (status > 90) categories['Above 90%']++;
+      else if (status > 70) categories['70% - 90%']++;
+      else if (status > 50) categories['50% - 70%']++;
+      else if (status > 20) categories['20% - 50%']++;
+    });
+
+    return Object.keys(categories).map(key => ({
+      name: key,
+      value: categories[key],
+    }));
   };
 
-  useEffect(() => {
-    filterProjects();
-  }, [sectorFilter, subcountyFilter, wardFilter, projects]);
-  
-  const handleSectorChange = (e) => {
-    setSectorFilter(e.target.value);
-  };
+  const chartData = getStatusCategoryData(filteredProjects);
 
-
-
-
-
-  const handleSubcountyChange = (e) => {
-    console.log("Subcounty selected:", e.target.value);
-    setSubcountyFilter(e.target.value);
-  };
-  
-
-  const handleWardChange = (e) => {
-    setWardFilter(e.target.value);
-  };
   return (
     <>
-         {projects.length > 0 && (
-        <Header
-          onSectorChange={handleSectorChange}
-          onLocationChange={handleSubcountyChange} 
-          sectors={uniqueSectors}
-          locations={uniqueSubcounties} 
-        />
-      )}
+      <UserHeader />
       <Container className="mt--7" fluid>
         <Row>
           <Col xl="12">
             <Card className="bg-gradient-default shadow">
-              <CardHeader className="bg-transparent">
-                {/* ... */}
-                
+              <CardHeader className="bg-transparent color-white">
+              Project completion percentage
               </CardHeader>
               <CardBody>
-                <div className="chart">
-                {/* <BudgetChart filteredProjects={filteredProjects} /> */}
-                </div>
+                <BudgetChart chartData={chartData} />
               </CardBody>
             </Card>
-          </Col>
-        </Row>
-        <Row className="mt-5">
-          <Col xl="12">
-          <ProjectsTable projectData={filteredProjects} />
           </Col>
         </Row>
       </Container>
@@ -120,4 +73,4 @@ const Index = () => {
   );
 };
 
-export default Index;
+export default Cabinet;

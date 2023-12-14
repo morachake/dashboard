@@ -17,12 +17,12 @@ const Index = () => {
   const [uniqueSectors, setUniqueSectors] = useState([]);
   const [uniqueSubcounties, setUniqueSubcounties] = useState([]);
   const [uniqueWards, setUniqueWards] = useState([]);
+
   useEffect(() => {
-    const accessToken = localStorage.getItem('accessToken'); // Fetch the token from local storage
-  
+    const accessToken = localStorage.getItem('accessToken'); 
     fetch(`${config.backendURL}/forms`, {
       headers: {
-        'Authorization': `Bearer ${accessToken}` // Include the authorization header
+        'Authorization': `Bearer ${accessToken}` 
       }
     })
     .then(response => response.json())

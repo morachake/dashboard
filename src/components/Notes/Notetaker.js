@@ -4,7 +4,7 @@ import {
     Card, CardHeader, CardBody, FormGroup, Label, Button, Alert, CustomInput,Input
 } from 'reactstrap';
 
-export default function NoteTaker({}) {
+export default function NoteTaker() {
     const [assignedTo, setAssignedTo] = useState([]);
     const [subject, setSubject] = useState('');
     const [details, setDetails] = useState('');

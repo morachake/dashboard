@@ -152,6 +152,13 @@ const ministryRoutes = [
     layout: "/ministry",
   },
   {
+    path: "/adddata",
+    name: "Add Data",
+    icon: "ni ni-fat-add",
+    component: <DataForm />,
+    layout: "/ministry",
+  },
+  {
     path: "/tables",
     name: "Tables",
     icon: "ni ni-bullet-list-67 text-red",

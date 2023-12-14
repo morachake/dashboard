@@ -1,3 +1,4 @@
+import config from 'config';
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
@@ -6,7 +7,7 @@ const ProjectDetails = () => {
   const [projectDetails, setProjectDetails] = useState(null);
 
   useEffect(() => {
-    fetch(`http://127.0.0.1:5000/projects/${projectId}`)
+    fetch(`${config.backendURL}/projects/${projectId}`)
       .then(response => {
         if (!response.ok) {
           throw new Error('Network response was not ok');

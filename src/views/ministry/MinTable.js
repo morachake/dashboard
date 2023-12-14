@@ -4,13 +4,19 @@ import { Column } from 'primereact/column';
 import { CardHeader, Container,Card, Col ,  CardBody, Row,ListGroup ,ListGroupItem} from 'reactstrap';
 import UserHeader from 'components/Headers/UserHeader';
 import { useAuth } from 'context/AuthContext';
+import config from 'config';
 
 export default function ProjectsTable() {
   const [projectData, setProjects] = useState([]);
   const [expandedRows, setExpandedRows] = useState(null);
     const user = useAuth()
   useEffect(() => {
-    fetch('http://127.0.0.1:5000/forms')
+    const accessToken = localStorage.getItem('accessToken')
+    fetch(`${config.backendURL}/forms`,{
+      headers:{
+        'Authorization': `Bearer ${accessToken}`
+      }
+    })
       .then(response => response.ok ? response.json() : Promise.reject('Network response was not ok'))
       .then(data => { 
         // const filteredProjects = data.filter(project => project.user_id === user.id);
