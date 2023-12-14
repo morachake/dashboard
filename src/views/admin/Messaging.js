@@ -8,43 +8,37 @@ export default function Messaging() {
   const { user } = useAuth();
   const [message, setMessage] = useState('');
   const [activeChat, setActiveChat] = useState(null);
-  const [chats, setChats] = useState({});
   const [projects, setProjects] = useState([]);
+  const [remarks, setRemarks] = useState([]); // State to store all remarks
 
+  const accessToken = localStorage.getItem('accessToken');
   useEffect(() => {
-    const accessToken = localStorage.getItem('accessToken');
     fetch(`${config.backendURL}/forms`, {
       headers: {
         'Authorization': `Bearer ${accessToken}`
       }
     })
-      .then(response => response.ok ? response.json() : Promise.reject('Network response was not ok'))
-      .then(data => setProjects(data))
-      .catch(error => console.error('Error fetching projects:', error));
+    .then(response => response.ok ? response.json() : Promise.reject('Network response was not ok'))
+    .then(data => setProjects(data))
+    .catch(error => console.error('Error fetching projects:', error));
+
+    fetchRemarks(); // Fetch remarks on component mount
   }, []);
 
   function fetchRemarks() {
-    fetch(`${config.backendURL}/messages`, {
+    fetch(`${config.backendURL}/get_remarks`, {
       method: 'GET',
       headers: {
+        'Authorization': `Bearer ${accessToken}`,
         'Content-Type': 'application/json',
       }
     })
-      .then(response => response.json())
-      .then(data => {
-        const groupedChats = data.reduce((acc, msg) => {
-          if (msg.sender_id === user.id || msg.recipient_id === user.id) {
-            const chatId = msg.sender_id === user.id ? msg.recipient_id : msg.sender_id;
-            acc[chatId] = acc[chatId] || [];
-            acc[chatId].push(msg);
-          }
-          return acc;
-        }, {});
-        setChats(groupedChats);
-      })
-      .catch(console.error);
+    .then(response => response.json())
+    .then(data => setRemarks(data)) // Store all remarks in state
+    .catch(console.error);
   }
-  
+console.log(remarks);
+
   const handleSendMessage = () => {
     if (activeChat && message.trim()) {
       sendMessage(user.id, activeChat.id, message);
@@ -66,36 +60,38 @@ export default function Messaging() {
       },
       body: JSON.stringify(messageData),
     })
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-        return response.json();
-      })
-      .then(sentMessage => {
-        setChats(prevChats => {
-          const updatedChats = { ...prevChats };
-          const messages = updatedChats[recipientId] ? [...updatedChats[recipientId]] : [];
-          messages.push(sentMessage);
-          updatedChats[recipientId] = messages;
-          return updatedChats;
-        });
-        setActiveChat(prevActiveChat => ({
-          ...prevActiveChat,
-          messages: [...(prevActiveChat?.messages || []), sentMessage]
-        }));
-      })
-      .catch(error => {
-        console.error('Error sending message:', error);
-      });
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      return response.json();
+    })
+    .then(sentMessage => {
+      const updatedRemarks = [...remarks, sentMessage];
+      setRemarks(updatedRemarks);
+      setActiveChat(prevActiveChat => ({
+        ...prevActiveChat,
+        messages: updatedRemarks.filter(remark => remark.form_id === prevActiveChat.id)
+      }));
+    })
+    .catch(error => {
+      console.error('Error sending message:', error);
+    });
   };
 
   const selectChat = (projectId) => {
     const selectedProject = projects.find(project => project.id === projectId);
+    const projectRemarks = remarks.filter(remark => remark.form_id === projectId)
+                                  .map(remark => ({
+                                    id: remark.id,
+                                    text: remark.text,
+                                    timestamp: remark.timestamp,
+                                    user: remark.user
+                                  }));
     setActiveChat({
       id: projectId,
       name: selectedProject.project_name,
-      messages: chats[projectId] || []
+      messages: projectRemarks
     });
   };
 
@@ -116,7 +112,7 @@ export default function Messaging() {
         <Row>
           <Col xl="3" lg="4" md="4" className="mb-4 mb-xl-0">
             <Card className="bg-secondary shadow">
-              <CardBody className="px-0 user-container" >
+              <CardBody className="px-0 user-container" style={userContainerStyle}>
                 <ListGroup flush>
                   <h2 className="centered-heading">Available Projects</h2>
                   {projects.map((project) => (
@@ -139,10 +135,13 @@ export default function Messaging() {
               <CardBody>
                 <div className="chat-box message-container" style={messageContainerStyle}>
                   {activeChat && activeChat.messages.length > 0 ? (
-                    activeChat.messages.map((msg, index) => (
-                      <div key={index} className={`mb-3 message ${user.id === msg.sender_id ? 'sender-message' : 'receiver-message'}`}>
-                        <p>{msg.body}</p>
-                      </div>
+                    activeChat.messages.map((remark, index) => (
+                      <div key={index} className={`mb-3 message ${remark.user === user.id ? 'sender-message' : 'receiver-message'}`}>
+                      <span className='username'>{remark.user}</span>
+                      <p className='message-text'>{remark.text}</p>
+                      <small className='timestamp'>{new Date(remark.timestamp).toLocaleString()}</small>
+                    </div>
+                    
                     ))
                   ) : (
                     <div className="no-messages">
