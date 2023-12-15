@@ -95,7 +95,7 @@ export default function NoteTaker() {
                 </h6>
             </CardHeader>
             <CardBody>
-                <FormGroup>
+                {/* <FormGroup>
                     <Label>Assigned To (optional)</Label>
                     <div style={{ maxHeight: '200px', overflowY: 'auto' }}>
                         {departments.map((dept, index) => (
@@ -109,7 +109,7 @@ export default function NoteTaker() {
                             />
                         ))}
                     </div>
-                </FormGroup>
+                </FormGroup> */}
                 {errors.subject && <Alert color="danger">{errors.subject}</Alert>}
                 <FormGroup>
                     <Label for="noteSubject">Subject</Label>

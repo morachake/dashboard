@@ -49,7 +49,7 @@ const handleSendMessage = () => {
 const addRemark = (formId, remarkText) => {
   const remarkData = {
     form_id: formId,
-    remarks: remarks,
+    remarks: remarkText,
   };
 
     fetch(`${config.backendURL}/remarks`, {
