@@ -86,7 +86,7 @@ export default function ProjectsTable() {
               <p><h4>Ward:</h4> {data.ward}</p>
               <Card>
                 <h4>Remarks:</h4>
-                <p> {renderRemarks(data.remarks)}
+                <p> {renderRemarks(data.remarks).slice(0,2)}
                   </p>
               </Card>
               <p><h4>Recommendations:</h4></p>

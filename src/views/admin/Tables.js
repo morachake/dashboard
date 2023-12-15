@@ -45,6 +45,16 @@ export default function ProjectsTable() {
       `${cert.certificate_number}: ${formatCurrency(cert.amount_certified)}`);
     const totalAmountPaid = data.certificates.reduce((sum, cert) => sum + parseFloat(cert.amount_certified), 0);
     const formattedTotalAmountPaid = formatCurrency(totalAmountPaid);
+    const renderRemark = (remarks) => {
+      return remarks.map((remark,index) =>(
+        <ListGroup key = {index}>
+          <ListGroupItem>
+            <p className='message-text'>{remark.text}</p>
+            <small className='timestamp'>{new Date(remark.timestamp).toLocaleString()}</small>
+          </ListGroupItem>
+        </ListGroup>
+      ))}
+  
     return (
       <Card>
         <CardHeader>
@@ -68,7 +78,11 @@ export default function ProjectsTable() {
             <Col lg="6" md="12">
               <p><h4>Subcounty:</h4> {data.subcounty}</p>
               <p><h4>Ward:</h4> {data.ward}</p>
-              <p><h4>Remarks:</h4> {data.remarks}</p>
+              <Card>
+                <h4>Remarks:</h4>
+                <span>{renderRemark(data.remarks).slice(0,2)}
+                  </span> 
+                </Card>
               <p><h4>Recommendations:</h4></p>
               <ListGroup>
                 {renderListItems(recommendationsList)}
