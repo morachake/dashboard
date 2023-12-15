@@ -60,14 +60,7 @@ export default function InputForm() {
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        // if (canSubmit()) {
             saveData();
-        // } else {
-            // console.error('Form validation failed');
-            // console.log('Form data:', formData); // Log the form data
-            // console.log('Form errors:', formErrors); // Log the form errors
-            // Optionally, display an error message in the UI
-        // }
     };
     
 
@@ -125,8 +118,6 @@ export default function InputForm() {
     const canSubmit = () => {
         let isValid = true;
         let newErrors = {};
-
-        // Validate each field in formData
         Object.keys(formData).forEach(key => {
             let error = '';
             switch (key) {
