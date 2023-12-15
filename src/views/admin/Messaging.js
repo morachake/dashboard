@@ -34,31 +34,31 @@ export default function Messaging() {
       }
     })
     .then(response => response.json())
-    .then(data => setRemarks(data)) // Store all remarks in state
+    .then(data => setRemarks(data)) 
     .catch(console.error);
   }
-console.log(remarks);
 
-  const handleSendMessage = () => {
-    if (activeChat && message.trim()) {
-      sendMessage(user.id, activeChat.id, message);
-      setMessage('');
-    }
+
+const handleSendMessage = () => {
+  if (activeChat && message.trim()) {
+    addRemark(activeChat.id, message);
+    setMessage('');
+  }
+};
+
+const addRemark = (formId, remarkText) => {
+  const remarkData = {
+    form_id: formId,
+    remarks: remarks,
   };
 
-  const sendMessage = (senderId, recipientId, messageBody) => {
-    const messageData = {
-      sender_id: senderId,
-      recipient_id: recipientId,
-      body: messageBody,
-    };
-
-    fetch(`${config.backendURL}/messages`, {
+    fetch(`${config.backendURL}/remarks`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        'Authorization': `Bearer ${accessToken}`
       },
-      body: JSON.stringify(messageData),
+      body: JSON.stringify(remarkData),
     })
     .then(response => {
       if (!response.ok) {
@@ -66,14 +66,14 @@ console.log(remarks);
       }
       return response.json();
     })
-    .then(sentMessage => {
-      const updatedRemarks = [...remarks, sentMessage];
+   .then(newRemark =>{
+      const updatedRemarks = [...remarks, newRemark];
       setRemarks(updatedRemarks);
-      setActiveChat(prevActiveChat => ({
-        ...prevActiveChat,
-        messages: updatedRemarks.filter(remark => remark.form_id === prevActiveChat.id)
-      }));
-    })
+      setActiveChat(prevAciveChat =>({
+        ...prevAciveChat,
+        message: updatedRemarks.filter(remark => remark.form_id === prevAciveChat.id)
+      }))
+   }) 
     .catch(error => {
       console.error('Error sending message:', error);
     });

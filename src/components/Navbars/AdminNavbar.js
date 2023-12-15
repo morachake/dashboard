@@ -83,11 +83,6 @@ const AdminNavbar = (props) => {
                 <DropdownItem className="noti-title" header tag="div">
                   <h6 className="text-overflow m-0">Welcome! {user?.username}</h6>
                 </DropdownItem>
-
-                <DropdownItem >
-                  <i className="ni ni-notification-70" />
-                  <span>Notifications </span>
-                </DropdownItem>
                 <DropdownItem href="#pablo" onClick={logout}>
                   <i className="ni ni-user-run" />
                   <span>Logout</span>

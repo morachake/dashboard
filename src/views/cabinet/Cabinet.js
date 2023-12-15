@@ -62,7 +62,7 @@ const Cabinet = () => {
               Project completion percentage
               </CardHeader>
               <CardBody>
-                {/* <BudgetChart chartData={chartData} /> */}
+                <BudgetChart chartData={chartData} />
               </CardBody>
             </Card>
           </Col>

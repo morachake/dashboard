@@ -21,6 +21,7 @@ export default function ProjectsTable() {
       .then(data => { 
         // const filteredProjects = data.filter(project => project.user_id === user.id);
         setProjects(data)
+        
       })
       .catch(error => console.error('Error fetching projects:', error));
   }, []);
@@ -53,6 +54,15 @@ export default function ProjectsTable() {
   
     const certificatesList = data.certificates.map(cert => `${cert.certificate_number}: ${cert.amount_certified}`);
   
+    const renderRemarks = (remarks) =>{
+      return remarks.map((remark, index) => (     
+         <ListGroup key={index}>
+          <p>{remark.text}</p>
+        </ListGroup>
+        
+      ))
+
+    }
     return (
       <Card>
         <CardHeader>
@@ -74,7 +84,11 @@ export default function ProjectsTable() {
             <Col lg="6" md="12">
               <p><h4>Subcounty:</h4> {data.subcounty}</p>
               <p><h4>Ward:</h4> {data.ward}</p>
-              <p><h4>Remarks:</h4> {data.remarks}</p>
+              <Card>
+                <h4>Remarks:</h4>
+                <p> {renderRemarks(data.remarks)}
+                  </p>
+              </Card>
               <p><h4>Recommendations:</h4></p>
               <ListGroup>
                 {renderListItems(recommendationsList)}
