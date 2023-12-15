@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
-import { CardHeader, Container,Card, Col ,  CardBody, Row,ListGroup ,ListGroupItem} from 'reactstrap';
+import { CardHeader, Container,Card, Col ,  CardBody, Row,ListGroup ,ListGroupItem, CardImg} from 'reactstrap';
 import UserHeader from 'components/Headers/UserHeader';
 import { useAuth } from 'context/AuthContext';
 import config from 'config';
@@ -93,6 +93,45 @@ export default function ProjectsTable() {
               <ListGroup>
                 {renderListItems(recommendationsList)}
               </ListGroup>
+              <CardHeader>
+                <div style={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center' }}>
+                  <div>
+                    {
+                      data.before_images && (
+                        <>
+                          <h5>Previous </h5>
+                          <Card style={{ width: '18rem', marginBottom: '1rem' }}>
+                            <img src={data.before_images} alt={data.project_name} style={{ width: '100%', height: 'auto' }} />
+                          </Card>
+                        </>
+                      )
+                    }
+
+                  </div>
+                  <div>
+                    {
+                      data.after_images && (
+                        <>
+                          <h5>Present</h5>
+
+                          <Card style={{ width: '18rem', marginBottom: '1rem' }}>
+                            <CardImg
+                              top
+                              style={{ width: '100%', height: 'auto' }}
+                              src={data.after_images}
+                              alt={data.project_name}
+                            />
+                          </Card>
+
+                        </>
+
+                      )
+
+                    }
+
+                  </div>
+                </div>
+              </CardHeader>
             </Col>
           </Row>
         </CardBody>

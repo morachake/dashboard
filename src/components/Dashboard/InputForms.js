@@ -60,13 +60,16 @@ export default function InputForm() {
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        if (canSubmit()) {
+        // if (canSubmit()) {
             saveData();
-        } else {
-            console.error('Form validation failed');
+        // } else {
+            // console.error('Form validation failed');
+            // console.log('Form data:', formData); // Log the form data
+            // console.log('Form errors:', formErrors); // Log the form errors
             // Optionally, display an error message in the UI
-        }
+        // }
     };
+    
 
     const handleInputChange = (event) => {
         const { name, value } = event.target;
@@ -77,7 +80,9 @@ export default function InputForm() {
         const jsonPayload = {
             ...formData,
              user_id: user.id
+             
         };
+        console.log('Form data:', formData);
         const accessToken = localStorage.getItem('accessToken');
         fetch(`${config.backendURL}/create_form`, {
             method: 'POST',
