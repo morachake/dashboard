@@ -23,6 +23,7 @@ const initialFormData = {
     contractor_details: '',
     certificates: [],
     status: '',
+    project_status_percentage:'',
     remarks: '',
     start_date:'',
     end_date:'',
@@ -40,6 +41,9 @@ export default function InputForm() {
         ...initialFormData,
         user_id: user.id
     });
+    const [formValid, setFormValid] = useState({});
+  
+
     const handleImageUpload = (url, imageType) => {
         setFormData((prevFormData) => ({
             ...prevFormData,
@@ -60,15 +64,18 @@ export default function InputForm() {
 
     const handleSubmit = (event) => {
         event.preventDefault();
+        if (isFormValid()) {
             saveData();
+        } else {
+            console.error('Form validation failed');
+        }
     };
-    
 
     const handleInputChange = (event) => {
         const { name, value } = event.target;
         setFormData({ ...formData, [name]: value });
+        validateField(name, value);
     };
-
     const saveData = () => {
         const jsonPayload = {
             ...formData,
@@ -199,7 +206,12 @@ export default function InputForm() {
     const requiredValidator = value => value.trim() ? '' : 'required';
     const numberValidator = value => !isNaN(value) && value.trim() !== '' ? '' : 'number';
 
-
+     const handleValidationStateChange = (name, isValid) => {
+        setFormValid({ ...formValid, [name]: isValid });
+    };
+    const isFormValid = () => {
+        return Object.values(formValid).every(Boolean);
+    };
     return (
         <CardHeader>
             <CardBody>
@@ -213,7 +225,8 @@ export default function InputForm() {
                     type="text"
                     value={formData.project_name}
                     onChange={handleInputChange}
-                    validator={requiredValidator}
+                    validator={(value) => !value ? 'required' : ''}
+                    onValidationStateChange={handleValidationStateChange}
                 />
                 <Row lg={4} md={6} xs={12}>
                     <Col md={6} lg={4}>
@@ -263,13 +276,14 @@ export default function InputForm() {
                     <Col md={6} lg={4}>
                         <ValidatedInput
                             label="Status"
-                            id="status"
-                            name="status"
+                            id="project_status_percentage"
+                            name="project_status_percentage"
                             placeholder="Enter the project status"
-                            type="text"
-                            value={formData.status}
+                            type="number"
+                            value={formData.project_status_percentage}
                             onChange={handleInputChange}
                             validator={requiredValidator}
+                            onValidationStateChange={handleValidationStateChange}
                         />
 
                     </Col>
@@ -282,10 +296,11 @@ export default function InputForm() {
                     value={formData.description}
                     onChange={handleInputChange}
                     validator={requiredValidator}
+                    onValidationStateChange={handleValidationStateChange}
                 />
 
                 <Row lg={4} md={6} xs={12}>
-                    <Col md={6} lg={6}>
+                    <Col md={6} lg={4}>
                             <ValidatedInput
                                 label="Start Date"
                                 name="start_date"
@@ -293,9 +308,10 @@ export default function InputForm() {
                                 value={formData.start_date}
                                 onChange={handleInputChange}
                                 validator={requiredValidator}
+                                onValidationStateChange={handleValidationStateChange}
                             />
                     </Col>
-                    <Col md={6} lg={6}>
+                    <Col md={6} lg={4}>
                        <ValidatedInput
                                 label="End Date"
                                 name="end_date"
@@ -303,8 +319,26 @@ export default function InputForm() {
                                 value={formData.end_date}
                                 onChange={handleInputChange}
                                 validator={requiredValidator}
+                                onValidationStateChange={handleValidationStateChange}
                             />
                     </Col>
+                    <Col md={6} lg={4}>
+                        <Label>Select Status</Label>
+                        <Input
+                            name="status"
+                            type="select"
+                            value={formData.status}
+                            onChange={handleInputChange}
+                            validator={requiredValidator}
+                            onValidationStateChange={handleValidationStateChange}
+                        >
+                            <option value="">Select Status</option>
+                            <option value="ongoing">Ongoing</option>
+                            <option value="complete">Complete</option>
+                            <option value="stalled">Stalled</option>
+                        </Input>
+                    </Col>
+
                 </Row>
                 <Row lg={4} md={6} xs={12}>
                     <Col md={6} lg={6}>
@@ -317,6 +351,7 @@ export default function InputForm() {
                             value={formData.contractor_details}
                             onChange={handleInputChange}
                             validator={requiredValidator}
+                            onValidationStateChange={handleValidationStateChange}
                         />
                     </Col>
                     <Col md={6} lg={6}>
@@ -329,21 +364,9 @@ export default function InputForm() {
                             value={formData.contract_sum}
                             onChange={handleInputChange}
                             validator={numberValidator}
+                            onValidationStateChange={handleValidationStateChange}
                         />
                     </Col>
-                    {/* <Col md={6} lg={4}>
-                        <ValidatedInput
-                            label="Time Frame"
-                            id="time_frame"
-                            name="time_frame"
-                            placeholder="Enter the project time frame"
-                            type="text"
-                            value={formData.time_frame}
-                            onChange={handleInputChange}
-                            validator={numberValidator}
-                        />
-                    </Col> */}
-
                 </Row>
 
 
@@ -420,6 +443,7 @@ export default function InputForm() {
                         value={formData.remarks}
                         onChange={handleInputChange}
                         validator={requiredValidator}
+                        onValidationStateChange={handleValidationStateChange}
                     />
                 </FormGroup>
 
@@ -434,6 +458,7 @@ export default function InputForm() {
                         value={formData.recommendations}
                         onChange={handleInputChange}
                         validator={requiredValidator}
+                        onValidationStateChange={handleValidationStateChange}
                     />
                 </FormGroup>
 
@@ -453,7 +478,7 @@ export default function InputForm() {
                 </Row>
 
                 <Card>
-                <Button type="submit" color='primary'>
+                <Button type="submit" color='primary' disabled={!isFormValid()}>
                     Submit
                 </Button>
                     

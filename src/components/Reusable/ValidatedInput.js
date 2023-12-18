@@ -1,5 +1,7 @@
-import React, { useState } from 'react';
+// ValidatedInput.js
+import React, { useState, useEffect } from 'react';
 import { FormGroup, Label, Input, FormFeedback } from 'reactstrap';
+import debounce from 'lodash/debounce';
 
 export default function ValidatedInput({
     label,
@@ -7,33 +9,44 @@ export default function ValidatedInput({
     value,
     type,
     validator,
-    onChange
+    onChange,
+    onValidationStateChange,
 }) {
     const [touched, setTouched] = useState(false);
     const [error, setError] = useState('');
 
+    const handleValidation = (inputValue) => {
+        const validationError = validator(inputValue);
+        setError(validationError);
+
+        if (onValidationStateChange) {
+            onValidationStateChange(name, !validationError);
+        }
+    };
+
+    const debouncedValidation = debounce(handleValidation, 300);
+
     const handleChange = (event) => {
         if (!touched) setTouched(true);
         onChange(event);
-    
-        const validationError = validator(event.target.value);
-        setError(validationError);
+        debouncedValidation(event.target.value);
     };
 
+    useEffect(() => {
+        return () => {
+            debouncedValidation.cancel();
+        };
+    }, [debouncedValidation]);
+
     const getErrorMessage = () => {
-        // You can modify this function to return more specific error messages
-        if (error) {
-            switch (error) {
-                case 'required':
-                    return 'This field is required';
-                case 'number':
-                    return 'Please enter a valid number';
-                // Add more cases as needed for different types of validation errors
-                default:
-                    return 'Invalid input'; // Generic error message
-            }
+        switch (error) {
+            case 'required':
+                return 'This field is required';
+            case 'number':
+                return 'Please enter a valid number';
+            default:
+                return error;
         }
-        return '';
     };
 
     return (
