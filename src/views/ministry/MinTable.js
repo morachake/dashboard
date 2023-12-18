@@ -10,7 +10,7 @@ export default function ProjectsTable() {
   const [projectData, setProjects] = useState([]);
   const [expandedRows, setExpandedRows] = useState(null);
     const user = useAuth()
-  useEffect(() => {
+
     const accessToken = localStorage.getItem('accessToken')
     fetch(`${config.backendURL}/forms`,{
       headers:{
@@ -24,8 +24,8 @@ export default function ProjectsTable() {
         
       })
       .catch(error => console.error('Error fetching projects:', error));
-  }, []);
-  console.log(projectData)
+
+  // console.log(projectData)
   const onRowToggle = (e) => {
     setExpandedRows(e.data);
   };

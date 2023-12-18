@@ -11,6 +11,7 @@ import Cabinet from "views/cabinet/Cabinet";
 import ExcNotes from "views/executive/ExcNotes";
 import CabinetTable from "views/cabinet/CabinetTable";
 import MinTable from "views/ministry/MinTable";
+import Ministry from "views/ministry/Ministry"
 
 const adminRoutes = [
   {
@@ -141,7 +142,7 @@ const ministryRoutes = [
     path: "/",
     name: "Dashboard",
     icon: "ni ni-tv-2 text-primary",
-    component: <Cabinet />,
+    component: <Ministry />,
     layout: "/ministry",
   },
   {

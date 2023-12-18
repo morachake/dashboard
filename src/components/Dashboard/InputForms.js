@@ -4,6 +4,7 @@ import { Card ,Form, FormGroup, FormFeedback, Input, Label, Button, CardHeader, 
 import ImageUpload from "../Reusable/ImageUpload";
 import ValidatedInput from 'components/Reusable/ValidatedInput';
 import config from 'config';
+import { key } from 'localforage';
 
 const subCountyWards = {
     Mvita: ["Mji Wa Kale/Makadara", "Tudor", "Tononoka", "Shimanzi/Ganjoni", "Majengo"],
@@ -22,6 +23,7 @@ const initialFormData = {
     time_frame: '',
     contractor_details: '',
     certificates: [],
+    locations:[],
     status: '',
     project_status_percentage:'',
     remarks: '',
@@ -37,12 +39,53 @@ export default function InputForm() {
     const [selectedSubCounty, setSelectedSubCounty] = useState('');
     const [wards, setWards] = useState([]);
     const [formErrors, setFormErrors] = useState({});
+    const [locationErrors, setLocationErrors] = useState({});
     const [formData, setFormData] = useState({
         ...initialFormData,
         user_id: user.id
     });
     const [formValid, setFormValid] = useState({});
-  
+    // const [updatedLocations ,setUpdatedLocations] = useState([])
+
+    const handleLocationChange = (index, key, value) => {
+        const updatedLocations = [...formData.locations];
+        if (key === 'subcounty') {
+            updatedLocations[index] = { subcounty: value, ward: '' }; // Reset ward when subcounty changes
+            setWards(subCountyWards[value] || []); // Update wards for the UI
+        } else {
+            updatedLocations[index][key] = value;
+        }
+        setFormData({ ...formData, locations: updatedLocations });
+    };
+    const validateLocation = (index, subcounty, ward) => {
+        const newLocationErrors = { ...locationErrors };
+    
+        // Here you can add your validation logic for subcounty and ward
+        newLocationErrors[index] = {
+            subcounty: subcounty ? '' : 'Subcounty is required',
+            ward: ward ? '' : 'Ward is required',
+        };
+    
+        setLocationErrors(newLocationErrors);
+    };
+    
+    const removeLocation = (index) => {
+        const updatedLocations = [...formData.locations].filter((_, locIndex) => locIndex !== index);
+        setFormData({ ...formData, locations: updatedLocations });
+    
+        const newLocationErrors = { ...locationErrors };
+        delete newLocationErrors[index];
+        setLocationErrors(newLocationErrors);
+    };
+    
+    
+    const addLocation = () => {
+        setFormData(prevFormData => ({
+            ...prevFormData,
+            locations: [...prevFormData.locations, { subcounty: '', ward: '' }]
+        }));
+    }
+    
 
     const handleImageUpload = (url, imageType) => {
         setFormData((prevFormData) => ({
@@ -228,19 +271,24 @@ export default function InputForm() {
                     validator={(value) => !value ? 'required' : ''}
                     onValidationStateChange={handleValidationStateChange}
                 />
-                <Row lg={4} md={6} xs={12}>
-                    <Col md={6} lg={4}>
-                        <Label>
-                            Select Sub-County
-                        </Label>
-                        <Input
-
-                            id="subCountySelect"
-                            name="subcounty"
-                            type="select"
-                            onChange={handleSubCountyChange}
-                            value={selectedSubCounty}
-                        >
+                <Row>
+                    <Button onClick={addLocation}>Add locations</Button>
+                </Row>
+             
+                   {formData.locations.map((location,index) =>(
+                    <Row lg={4} md={6} xs={12} key={index}>
+                         <Col md={6} lg={4}>
+                         <Label for={`subcounty-${index}`}>Sub-County</Label>
+                <Input
+                    id={`subcounty-${index}`}
+                    name={`subcounty-${index}`}
+                    type="select"
+                    value={location.subcounty}
+                    onChange={(e) => {
+                        handleLocationChange(index, 'subcounty', e.target.value);
+                        validateLocation(index, e.target.value, location.ward);
+                    }}
+                >
                             <option value="">Select Sub-County</option>
                             <option value="Mvita">Mvita</option>
                             <option value="Likoni">Likoni</option>
@@ -249,18 +297,23 @@ export default function InputForm() {
                             <option value="Nyali">Nyali</option>
                             <option value="Jomvu">Jomvu</option>
                         </Input>
-                        <FormFeedback>{formErrors.subcounty}</FormFeedback>
+                        {locationErrors[index]?.subcounty && (
+                    <div className="text-danger">{locationErrors[index].subcounty}</div>
+                )}
+                        {/* <FormFeedback>{formErrors.subcounty}</FormFeedback> */}
                     </Col>
                     <Col md={6} lg={4}>
-                        <Label>Select Ward</Label>
-                        <Input
-                            label="Wards"
-                            id="wardsSelect"
-                            name="ward"
-                            type="select"
-                            onChange={handleWardChange}
-                            value={wards.length === 0 ? '' : undefined}
-                        >
+                    <Label for={`ward-${index}`}>Ward</Label>
+                <Input
+                    id={`ward-${index}`}
+                    name={`ward-${index}`}
+                    type="select"
+                    value={location.ward}
+                    onChange={(e) => {
+                        handleLocationChange(index, 'ward', e.target.value);
+                        validateLocation(index, location.subcounty, e.target.value);
+                    }}
+                >
                             {wards.length === 0 ? (
                                 <option>No wards available</option>
                             ) : (
@@ -271,23 +324,19 @@ export default function InputForm() {
                                 ))
                             )}
                         </Input>
-                        <FormFeedback>{formErrors.ward}</FormFeedback>
+                        {locationErrors[index]?.ward && (
+                    <div className="text-danger">{locationErrors[index].ward}</div>
+                )}
+                        {/* <FormFeedback>{formErrors.ward}</FormFeedback> */}
                     </Col>
-                    <Col md={6} lg={4}>
-                        <ValidatedInput
-                            label="Status"
-                            id="project_status_percentage"
-                            name="project_status_percentage"
-                            placeholder="Enter the project status"
-                            type="number"
-                            value={formData.project_status_percentage}
-                            onChange={handleInputChange}
-                            validator={requiredValidator}
-                            onValidationStateChange={handleValidationStateChange}
-                        />
-
-                    </Col>
-                </Row>
+                    <Col md={6}>
+            <Button color="danger" onClick={() => removeLocation(index)}>
+                Remove
+            </Button>
+        </Col>
+                    </Row>
+                   ))}
+               
 
                 <ValidatedInput
                     label="Project Description"
@@ -341,7 +390,7 @@ export default function InputForm() {
 
                 </Row>
                 <Row lg={4} md={6} xs={12}>
-                    <Col md={6} lg={6}>
+                    <Col md={6} lg={4}>
 
                         <ValidatedInput
                             id="contractor_details"
@@ -354,7 +403,7 @@ export default function InputForm() {
                             onValidationStateChange={handleValidationStateChange}
                         />
                     </Col>
-                    <Col md={6} lg={6}>
+                    <Col md={6} lg={4}>
                         <ValidatedInput
                             label="Contract Sum"
                             id="contract_sum"
@@ -366,6 +415,20 @@ export default function InputForm() {
                             validator={numberValidator}
                             onValidationStateChange={handleValidationStateChange}
                         />
+                    </Col>
+                    <Col md={6} lg={4}>
+                        <ValidatedInput
+                            label="Status"
+                            id="project_status_percentage"
+                            name="project_status_percentage"
+                            placeholder="Enter the project status"
+                            type="number"
+                            value={formData.project_status_percentage}
+                            onChange={handleInputChange}
+                            validator={requiredValidator}
+                            onValidationStateChange={handleValidationStateChange}
+                        />
+
                     </Col>
                 </Row>
 
