@@ -1,60 +1,123 @@
 import React, { useEffect, useState } from 'react';
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
-import { CardHeader, Container, Card, Col, CardBody, Row, ListGroup, ListGroupItem, CardImg } from 'reactstrap';
+import { CardHeader, Container, Card, Col, CardBody, Row, ListGroup, ListGroupItem, CardImg, Table } from 'reactstrap';
 import UserHeader from 'components/Headers/UserHeader';
+import { useAuth } from 'context/AuthContext';
 import config from 'config';
-
 
 export default function ProjectsTable() {
   const [projectData, setProjects] = useState([]);
   const [expandedRows, setExpandedRows] = useState(null);
-  const contractSumTemplate = (rowData) => {
-    return formatCurrency(rowData.contract_sum);
-  };
-  useEffect(() => {
-    const accessToken = localStorage.getItem('accessToken');
-    fetch(`${config.backendURL}/forms`,{
-      headers :{
-        'Authorization': `Bearer ${accessToken}`
-      }
+  const user = useAuth()
+
+  const accessToken = localStorage.getItem('accessToken')
+  fetch(`${config.backendURL}/forms`, {
+    headers: {
+      'Authorization': `Bearer ${accessToken}`
+    }
+  })
+    .then(response => response.ok ? response.json() : Promise.reject('Network response was not ok'))
+    .then(data => {
+      // const filteredProjects = data.filter(project => project.user_id === user.id);
+      setProjects(data)
+
     })
-      .then(response => response.ok ? response.json() : Promise.reject('Network response was not ok'))
-      .then(data => setProjects(data))
-      .catch(error => console.error('Error fetching projects:', error));
-  }, []);
-  console.log(projectData)
+    .catch(error => console.error('Error fetching projects:', error));
+
+  // console.log(projectData)
   const onRowToggle = (e) => {
     setExpandedRows(e.data);
   };
+
+
+
   const formatCurrency = (value) => {
+    // Check if value is a number or can be converted to one
     const num = parseFloat(value);
     return isNaN(num) ? 'N/A' : num.toLocaleString();
   };
   const rowExpansionTemplate = (data) => {
     const processRecommendations = (recommendations) => {
+      if (!recommendations){
+        return [];
+      } 
       return recommendations
-        .split(/\d+\.\s*/)
-        .filter(item => item.trim() !== '');
+        .split(/\d+\.\s*/) 
+        .filter(item => item.trim() !== '');  
+    };
+    const recommendationsList = processRecommendations(data.recommendations);
+
+
+
+    const formattedContractSum = formatCurrency(data.contract_sum);
+
+    // Render List Items
+    const renderListItems = (items) => items.map((item, index) => <ListGroupItem key={index}>{item}</ListGroupItem>);
+
+    const certificatesList = data.certificates.map(cert => `${cert.certificate_number}: ${cert.amount_certified}`);
+    const locationList = data.locations.map(loc => `${loc.subcounty}, ${loc.ward}`);
+
+    const renderLocation = (locations) => {
+      if (!locations || locations.length === 0) {
+        return <h5>No location data available.</h5>;
+      }
+      return (
+        <Card>
+          <Table>
+          <thead>
+            <tr>
+              <th scope='row'>Subcounty</th>
+              <th>Ward</th>
+            </tr>
+          </thead>
+          <tbody>
+            {locations.map((location, index) => (
+              <tr key={index}>
+                <td>{location.subcounty}</td>
+                <td>{location.ward}</td>
+              </tr>
+            ))}
+          </tbody>
+        </Table>
+        </Card>
+      );
+    };
+    const renderCertificates = (certificates) => {
+      if (!certificates || certificates.length === 0) {
+        return <h5>No certificate data available.</h5>;
+      }
+      return (
+        <Card>
+           <Table>
+          <thead>
+            <tr>
+              <th>Certificate Number</th>
+              <th>Amount Certified</th>
+            </tr>
+          </thead>
+          <tbody>
+            {certificates.map((cert, index) => (
+              <tr key={index}>
+                <td>{cert.certificate_number}</td>
+                <td>{formatCurrency(cert.amount_certified)}</td>
+              </tr>
+            ))}
+          </tbody>
+        </Table>
+        </Card>
+       
+      );
     };
 
-    const recommendationsList = processRecommendations(data.recommendations);
-    const formattedContractSum = formatCurrency(data.contract_sum);
-    const renderListItems = (items) => items.map((item, index) => <ListGroupItem key={index}>{item}</ListGroupItem>);
-    const certificatesList = data.certificates.map(cert =>
-      `${cert.certificate_number}: ${formatCurrency(cert.amount_certified)}`);
-    const totalAmountPaid = data.certificates.reduce((sum, cert) => sum + parseFloat(cert.amount_certified), 0);
-    const formattedTotalAmountPaid = formatCurrency(totalAmountPaid);
-    const renderRemark = (remarks) => {
-      return remarks.map((remark,index) =>(
-        <ListGroup key = {index}>
-          <ListGroupItem>
-            <p className='message-text'>{remark.text}</p>
-            <small className='timestamp'>{new Date(remark.timestamp).toLocaleString()}</small>
-          </ListGroupItem>
+    const renderRemarks = (remarks) => {
+      return remarks.map((remark, index) => (
+        <ListGroup key={index}>
+          <p>{remark.text}</p>
         </ListGroup>
-      ))}
-  
+
+      ))
+    }
     return (
       <Card>
         <CardHeader>
@@ -69,24 +132,31 @@ export default function ProjectsTable() {
               <p><h4>Status:</h4> {data.status}</p>
               <p><h4>Time Frame:</h4> {data.time_frame}</p>
               <p><h4>Certificates:</h4></p>
-              <p><h4>Total Amount Paid: {formattedTotalAmountPaid}</h4></p>
               <ListGroup>
-                {renderListItems(certificatesList)}
+                {renderCertificates(data.certificates)}
               </ListGroup>
-
             </Col>
             <Col lg="6" md="12">
-              <p><h4>Subcounty:</h4> {data.subcounty}</p>
-              <p><h4>Ward:</h4> {data.ward}</p>
-              <Card>
+              <Card body
+                className="my-2">
+                <h4>Project Location</h4>
+                <div>{renderLocation(data.locations)}</div>
+              </Card>
+
+              <Card body
+                className="my-2">
                 <h4>Remarks:</h4>
-                <span>{renderRemark(data.remarks).slice(0,2)}
-                  </span> 
-                </Card>
-              <p><h4>Recommendations:</h4></p>
-              <ListGroup>
-                {renderListItems(recommendationsList)}
-              </ListGroup>
+                <p> {renderRemarks(data.remarks).slice(0, 2)}
+                </p>
+              </Card>
+              <Card body
+                className="my-2">
+                <p><h4>Recommendations:</h4></p>
+                <ListGroup>
+                  {renderListItems(recommendationsList)}
+                </ListGroup>
+              </Card>
+
               <CardHeader>
                 <div style={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center' }}>
                   <div>
@@ -126,7 +196,6 @@ export default function ProjectsTable() {
                   </div>
                 </div>
               </CardHeader>
-
             </Col>
           </Row>
         </CardBody>
@@ -159,10 +228,17 @@ export default function ProjectsTable() {
                 <Column field="status" header="Status" />
                 <Column field="subcounty" header="Subcounty" />
                 <Column field="ward" header="Ward" />
-                <Column field="contract_sum" header="Contract Sum" body={contractSumTemplate} />
+                <Column field="contract_sum" header="Contract Sum" />
               </DataTable>
             ) : (
-              <div>No data available</div>
+              <Card>
+                <CardHeader>
+                  No data available
+                </CardHeader>
+                <CardBody>
+                  Please Proceed to add data to your account for it to be visible here
+                </CardBody>
+              </Card>
             )}
           </div>
         </CardHeader>
