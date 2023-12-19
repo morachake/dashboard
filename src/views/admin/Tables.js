@@ -140,7 +140,6 @@ export default function ProjectTable() {
         </CardHeader>
         <CardBody>
           <Row>
-            
             <Col lg="6" md="12">
               <p><h4>Description:</h4> {data.description}</p>
               <p><h4>Contractor Details:</h4> {data.contractor_details}</p>
