@@ -1,10 +1,13 @@
 import { useAuth } from 'context/AuthContext';
 import React, { useCallback, useState } from 'react';
-import { Card ,Form, FormGroup, FormFeedback, Input, Label, Button, CardHeader, Row, CardBody, Col } from 'reactstrap';
+import { Card, Form, FormGroup, FormFeedback, Input, Label, Button, CardHeader, Row, CardBody, Col } from 'reactstrap';
 import ImageUpload from "../Reusable/ImageUpload";
 import ValidatedInput from 'components/Reusable/ValidatedInput';
 import config from 'config';
 import { key } from 'localforage';
+import { ProjectDetailsForm } from './InputForm/ProjectdetailsForm';
+import { Certandloc } from './InputForm/Certand loc';
+
 
 const subCountyWards = {
     Mvita: ["Mji Wa Kale/Makadara", "Tudor", "Tononoka", "Shimanzi/Ganjoni", "Majengo"],
@@ -20,15 +23,14 @@ const initialFormData = {
     ward: '',
     description: '',
     contract_sum: '',
-    time_frame: '',
     contractor_details: '',
     certificates: [],
-    locations:[],
+    locations: [],
     status: '',
-    project_status_percentage:'',
+    project_status_percentage: '',
     remarks: '',
-    start_date:'',
-    end_date:'',
+    start_date: '',
+    end_date: '',
     recommendations: '',
     before_images_url: '',
     after_images_url: '',
@@ -40,6 +42,7 @@ export default function InputForm() {
     const [wards, setWards] = useState([]);
     const [formErrors, setFormErrors] = useState({});
     const [locationErrors, setLocationErrors] = useState({});
+    const [currentStep,setCurrentStep] = useState(1)
     const [formData, setFormData] = useState({
         ...initialFormData,
         user_id: user.id
@@ -59,33 +62,33 @@ export default function InputForm() {
     };
     const validateLocation = (index, subcounty, ward) => {
         const newLocationErrors = { ...locationErrors };
-    
+
         // Here you can add your validation logic for subcounty and ward
         newLocationErrors[index] = {
             subcounty: subcounty ? '' : 'Subcounty is required',
             ward: ward ? '' : 'Ward is required',
         };
-    
+
         setLocationErrors(newLocationErrors);
     };
-    
+
     const removeLocation = (index) => {
         const updatedLocations = [...formData.locations].filter((_, locIndex) => locIndex !== index);
         setFormData({ ...formData, locations: updatedLocations });
-    
+
         const newLocationErrors = { ...locationErrors };
         delete newLocationErrors[index];
         setLocationErrors(newLocationErrors);
     };
-    
-    
+
+
     const addLocation = () => {
         setFormData(prevFormData => ({
             ...prevFormData,
             locations: [...prevFormData.locations, { subcounty: '', ward: '' }]
         }));
     }
-    
+
 
     const handleImageUpload = (url, imageType) => {
         setFormData((prevFormData) => ({
@@ -122,8 +125,8 @@ export default function InputForm() {
     const saveData = () => {
         const jsonPayload = {
             ...formData,
-             user_id: user.id
-             
+            user_id: user.id
+
         };
         console.log('Form data:', formData);
         const accessToken = localStorage.getItem('accessToken');
@@ -249,304 +252,69 @@ export default function InputForm() {
     const requiredValidator = value => value.trim() ? '' : 'required';
     const numberValidator = value => !isNaN(value) && value.trim() !== '' ? '' : 'number';
 
-     const handleValidationStateChange = (name, isValid) => {
+    const handleValidationStateChange = (name, isValid) => {
         setFormValid({ ...formValid, [name]: isValid });
     };
     const isFormValid = () => {
         return Object.values(formValid).every(Boolean);
     };
+    const totalSteps = 2; // Replace with the total number of steps in the form
+    const nextStep = () => {
+        if (currentStep < totalSteps && isCurrentStepValid()) {
+            setCurrentStep(currentStep + 1);
+        }
+    };
+    const isCurrentStepValid = () => {
+        return true; 
+    };
+    const prevStep = () => {
+        setCurrentStep(currentStep -1)
+    };
+    const renderStep = ( ) =>{
+        switch(currentStep){
+            case 1:
+                return <ProjectDetailsForm
+                    handleInputChange={handleInputChange}
+                    formData={formData}
+                    handleValidationStateChange={handleValidationStateChange}
+                    requiredValidator={requiredValidator}
+                    numberValidator={numberValidator}
+                />
+            case 2:
+                return <Certandloc
+                    handleImageUpload={handleImageUpload}
+                    formData={formData}
+                    handleCertificateItemChange={handleCertificateItemChange}
+                    validateCertificateData={validateCertificateData}
+                    removeCertificateItem={removeCertificateItem}
+                    addCertificateItem={addCertificateItem}
+                    addLocation={addLocation}
+                    validateLocation={validateLocation}
+                    handleLocationChange={handleLocationChange}
+                    locationErrors={locationErrors}
+                    wards={wards}
+                    removeLocation={removeLocation}
+                />
+                default:
+                    return null
+    }}
     return (
         <CardHeader>
             <CardBody>
-            </CardBody>
-            <Form onSubmit={handleSubmit}>
-                <ValidatedInput
-                    label="Project Name"
-                    id="project_name"
-                    name="project_name"
-                    placeholder="Project Name"
-                    type="text"
-                    value={formData.project_name}
-                    onChange={handleInputChange}
-                    validator={(value) => !value ? 'required' : ''}
-                    onValidationStateChange={handleValidationStateChange}
-                />
-                <Row>
-                    <Button onClick={addLocation}>Add locations</Button>
-                </Row>
-             
-                   {formData.locations.map((location,index) =>(
-                    <Row lg={4} md={6} xs={12} key={index}>
-                         <Col md={6} lg={4}>
-                         <Label for={`subcounty-${index}`}>Sub-County</Label>
-                <Input
-                    id={`subcounty-${index}`}
-                    name={`subcounty-${index}`}
-                    type="select"
-                    value={location.subcounty}
-                    onChange={(e) => {
-                        handleLocationChange(index, 'subcounty', e.target.value);
-                        validateLocation(index, e.target.value, location.ward);
-                    }}
-                >
-                            <option value="">Select Sub-County</option>
-                            <option value="Mvita">Mvita</option>
-                            <option value="Likoni">Likoni</option>
-                            <option value="Changamwe">Changamwe</option>
-                            <option value="Kisauni">Kisauni</option>
-                            <option value="Nyali">Nyali</option>
-                            <option value="Jomvu">Jomvu</option>
-                        </Input>
-                        {locationErrors[index]?.subcounty && (
-                    <div className="text-danger">{locationErrors[index].subcounty}</div>
-                )}
-                        {/* <FormFeedback>{formErrors.subcounty}</FormFeedback> */}
-                    </Col>
-                    <Col md={6} lg={4}>
-                    <Label for={`ward-${index}`}>Ward</Label>
-                <Input
-                    id={`ward-${index}`}
-                    name={`ward-${index}`}
-                    type="select"
-                    value={location.ward}
-                    onChange={(e) => {
-                        handleLocationChange(index, 'ward', e.target.value);
-                        validateLocation(index, location.subcounty, e.target.value);
-                    }}
-                >
-                            {wards.length === 0 ? (
-                                <option>No wards available</option>
-                            ) : (
-                                wards.map((ward, index) => (
-                                    <option key={index} value={ward}>
-                                        {ward}
-                                    </option>
-                                ))
-                            )}
-                        </Input>
-                        {locationErrors[index]?.ward && (
-                    <div className="text-danger">{locationErrors[index].ward}</div>
-                )}
-                        {/* <FormFeedback>{formErrors.ward}</FormFeedback> */}
-                    </Col>
-                    <Col md={6}>
-            <Button color="danger" onClick={() => removeLocation(index)}>
-                Remove
-            </Button>
-        </Col>
-                    </Row>
-                   ))}
-               
-
-                <ValidatedInput
-                    label="Project Description"
-                    name="description"
-                    type="textarea"
-                    value={formData.description}
-                    onChange={handleInputChange}
-                    validator={requiredValidator}
-                    onValidationStateChange={handleValidationStateChange}
-                />
-
-                <Row lg={4} md={6} xs={12}>
-                    <Col md={6} lg={4}>
-                            <ValidatedInput
-                                label="Start Date"
-                                name="start_date"
-                                type="date"
-                                value={formData.start_date}
-                                onChange={handleInputChange}
-                                validator={requiredValidator}
-                                onValidationStateChange={handleValidationStateChange}
-                            />
-                    </Col>
-                    <Col md={6} lg={4}>
-                       <ValidatedInput
-                                label="End Date"
-                                name="end_date"
-                                type="date"
-                                value={formData.end_date}
-                                onChange={handleInputChange}
-                                validator={requiredValidator}
-                                onValidationStateChange={handleValidationStateChange}
-                            />
-                    </Col>
-                    <Col md={6} lg={4}>
-                        <Label>Select Status</Label>
-                        <Input
-                            name="status"
-                            type="select"
-                            value={formData.status}
-                            onChange={handleInputChange}
-                            validator={requiredValidator}
-                            onValidationStateChange={handleValidationStateChange}
-                        >
-                            <option value="">Select Status</option>
-                            <option value="ongoing">Ongoing</option>
-                            <option value="complete">Complete</option>
-                            <option value="stalled">Stalled</option>
-                        </Input>
-                    </Col>
-
-                </Row>
-                <Row lg={4} md={6} xs={12}>
-                    <Col md={6} lg={4}>
-
-                        <ValidatedInput
-                            id="contractor_details"
-                            name="contractor_details"
-                            label="Contractor Details"
-                            type="text"
-                            value={formData.contractor_details}
-                            onChange={handleInputChange}
-                            validator={requiredValidator}
-                            onValidationStateChange={handleValidationStateChange}
-                        />
-                    </Col>
-                    <Col md={6} lg={4}>
-                        <ValidatedInput
-                            label="Contract Sum"
-                            id="contract_sum"
-                            name="contract_sum"
-                            placeholder="Enter the contract sum"
-                            type="number"
-                            value={formData.contract_sum}
-                            onChange={handleInputChange}
-                            validator={numberValidator}
-                            onValidationStateChange={handleValidationStateChange}
-                        />
-                    </Col>
-                    <Col md={6} lg={4}>
-                        <ValidatedInput
-                            label="Status"
-                            id="project_status_percentage"
-                            name="project_status_percentage"
-                            placeholder="Enter the project status"
-                            type="number"
-                            value={formData.project_status_percentage}
-                            onChange={handleInputChange}
-                            validator={requiredValidator}
-                            onValidationStateChange={handleValidationStateChange}
-                        />
-
-                    </Col>
-                </Row>
-
-
-
-                <FormGroup>
-                    <Label for="certificates">Certificates</Label>
-                    {formData.certificates.map((certificate, index) => (
-                        <div key={index}>
-                            <Row lg={4} md={6} xs={12}>
-                                <Col md={6} lg={6}>
-                                    <FormGroup>
-                                        <Label for={`certificateNumber-${index}`}>Certificate Number</Label>
-                                        <Input
-                                            id={`certificateNumber-${index}`}
-                                            name="certificate_number"
-                                            placeholder="Certificate Number"
-                                            type="text"
-                                            value={certificate.certificate_number}
-                                            onChange={(e) => handleCertificateItemChange(e, index)}
-                                        />
-                                        {/* Display validation error if any */}
-                                        {validateCertificateData(certificate).certificate_number && (
-                                            <div className="text-danger">
-                                                {validateCertificateData(certificate).certificate_number}
-                                            </div>
-                                        )}
-                                    </FormGroup>
-                                </Col>
-                                <Col md={6} lg={6}>
-                                    <FormGroup>
-                                        <Label for={`amountCertified-${index}`}>Amount Certified</Label>
-                                        <Input
-                                            id={`amountCertified-${index}`}
-                                            name="amount_certified"
-                                            placeholder="Amount Certified"
-                                            type="text"
-                                            value={certificate.amount_certified}
-                                            onChange={(e) => handleCertificateItemChange(e, index)}
-                                        />
-                                        {/* Display validation error if any */}
-                                        {validateCertificateData(certificate).amount_certified && (
-                                            <div className="text-danger">
-                                                {validateCertificateData(certificate).amount_certified}
-                                            </div>
-                                        )}
-                                    </FormGroup>
-                                </Col>
-                            </Row>
-                            {index > 0 && (
-                                <Col className='m-4 '>
-                                    <Button type="button" onClick={() => removeCertificateItem(index)}>
-                                        Remove Certificate
-                                    </Button>
-                                </Col>
-
-                            )}
-                        </div>
-                    ))}
-                    <Col className=''>
-                        <Button type="button" onClick={addCertificateItem}>
-                            Add Certificate
+                <Form onSubmit={handleSubmit}>
+                    {renderStep()}
+                    {currentStep > 1 && (
+                        <Button onClick={prevStep} color='secondary'>Previous</Button>
+                    )}
+                    {currentStep < totalSteps ? (
+                        <Button onClick={nextStep} color='primary'>Next</Button>
+                    ) : (
+                        <Button type="submit" color='primary' disabled={!isFormValid()}>
+                            Submit
                         </Button>
-                    </Col>
-                </FormGroup>
-
-                <FormGroup>
-
-                    <ValidatedInput
-                        label="Remarks"
-                        id="remarks"
-                        name="remarks"
-                        placeholder="Enter any remarks"
-                        type="textarea"
-                        value={formData.remarks}
-                        onChange={handleInputChange}
-                        validator={requiredValidator}
-                        onValidationStateChange={handleValidationStateChange}
-                    />
-                </FormGroup>
-
-                <FormGroup>
-
-                    <ValidatedInput
-                        label="Recommendations"
-                        id="recommendations"
-                        name="recommendations"
-                        placeholder="Enter any recommendations"
-                        type="textarea"
-                        value={formData.recommendations}
-                        onChange={handleInputChange}
-                        validator={requiredValidator}
-                        onValidationStateChange={handleValidationStateChange}
-                    />
-                </FormGroup>
-
-                <Row lg={4} md={6} xs={12}>
-                    <Col md={6} lg={6}>
-                        
-                            <Label for="before_images_url">Previous Images</Label>
-                            <ImageUpload onImageUpload={(url) => handleImageUpload(url, 'before_images_url')} />
-                        
-                    </Col>
-                    <Col md={6} lg={6}>
-                    
-                            <Label for="after_images_url">Current Image</Label>
-                            <ImageUpload onImageUpload={(url) => handleImageUpload(url, 'after_images_url')} />
-                    
-                    </Col>
-                </Row>
-
-                <Card>
-                <Button type="submit" color='primary' disabled={!isFormValid()}>
-                    Submit
-                </Button>
-                    
-                </Card>
-            </Form>
+                    )}
+                </Form>
+            </CardBody>
         </CardHeader>
     );
 }

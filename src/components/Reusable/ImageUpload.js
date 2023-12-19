@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Input, Card, Button } from 'reactstrap';
+import { Input, Card, Button ,Col} from 'reactstrap';
 import axios from 'axios';
 
 export default function ImageUpload({ onImageUpload }) {
@@ -30,24 +30,23 @@ export default function ImageUpload({ onImageUpload }) {
 
     return (
         <Card style={{ margin: '20px' }}>
-        <label htmlFor="afterImages" style={{ display: 'block', marginBottom: '10px' }}>Upload Current Condition Image</label>
-        <Card >
-            <Input
-                id="afterImages"
-                name="after_images"
-                type="file"
-                onChange={(event) => setUploadFile(event.target.files[0])}
-                style={{ marginBottom: '10px' }}
-            />
-            <Button onClick={handleUpload} style={{ display: 'block' }} color='primary'>Upload</Button>
+            <Col >
+                <Input
+                    id="afterImages"
+                    name="after_images"
+                    type="file"
+                    onChange={(event) => setUploadFile(event.target.files[0])}
+                    style={{ marginBottom: '10px' }}
+                />
+                <Button onClick={handleUpload} style={{ display: 'block' }} color='primary'>Upload</Button>
+            </Col>
+            {uploadError && <p className="error-message" style={{ color: 'red', marginBottom: '10px' }}>{uploadError}</p>}
+            <Card style={{ width: '18rem', marginTop: '5' }}>
+                {cloudinaryImage &&
+                    <img src={cloudinaryImage} alt="Uploaded" style={{ width: '100%', height: 'auto' }} />
+                }
+            </Card>
         </Card>
-        {uploadError && <p className="error-message" style={{ color: 'red', marginBottom: '10px' }}>{uploadError}</p>}
-        <Card style={{ width: '18rem', marginTop: '5' }}>
-            {cloudinaryImage && 
-                <img src={cloudinaryImage} alt="Uploaded" style={{ width: '100%', height: 'auto' }} />
-            }
-        </Card>
-    </Card>
-    
+
     );
 }
