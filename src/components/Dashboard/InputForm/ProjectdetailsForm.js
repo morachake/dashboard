@@ -83,6 +83,17 @@ export const ProjectDetailsForm = ({ formData, handleInputChange, handleValidati
         validator={requiredValidator}
         onValidationStateChange={handleValidationStateChange}
       />
+       <ValidatedInput
+        label="Contractor Details"
+        id="contractor_details"
+        name="contractor_details"
+        placeholder="Enter any Contractor Detailes"
+        type="textarea"
+        value={formData.contractor_details}
+        onChange={handleInputChange}
+        validator={requiredValidator}
+        onValidationStateChange={handleValidationStateChange}
+      />
 
       <Row lg={4} md={6} xs={12}>
         <Col md={6} lg={4}>
@@ -120,7 +131,7 @@ export const ProjectDetailsForm = ({ formData, handleInputChange, handleValidati
             onValidationStateChange={handleValidationStateChange}
           />
         </Col>
-     
+
       </Row>
     </div>
   );

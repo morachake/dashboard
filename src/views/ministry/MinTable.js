@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
-import { CardHeader, Container,Card, Col ,  CardBody, Row,ListGroup ,ListGroupItem, CardImg} from 'reactstrap';
+import { CardHeader, Container, Card, Col, CardBody, Row, ListGroup, ListGroupItem, CardImg, Table } from 'reactstrap';
 import UserHeader from 'components/Headers/UserHeader';
 import { useAuth } from 'context/AuthContext';
 import config from 'config';
@@ -9,28 +9,28 @@ import config from 'config';
 export default function ProjectsTable() {
   const [projectData, setProjects] = useState([]);
   const [expandedRows, setExpandedRows] = useState(null);
-    const user = useAuth()
+  const user = useAuth()
 
-    const accessToken = localStorage.getItem('accessToken')
-    fetch(`${config.backendURL}/forms`,{
-      headers:{
-        'Authorization': `Bearer ${accessToken}`
-      }
+  const accessToken = localStorage.getItem('accessToken')
+  fetch(`${config.backendURL}/forms`, {
+    headers: {
+      'Authorization': `Bearer ${accessToken}`
+    }
+  })
+    .then(response => response.ok ? response.json() : Promise.reject('Network response was not ok'))
+    .then(data => {
+      // const filteredProjects = data.filter(project => project.user_id === user.id);
+      setProjects(data)
+
     })
-      .then(response => response.ok ? response.json() : Promise.reject('Network response was not ok'))
-      .then(data => { 
-        // const filteredProjects = data.filter(project => project.user_id === user.id);
-        setProjects(data)
-        
-      })
-      .catch(error => console.error('Error fetching projects:', error));
+    .catch(error => console.error('Error fetching projects:', error));
 
   // console.log(projectData)
   const onRowToggle = (e) => {
     setExpandedRows(e.data);
   };
 
- 
+
 
   const formatCurrency = (value) => {
     // Check if value is a number or can be converted to one
@@ -44,24 +44,76 @@ export default function ProjectsTable() {
         .filter(item => item.trim() !== '');  // Filter out empty strings
     };
     const recommendationsList = processRecommendations(data.recommendations);
-  
-    
-  
+
+
+
     const formattedContractSum = formatCurrency(data.contract_sum);
-  
+
     // Render List Items
     const renderListItems = (items) => items.map((item, index) => <ListGroupItem key={index}>{item}</ListGroupItem>);
-  
+
     const certificatesList = data.certificates.map(cert => `${cert.certificate_number}: ${cert.amount_certified}`);
-  
-    const renderRemarks = (remarks) =>{
-      return remarks.map((remark, index) => (     
-         <ListGroup key={index}>
+    const locationList = data.locations.map(loc => `${loc.subcounty}, ${loc.ward}`);
+
+    const renderLocation = (locations) => {
+      if (!locations || locations.length === 0) {
+        return <h5>No location data available.</h5>;
+      }
+      return (
+        <Card>
+          <Table>
+          <thead>
+            <tr>
+              <th scope='row'>Subcounty</th>
+              <th>Ward</th>
+            </tr>
+          </thead>
+          <tbody>
+            {locations.map((location, index) => (
+              <tr key={index}>
+                <td>{location.subcounty}</td>
+                <td>{location.ward}</td>
+              </tr>
+            ))}
+          </tbody>
+        </Table>
+        </Card>
+      );
+    };
+    const renderCertificates = (certificates) => {
+      if (!certificates || certificates.length === 0) {
+        return <h5>No certificate data available.</h5>;
+      }
+      return (
+        <Card>
+           <Table>
+          <thead>
+            <tr>
+              <th>Certificate Number</th>
+              <th>Amount Certified</th>
+            </tr>
+          </thead>
+          <tbody>
+            {certificates.map((cert, index) => (
+              <tr key={index}>
+                <td>{cert.certificate_number}</td>
+                <td>{formatCurrency(cert.amount_certified)}</td>
+              </tr>
+            ))}
+          </tbody>
+        </Table>
+        </Card>
+       
+      );
+    };
+
+    const renderRemarks = (remarks) => {
+      return remarks.map((remark, index) => (
+        <ListGroup key={index}>
           <p>{remark.text}</p>
         </ListGroup>
-        
-      ))
 
+      ))
     }
     return (
       <Card>
@@ -78,21 +130,30 @@ export default function ProjectsTable() {
               <p><h4>Time Frame:</h4> {data.time_frame}</p>
               <p><h4>Certificates:</h4></p>
               <ListGroup>
-                {renderListItems(certificatesList)}
+                {renderCertificates(data.certificates)}
               </ListGroup>
             </Col>
             <Col lg="6" md="12">
-              <p><h4>Subcounty:</h4> {data.subcounty}</p>
-              <p><h4>Ward:</h4> {data.ward}</p>
-              <Card>
-                <h4>Remarks:</h4>
-                <p> {renderRemarks(data.remarks).slice(0,2)}
-                  </p>
+              <Card body
+                className="my-2">
+                <h4>Project Location</h4>
+                <div>{renderLocation(data.locations)}</div>
               </Card>
-              <p><h4>Recommendations:</h4></p>
-              <ListGroup>
-                {renderListItems(recommendationsList)}
-              </ListGroup>
+
+              <Card body
+                className="my-2">
+                <h4>Remarks:</h4>
+                <p> {renderRemarks(data.remarks).slice(0, 2)}
+                </p>
+              </Card>
+              <Card body
+                className="my-2">
+                <p><h4>Recommendations:</h4></p>
+                <ListGroup>
+                  {renderListItems(recommendationsList)}
+                </ListGroup>
+              </Card>
+
               <CardHeader>
                 <div style={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center' }}>
                   <div>
@@ -139,8 +200,8 @@ export default function ProjectsTable() {
     );
   };
 
-   
-  
+
+
 
   return (
     <>
@@ -149,10 +210,10 @@ export default function ProjectsTable() {
         <CardHeader>
           <div className="card">
             {projectData && projectData.length > 0 ? (
-              <DataTable 
+              <DataTable
                 value={projectData}
-                paginator 
-                rows={10} 
+                paginator
+                rows={10}
                 dataKey="id"
                 emptyMessage="No projects found."
                 expandedRows={expandedRows}
@@ -167,14 +228,14 @@ export default function ProjectsTable() {
                 <Column field="contract_sum" header="Contract Sum" />
               </DataTable>
             ) : (
-            <Card>
+              <Card>
                 <CardHeader>
-                No data available
+                  No data available
                 </CardHeader>
                 <CardBody>
-                    Please Proceed to add data to your account for it to be visible here
+                  Please Proceed to add data to your account for it to be visible here
                 </CardBody>
-            </Card>
+              </Card>
             )}
           </div>
         </CardHeader>

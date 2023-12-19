@@ -1,10 +1,8 @@
 import { useAuth } from 'context/AuthContext';
-import React, { useCallback, useState } from 'react';
-import { Card, Form, FormGroup, FormFeedback, Input, Label, Button, CardHeader, Row, CardBody, Col } from 'reactstrap';
-import ImageUpload from "../Reusable/ImageUpload";
-import ValidatedInput from 'components/Reusable/ValidatedInput';
+import React, { useState } from 'react';
+import { Form, Button, Card, CardBody } from 'reactstrap';
+
 import config from 'config';
-import { key } from 'localforage';
 import { ProjectDetailsForm } from './InputForm/ProjectdetailsForm';
 import { Certandloc } from './InputForm/Certand loc';
 
@@ -19,19 +17,17 @@ const subCountyWards = {
 };
 const initialFormData = {
     project_name: '',
-    subcounty: '',
-    ward: '',
     description: '',
-    contract_sum: '',
     contractor_details: '',
-    certificates: [],
-    locations: [],
     status: '',
     project_status_percentage: '',
     remarks: '',
     start_date: '',
     end_date: '',
+    contract_sum: '',
+    certificates: [],
     recommendations: '',
+    locations: [],
     before_images_url: '',
     after_images_url: '',
 };
@@ -42,7 +38,7 @@ export default function InputForm() {
     const [wards, setWards] = useState([]);
     const [formErrors, setFormErrors] = useState({});
     const [locationErrors, setLocationErrors] = useState({});
-    const [currentStep,setCurrentStep] = useState(1)
+    const [currentStep, setCurrentStep] = useState(1)
     const [formData, setFormData] = useState({
         ...initialFormData,
         user_id: user.id
@@ -62,8 +58,6 @@ export default function InputForm() {
     };
     const validateLocation = (index, subcounty, ward) => {
         const newLocationErrors = { ...locationErrors };
-
-        // Here you can add your validation logic for subcounty and ward
         newLocationErrors[index] = {
             subcounty: subcounty ? '' : 'Subcounty is required',
             ward: ward ? '' : 'Ward is required',
@@ -119,8 +113,10 @@ export default function InputForm() {
 
     const handleInputChange = (event) => {
         const { name, value } = event.target;
-        setFormData({ ...formData, [name]: value });
-        validateField(name, value);
+        setFormData(prevFormData => ({
+            ...prevFormData,
+            [name]: value
+        }));
     };
     const saveData = () => {
         const jsonPayload = {
@@ -258,20 +254,20 @@ export default function InputForm() {
     const isFormValid = () => {
         return Object.values(formValid).every(Boolean);
     };
-    const totalSteps = 2; // Replace with the total number of steps in the form
+    const totalSteps = 2
     const nextStep = () => {
-        if (currentStep < totalSteps && isCurrentStepValid()) {
+        if (currentStep < 2) { 
             setCurrentStep(currentStep + 1);
         }
     };
-    const isCurrentStepValid = () => {
-        return true; 
-    };
+
     const prevStep = () => {
-        setCurrentStep(currentStep -1)
+        if (currentStep > 1) {
+            setCurrentStep(currentStep - 1);
+        }
     };
-    const renderStep = ( ) =>{
-        switch(currentStep){
+    const renderStep = () => {
+        switch (currentStep) {
             case 1:
                 return <ProjectDetailsForm
                     handleInputChange={handleInputChange}
@@ -295,26 +291,28 @@ export default function InputForm() {
                     wards={wards}
                     removeLocation={removeLocation}
                 />
-                default:
-                    return null
-    }}
+            default:
+                return null
+        }
+    }
     return (
-        <CardHeader>
-            <CardBody>
+        <Card>
+           <CardBody>
                 <Form onSubmit={handleSubmit}>
                     {renderStep()}
-                    {currentStep > 1 && (
-                        <Button onClick={prevStep} color='secondary'>Previous</Button>
-                    )}
-                    {currentStep < totalSteps ? (
-                        <Button onClick={nextStep} color='primary'>Next</Button>
-                    ) : (
-                        <Button type="submit" color='primary' disabled={!isFormValid()}>
-                            Submit
-                        </Button>
-                    )}
+                    <div className="form-navigation">
+                        {currentStep > 1 && (
+                            <Button onClick={prevStep} type='button' color='secondary'>Previous</Button>
+                        )}
+                        {currentStep < totalSteps && (
+                            <Button onClick={nextStep} type='button' color='primary'>Next</Button>
+                        )}
+                        {currentStep === totalSteps && (
+                            <Button type="submit" color='primary' disabled={!isFormValid()}>Submit</Button>
+                        )}
+                    </div>
                 </Form>
             </CardBody>
-        </CardHeader>
+        </Card>
     );
 }

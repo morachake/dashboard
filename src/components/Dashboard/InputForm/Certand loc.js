@@ -28,9 +28,8 @@ export const Certandloc = ({
 
                 <CardBody>
                     {formData.certificates.map((certificate, index) => (
-                        <div key={index}>
-                            <Row lg={4} md={6} xs={12}>
-                                <Col md={6} lg={6}>
+                            <Row lg={4} md={6} xs={12} style={{alignItems:'center'}} key={index}>
+                                <Col md={6} lg={4}>
                                     <FormGroup>
                                         <Label for={`certificateNumber-${index}`}>Certificate Number</Label>
                                         <Input
@@ -49,7 +48,7 @@ export const Certandloc = ({
                                         )}
                                     </FormGroup>
                                 </Col>
-                                <Col md={6} lg={6}>
+                                <Col md={6} lg={4}>
                                     <FormGroup>
                                         <Label for={`amountCertified-${index}`}>Amount Certified</Label>
                                         <Input
@@ -68,16 +67,15 @@ export const Certandloc = ({
                                         )}
                                     </FormGroup>
                                 </Col>
-                            </Row>
                             {index > 0 && (
-                                <Col className='m-4 '>
-                                    <Button type="button" onClick={() => removeCertificateItem(index)}>
-                                        Remove Certificate
+                                <Col>
+                                    <Button type="button" color='danger'  onClick={() => removeCertificateItem(index)}>
+                                        Remove 
                                     </Button>
                                 </Col>
 
-                            )}
-                        </div>
+                          )} 
+                            </Row>
                     ))}
                 </CardBody>
             </Card>
@@ -93,7 +91,7 @@ export const Certandloc = ({
                 <CardBody>
 
                     {formData.locations.map((location, index) => (
-                        <Row lg={4} md={6} xs={12} key={index}>
+                        <Row lg={4} md={6} xs={12} key={index} style={{alignItems:'center'}}>
                             <Col md={6} lg={4}>
                                 <Label for={`subcounty-${index}`}>Sub-County</Label>
                                 <Input
@@ -117,7 +115,6 @@ export const Certandloc = ({
                                 {locationErrors[index]?.subcounty && (
                                     <div className="text-danger">{locationErrors[index].subcounty}</div>
                                 )}
-                                {/* <FormFeedback>{formErrors.subcounty}</FormFeedback> */}
                             </Col>
                             <Col md={6} lg={4}>
                                 <Label for={`ward-${index}`}>Ward</Label>
@@ -144,13 +141,15 @@ export const Certandloc = ({
                                 {locationErrors[index]?.ward && (
                                     <div className="text-danger">{locationErrors[index].ward}</div>
                                 )}
-                                {/* <FormFeedback>{formErrors.ward}</FormFeedback> */}
                             </Col>
-                            <Col md={6}>
+                            {index > 0 && (
+                                <Col md={6} lg={4} style={{marginTop:30}}>
                                 <Button color="danger" onClick={() => removeLocation(index)}>
                                     Remove
                                 </Button>
                             </Col>
+                            )}
+
                         </Row>
                     ))}
                 </CardBody>
