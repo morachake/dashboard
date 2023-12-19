@@ -19,21 +19,23 @@ const Index = () => {
   const [uniqueWards, setUniqueWards] = useState([]);
 
   useEffect(() => {
-    const accessToken = localStorage.getItem('accessToken'); 
+    const accessToken = localStorage.getItem('accessToken');
     fetch(`${config.backendURL}/forms`, {
       headers: {
-        'Authorization': `Bearer ${accessToken}` 
+        'Authorization': `Bearer ${accessToken}`
       }
     })
-    .then(response => response.json())
-    .then(data => {
-      setProjects(data);
-      setFilteredProjects(data);
-      setUniqueSectors([...new Set(data.map(project => project.sector))]);
-      setUniqueSubcounties([...new Set(data.map(project => project.subcounty))]);
-      setUniqueWards([...new Set(data.map(project => project.ward))]);
-    })
-    .catch(error => console.error('Error fetching projects:', error));
+      .then(response => response.json())
+      .then(data => {
+        setProjects(data);
+        setFilteredProjects(data);
+        const allLocations = data.flatMap(project => project.locations)
+        console.log(allLocations);
+        setUniqueSectors([...new Set(data.map(project => project.sector))]);
+        setUniqueSubcounties([...new Set(allLocations.map(project => project.subcounty))]);
+        setUniqueWards([...new Set(allLocations.map(project => project.ward))]);
+      })
+      .catch(error => console.error('Error fetching projects:', error));
   }, []);
 
   useEffect(() => {
@@ -44,25 +46,22 @@ const Index = () => {
 
   const filterProjects = () => {
     let result = projects;
-  
-    if (sectorFilter) {
-      result = result.filter(project => project.sector === sectorFilter);
-    }
-    if (subcountyFilter) {
-      result = result.filter(project => project.subcounty === subcountyFilter);
-    }
-    if (wardFilter) {
-      result = result.filter(project => project.ward === wardFilter);
-      console.log(result);
-    }
-  
+
+    result = result.filter(project => {
+      const matchesSector = sectorFilter ? project.sector === sectorFilter : true;
+      const matchesSubcounty = subcountyFilter ? project.locations.some(location => location.subcounty === subcountyFilter) : true;
+      const matchesWard = wardFilter ? project.locations.some(location => location.ward === wardFilter) : true;
+
+      return matchesSector && matchesSubcounty && matchesWard;
+    });
+
     setFilteredProjects(result);
   };
 
   useEffect(() => {
     filterProjects();
   }, [sectorFilter, subcountyFilter, wardFilter, projects]);
-  
+
   const handleSectorChange = (e) => {
     setSectorFilter(e.target.value);
   };
@@ -72,25 +71,32 @@ const Index = () => {
 
 
   const handleSubcountyChange = (e) => {
-    console.log("Subcounty selected:", e.target.value);
-    setSubcountyFilter(e.target.value);
+    const selectedSubcounty = e.target.value;
+    setSubcountyFilter(selectedSubcounty);
+    console.log("Subcounty selected:", selectedSubcounty);
+    setWardFilter('');
+    const wardsInSubcounty = projects
+      .flatMap(project => project.locations.filter(location => location.subcounty === selectedSubcounty))
+      .map(location => location.ward);
+    setUniqueWards([...new Set(wardsInSubcounty)]);
   };
-  
 
+  console.log("Wards:", uniqueWards);
   const handleWardChange = (e) => {
     console.log("Ward selected:", e.target.value);
     setWardFilter(e.target.value);
   };
-  
+
   return (
     <>
-         {projects.length > 0 && (
+      {projects.length > 0 && (
         <Header
           onSectorChange={handleSectorChange}
-          onLocationChange={handleSubcountyChange} 
+          onLocationChange={handleSubcountyChange}
           onWardChange={handleWardChange}
           sectors={uniqueSectors}
-          locations={uniqueSubcounties} 
+          locations={uniqueSubcounties}
+          wards={uniqueWards}
         />
       )}
       <Container className="mt--7" fluid>
@@ -100,16 +106,21 @@ const Index = () => {
               <CardHeader className="bg-transparent">
               </CardHeader>
               <CardBody>
-              <div className="chart">
-              <BarChart data={filteredProjects} />
-              </div>
+                <div className="chart">
+                  <BarChart
+                    data={filteredProjects}
+                    isWardFilterApplied={wardFilter !== ''}
+                    currentWardFilter={wardFilter}
+                  />
+
+                </div>
               </CardBody>
             </Card>
           </Col>
         </Row>
         <Row className="mt-5">
           <Col xl="12">
-          <ProjectsTable projectData={filteredProjects} />
+            <ProjectsTable projectData={filteredProjects} />
           </Col>
         </Row>
       </Container>
