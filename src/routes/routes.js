@@ -115,13 +115,6 @@ const cabinetRoutes = [
     layout: "/cabinet",
   },
   {
-    path: "/adddata",
-    name: "Add Data",
-    icon: "ni ni-fat-add",
-    component: <DataForm />,
-    layout: "/cabinet",
-  },
-  {
     path: "/tables",
     name: "Tables",
     icon: "ni ni-bullet-list-67 text-red",
