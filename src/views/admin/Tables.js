@@ -6,7 +6,7 @@ import UserHeader from 'components/Headers/UserHeader';
 import { useAuth } from 'context/AuthContext';
 import config from 'config';
 
-export default function ProjectsTable() {
+export default function ProjectTable() {
   const [projectData, setProjects] = useState([]);
   const [expandedRows, setExpandedRows] = useState(null);
   const user = useAuth()
@@ -30,7 +30,30 @@ export default function ProjectsTable() {
     setExpandedRows(e.data);
   };
 
+  function formatReadableDate(dateString) {
+    const date = new Date(dateString);
+    return date.toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    });
+  }
+  
+  const startDateTemplate = (rowData) => {
+    return <span>{formatReadableDate(rowData.start_date)}</span>;
+  };
+  
+  const endDateTemplate = (rowData) => {
+    return <span>{formatReadableDate(rowData.end_date)}</span>;
+  };
+  const renderRemarks = (remarks) => {
+    return remarks.map((remark, index) => (
+      <ListGroup key={index}>
+        <p>{remark.text}</p>
+      </ListGroup>
 
+    ))
+  }
 
   const formatCurrency = (value) => {
     // Check if value is a number or can be converted to one
@@ -39,12 +62,12 @@ export default function ProjectsTable() {
   };
   const rowExpansionTemplate = (data) => {
     const processRecommendations = (recommendations) => {
-      if (!recommendations){
+      if(!recommendations){
         return [];
-      } 
+      }
       return recommendations
-        .split(/\d+\.\s*/) 
-        .filter(item => item.trim() !== '');  
+        .split(/\d+\.\s*/)  // Split by the number followed by a period and space
+        .filter(item => item.trim() !== '');  // Filter out empty strings
     };
     const recommendationsList = processRecommendations(data.recommendations);
 
@@ -109,15 +132,7 @@ export default function ProjectsTable() {
        
       );
     };
-
-    const renderRemarks = (remarks) => {
-      return remarks.map((remark, index) => (
-        <ListGroup key={index}>
-          <p>{remark.text}</p>
-        </ListGroup>
-
-      ))
-    }
+   
     return (
       <Card>
         <CardHeader>
@@ -226,8 +241,8 @@ export default function ProjectsTable() {
                 <Column expander style={{ width: '3em' }} />
                 <Column field="project_name" header="Project Name" />
                 <Column field="status" header="Status" />
-                <Column field="subcounty" header="Subcounty" />
-                <Column field="ward" header="Ward" />
+                <Column field="start_date" header="Start Date" body={startDateTemplate} />
+              <Column field="end_date" header="End Date" body={endDateTemplate} />
                 <Column field="contract_sum" header="Contract Sum" />
               </DataTable>
             ) : (

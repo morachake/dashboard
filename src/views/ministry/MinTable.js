@@ -6,7 +6,7 @@ import UserHeader from 'components/Headers/UserHeader';
 import { useAuth } from 'context/AuthContext';
 import config from 'config';
 
-export default function ProjectsTable() {
+export default function MinTable() {
   const [projectData, setProjects] = useState([]);
   const [expandedRows, setExpandedRows] = useState(null);
   const user = useAuth()
