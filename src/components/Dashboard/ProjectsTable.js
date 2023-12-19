@@ -55,7 +55,6 @@ export default function ProjectsTable({ projectData }) {
                         <Column field="sector" header="Sector" />
                         <Column field="status" header="Status" body={statusBodyTemplate} />
                         <Column field="contract_sum" header="Contract Sum" body={contractSumBodyTemplate} />
-                        {/* Additional columns can be added as needed */}
                     </DataTable>
                 ) : (
                     <div>No data available</div>
