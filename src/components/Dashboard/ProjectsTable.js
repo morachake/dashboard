@@ -53,6 +53,12 @@ export default function ProjectsTable({ projectData }) {
                         <Column field="project_name" header="Project Name" body={projectNameBodyTemplate} />
                         <Column field="description" header="Description" body={descriptionWithTooltip} />
                         <Column field="sector" header="Sector" />
+                        <Column 
+                            field="project_status_percentage" 
+                            header="Percentage"
+                            body={rowData => `${rowData.project_status_percentage}%`}
+                        />
+                        {/* <Column field="project_status_percentage" header="Percentage"  /> */}
                         <Column field="status" header="Status" body={statusBodyTemplate} />
                         <Column field="contract_sum" header="Contract Sum" body={contractSumBodyTemplate} />
                     </DataTable>
