@@ -89,7 +89,7 @@ const Index = () => {
 
   return (
     <>
-      {projects.length > 0 && (
+      {/* {projects.length > 0 && ( */}
         <Header
           onSectorChange={handleSectorChange}
           onLocationChange={handleSubcountyChange}
@@ -98,7 +98,7 @@ const Index = () => {
           locations={uniqueSubcounties}
           wards={uniqueWards}
         />
-      )}
+      {/* )} */}
       <Container className="mt--7" fluid>
         <Row>
           <Col xl="12">

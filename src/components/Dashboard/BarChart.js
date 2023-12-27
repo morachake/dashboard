@@ -63,21 +63,24 @@ const BarChart = ({ data, isWardFilterApplied, currentWardFilter }) => {
     // Update chart data when data or filter changes
     if (chartInstance.current) {
       const { labels, chartData } = generateLabelsAndData();
-
-      chartInstance.current.data = {
-        labels,
-        datasets: [{
-          label: 'Contract Sum',
-          data: chartData,
-          backgroundColor: 'rgba(52, 152, 219, 0.5)',
-        }],
-      };
-
+      const ctx = chartRef.current.getContext('2d');
+      
+       chartInstance.current = new Chart(ctx, {
+      type: 'bar',
+      options: {
+        maintainAspectRatio: false, // Add this line
+        scales: {
+          yAxes: [{ ticks: { beginAtZero: true } }],
+        },
+        hover: { mode: null },
+      },
+    });
+  
       chartInstance.current.update();
     }
   }, [data, isWardFilterApplied, currentWardFilter]);
 
-  return <canvas ref={chartRef}></canvas>;
+  return <canvas ref={chartRef} className='chart-canvas'></canvas>;
 };
 
 export default BarChart;

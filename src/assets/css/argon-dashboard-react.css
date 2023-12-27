@@ -16234,6 +16234,10 @@ a.btn-icon-only {
   position: relative;
   height: 350px;
 }
+.chart-canvas {
+  height: 400px; /* Fixed height */
+  width: 100%;   /* Responsive width */
+}
 
 .chart-sm {
   height: 230px;
