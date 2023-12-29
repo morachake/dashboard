@@ -40,9 +40,9 @@ export const AuthProvider = ({ children }) => {
           navigate('/admin/index');
         } else if (data.user.user_type === 'cec') {
           navigate('/executive');
-        } else if (data.user.user_type === 'county_secretary') {
+        } else if (data.user.user_type === 'cs') {
           navigate('/cabinet');
-        } else if (data.user.user_type === 'director' ) {
+        } else if (data.user.user_type === 'director' || data.user.user_type === 'chief_officer') {
           navigate('/ministry')
         }  else {
           navigate('/login');

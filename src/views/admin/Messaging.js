@@ -29,8 +29,7 @@ export default function Messaging() {
     fetch(`${config.backendURL}/get_remarks`, {
       method: 'GET',
       headers: {
-        'Authorization': `Bearer ${accessToken}`,
-        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${accessToken}`
       }
     })
     .then(response => response.json())
@@ -49,7 +48,7 @@ const handleSendMessage = () => {
 const addRemark = (formId, remarkText) => {
   const remarkData = {
     form_id: formId,
-    remarks: remarkText,
+    remark: remarkText,
   };
 
     fetch(`${config.backendURL}/remarks`, {

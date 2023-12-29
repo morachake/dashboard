@@ -35,12 +35,12 @@ root.render(
           </ProtectedRoute>
         } />
         <Route path="/cabinet/*" element={
-          <ProtectedRoute allowedUserTypes={['county_secretary']}>
+          <ProtectedRoute allowedUserTypes={['cs']}>
             <CabinetLayout />
           </ProtectedRoute>
         } />
         <Route path="/ministry/*" element={
-          <ProtectedRoute allowedUserTypes={['director']}>
+          <ProtectedRoute allowedUserTypes={['director','chief_officer']}>
             <MinLayout />
           </ProtectedRoute>
         } />
