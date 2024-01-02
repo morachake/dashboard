@@ -10,10 +10,15 @@ import {
   ResponsiveContainer,
 } from 'recharts';
 
-export default function BudgetBars({ filteredProjects }) {
+export default function BudgetBars({ filteredProjects, currentFilter }) {
+  // Determine the key for the x-axis based on the current filter
+  const labelKey = currentFilter && currentFilter.ward ? 'ward' 
+                  : currentFilter && currentFilter.subcounty ? 'subcounty' 
+                  : 'sector'; // default to sector if no filter is applied
+
   const chartData = filteredProjects.map((project) => ({
-    name: project.project_name,
-    status: parseFloat(project.status),
+    label: project[labelKey],
+    contractSum: parseFloat(project.contract_sum),
   }));
 
   return (
@@ -27,15 +32,16 @@ export default function BudgetBars({ filteredProjects }) {
           bottom: 5,
         }}
       >
-        <CartesianGrid  strokeDasharray="5 5" />
-        <XAxis dataKey="name" fill="#3498db"/>
-        <YAxis domain={[0, 100]} />
+        <CartesianGrid strokeDasharray="5 5" />
+        <XAxis dataKey="label" />
+        <YAxis />
         {/* <Tooltip /> */}
         <Legend />
         <Bar
-          dataKey="status"
+          dataKey="contractSum"
           fill="#3498db"
-          strokeWidth={2} 
+          strokeWidth={2}
+          isAnimationActive={false}
         />
       </BarChart>
     </ResponsiveContainer>

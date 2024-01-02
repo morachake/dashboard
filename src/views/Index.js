@@ -109,8 +109,9 @@ const Index = () => {
                 <div className="chart">
                   <BarChart
                     data={filteredProjects}
-                    isWardFilterApplied={wardFilter !== ''}
-                    currentWardFilter={wardFilter}
+                    //isWardFilterApplied={wardFilter !== ''}
+                   // currentWardFilter={wardFilter}
+                   currentFilter={{ sector: sectorFilter, subcounty: subcountyFilter, ward: wardFilter }}
                   />
 
                 </div>
