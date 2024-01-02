@@ -50,7 +50,6 @@ const CabinetLayout = (props) => {
         {...props}
         routes={cabinetRoutes}
         logo={{
-          innerLink: "/cabinet/index",
           imgSrc: ("https://web.mombasa.go.ke/wp-content/uploads/elementor/thumbs/msa-county-pvpwt97u9pzd6lh7rs4eyuajx9c5n3tbhn01h7rg14.png"),
           imgAlt: "...",
         }}
@@ -62,7 +61,7 @@ const CabinetLayout = (props) => {
         />
         <Routes>
           {getRoutes(cabinetRoutes)}
-          <Route path="*" element={<Navigate to="/cabinet" replace />} />
+          <Route path="*" element={<Navigate to="/cabinet/index" replace />} />
         </Routes>
         <Container fluid>
           <AdminFooter />
