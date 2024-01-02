@@ -67,7 +67,7 @@ export default function NoteTaker() {
         }
 
         const noteData = {
-            assignedTo: assignedTo,
+            cec_ids: assignedTo,
             body: details,
             subject: subject
         };
@@ -89,9 +89,7 @@ export default function NoteTaker() {
             setDetails(''); 
             setSubject(''); 
             setErrors({}); 
-            // if (onNoteCreated) {
-            //     onNoteCreated();
-            // }
+            
         })
         .catch((error) => {
             console.error('Error:', error);

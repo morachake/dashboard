@@ -9,7 +9,7 @@ export default function Messaging() {
   const [message, setMessage] = useState('');
   const [activeChat, setActiveChat] = useState(null);
   const [projects, setProjects] = useState([]);
-  const [remarks, setRemarks] = useState([]); // State to store all remarks
+  const [remarks, setRemarks] = useState([]);
 
   const accessToken = localStorage.getItem('accessToken');
   useEffect(() => {
@@ -22,7 +22,7 @@ export default function Messaging() {
     .then(data => setProjects(data))
     .catch(error => console.error('Error fetching projects:', error));
 
-    fetchRemarks(); // Fetch remarks on component mount
+    fetchRemarks();
   }, []);
 
   function fetchRemarks() {
@@ -37,19 +37,18 @@ export default function Messaging() {
     .catch(console.error);
   }
 
-
-const handleSendMessage = () => {
-  if (activeChat && message.trim()) {
-    addRemark(activeChat.id, message);
-    setMessage('');
-  }
-};
-
-const addRemark = (formId, remarkText) => {
-  const remarkData = {
-    form_id: formId,
-    remark: remarkText,
+  const handleSendMessage = () => {
+    if (activeChat && message.trim()) {
+      addRemark(activeChat.id, message);
+      setMessage('');
+    }
   };
+
+  const addRemark = (formId, remarkText) => {
+    const remarkData = {
+      form_id: formId,
+      remark: remarkText,
+    };
 
     fetch(`${config.backendURL}/remarks`, {
       method: 'POST',
@@ -65,14 +64,15 @@ const addRemark = (formId, remarkText) => {
       }
       return response.json();
     })
-   .then(newRemark =>{
-      const updatedRemarks = [...remarks, newRemark];
-      setRemarks(updatedRemarks);
-      setActiveChat(prevAciveChat =>({
-        ...prevAciveChat,
-        message: updatedRemarks.filter(remark => remark.form_id === prevAciveChat.id)
-      }))
-   }) 
+    .then(newRemark => {
+      setRemarks(prevRemarks => [...prevRemarks, newRemark]); // Update global remarks
+      if (activeChat && activeChat.id === formId) {
+        setActiveChat(prevActiveChat => ({
+          ...prevActiveChat,
+          messages: [...prevActiveChat.messages, newRemark] // Update active chat messages
+        }));
+      }
+    }) 
     .catch(error => {
       console.error('Error sending message:', error);
     });
@@ -80,13 +80,7 @@ const addRemark = (formId, remarkText) => {
 
   const selectChat = (projectId) => {
     const selectedProject = projects.find(project => project.id === projectId);
-    const projectRemarks = remarks.filter(remark => remark.form_id === projectId)
-                                  .map(remark => ({
-                                    id: remark.id,
-                                    text: remark.text,
-                                    timestamp: remark.timestamp,
-                                    user: remark.user
-                                  }));
+    const projectRemarks = remarks.filter(remark => remark.form_id === projectId);
     setActiveChat({
       id: projectId,
       name: selectedProject.project_name,
@@ -103,7 +97,6 @@ const addRemark = (formId, remarkText) => {
     height: '500px',
     overflowY: 'scroll'
   };
-
   return (
     <>
       <UserHeader />
