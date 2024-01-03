@@ -1,6 +1,17 @@
+import { Card } from 'primereact/card';
 import React, { useState } from 'react';
-import { Modal, ModalHeader, ModalBody, ListGroup, ListGroupItem, Badge } from "reactstrap";
-
+import { 
+    Modal,
+    ModalHeader, 
+    ModalBody, 
+    ListGroup, 
+    ListGroupItem, 
+    Badge, 
+    Input, 
+    Label , 
+    FormGroup 
+} from "reactstrap";
+import { Button } from 'primereact/button';
 
 const NotificationModal = ({ isOpen, toggle, notifications }) => {
     const [expandedNotificationId, setExpandedNotificationId] = useState(null);
@@ -18,25 +29,49 @@ const NotificationModal = ({ isOpen, toggle, notifications }) => {
         if (typeof text !== 'string') return ''; 
         return text.length > length ? text.substring(0, length) + "..." : text;
     };
-
+    const handleReply = (event) => {
+        event.stopPropagation();
+        console.log('Reply');
+    }
     return (
-        <Modal isOpen={isOpen} toggle={toggle} className="notification-modal" size='lg'>
+        <Modal 
+        isOpen={isOpen} 
+        toggle={toggle}
+        className="notification-modal"
+         size='lg'
+         backdrop="static"
+         >
             <ModalHeader toggle={toggle}>Notifications</ModalHeader>
             <ModalBody>
                 <ListGroup>
                     {notifications.map(notification => (
                         <ListGroupItem key={notification.id} className="notification-item" onClick={() => handleNotificationClick(notification.id)}>
-                            <div className="notification-message">
+                            <h3 className="notification-message">
                                 {notification.subject}
                                 {readNotifications.has(notification.id)
                                     ? <Badge color="secondary">Read</Badge>
                                     : <Badge color="primary">New</Badge>
                                 }
-                            </div>
-                            {expandedNotificationId === notification.id
-                                ? <div className="notification-details">{notification.body}</div>
-                                : <div className="notification-details">{trimText(notification.details, 50)}</div>
-                            }
+                            </h3>
+                            {expandedNotificationId === notification.id ? (
+                                <Card onClick={handleReply}>
+                                     <p className="notification-details">{notification.body}</p>
+                                     <div>
+                                        <FormGroup>
+                                            <Label>Reply</Label>
+                                           <Input 
+                                            type='textarea'
+                                            placeholder='Reply'
+                                        /> 
+                                        </FormGroup>
+                                        
+                                        <Button className='rounded-md'>Send</Button>
+                                     </div>
+                                </Card>
+                               
+                            ) : (
+                                  <p className="notification-details">{trimText(notification.details, 50)}</p>
+                            )}
                         </ListGroupItem>
                     ))}
                 </ListGroup>

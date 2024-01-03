@@ -1,8 +1,8 @@
 .notification-modal {
-    max-width: 360px; /* Set a max-width for the modal */
-    position: fixed;
-    top: 20px; /* Position from the top */
-    right: 20px; /* Position from the right */
+    max-width: 660px;  
+    /* position: fixed; */
+    top: 30px; /* Position from the top */
+    right: 30px; /* Position from the right */
     border-radius: 8px; /* Rounded corners */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
     overflow: hidden; /* Ensures the border radius applies to children elements */
@@ -51,4 +51,12 @@
   right: -5px;
   font-size: 17px; /* Adjust as needed */
   border-radius: 50%;
+}
+
+
+/* styles.css */
+
+.modal-backdrop.show {
+    opacity: 0.8; /* Darker */
+    backdrop-filter: blur(5px); /* Blurry */
 }

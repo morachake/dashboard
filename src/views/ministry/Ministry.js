@@ -43,7 +43,6 @@ const Index = () => {
   }, [projects]);
   
 
-  // useEffect(() => {
   //   if (window.Chart) {
   //     parseOptions(Chart, chartOptions());
   //   }
@@ -69,23 +68,7 @@ const Index = () => {
     filterProjects();
   }, [sectorFilter, subcountyFilter, wardFilter, projects]);
   
-  const handleSectorChange = (e) => {
-    setSectorFilter(e.target.value);
-  };
 
-
-
-
-
-  const handleSubcountyChange = (e) => {
-    console.log("Subcounty selected:", e.target.value);
-    setSubcountyFilter(e.target.value);
-  };
-  
-
-  const handleWardChange = (e) => {
-    setWardFilter(e.target.value);
-  };
   return (
     <>
     <UserHeader/>
