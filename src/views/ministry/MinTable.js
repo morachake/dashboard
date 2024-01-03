@@ -1,14 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
-import { CardHeader, Container, Card, Col, CardBody, Row, ListGroup, ListGroupItem, CardImg, Table } from 'reactstrap';
+import { CardHeader, Container, Card, Col, CardBody, Row, ListGroup, ListGroupItem, CardImg, Table,CardFooter } from 'reactstrap';
 import UserHeader from 'components/Headers/UserHeader';
 import { useAuth } from 'context/AuthContext';
 import config from 'config';
+import { Button } from 'primereact/button';
+import EditForm from './components/EditFrom';
 
 export default function MinTable() {
   const [projectData, setProjects] = useState([]);
   const [expandedRows, setExpandedRows] = useState(null);
+  const [modal ,setModal] = useState(false);
+  const toggle = () => setModal(!modal);
+
   const user = useAuth()
 
   const accessToken = localStorage.getItem('accessToken')
@@ -215,6 +220,11 @@ export default function MinTable() {
             </Col>
           </Row>
         </CardBody>
+        <CardFooter>
+          <Button className='rounded-md' onClick={toggle}>
+            Update Project Details
+          </Button>
+        </CardFooter>
       </Card>
     );
   };
@@ -223,6 +233,15 @@ export default function MinTable() {
       <UserHeader />
       <Container className="mt--7" fluid>
         <CardHeader>
+
+        {/* edit modal */}
+          <EditForm
+            toggle={toggle}
+            modal={modal}
+            
+          />
+
+
           <div className="card">
             {projectData && projectData.length > 0 ? (
               <DataTable
@@ -241,6 +260,7 @@ export default function MinTable() {
                 <Column field="start_date" header="Start Date" body={startDateTemplate} />
                 <Column field="end_date" header="End Date" body={endDateTemplate} />
                 <Column field="contract_sum" header="Contract Sum" />
+                 <Column rowEditor headerStyle={{ width: '10%', minWidth: '8rem' }} bodyStyle={{ textAlign: 'center' }}>Edit</Column>
               </DataTable>
             ) : (
               <Card>

@@ -241,6 +241,7 @@ export default function CabinetTable() {
                 <Column field="start_date" header="Start Date" body={startDateTemplate} />
                 <Column field="end_date" header="End Date" body={endDateTemplate} />
                 <Column field="contract_sum" header="Contract Sum" />
+               
               </DataTable>
             ) : (
               <Card>
