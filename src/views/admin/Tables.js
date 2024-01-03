@@ -11,6 +11,8 @@ export default function ProjectTable() {
   const [expandedRows, setExpandedRows] = useState(null);
   const user = useAuth()
 
+  useEffect(() => {
+
   const accessToken = localStorage.getItem('accessToken')
   fetch(`${config.backendURL}/forms`, {
     headers: {
@@ -25,9 +27,17 @@ export default function ProjectTable() {
     })
     .catch(error => console.error('Error fetching projects:', error));
 
-  // console.log(projectData)
+
+  },[])
+
   const onRowToggle = (e) => {
-    setExpandedRows(e.data);
+    
+    if(expandedRows && expandedRows.id === e.data.id){
+      console.log("expandedRows", expandedRows)
+      setExpandedRows(null)
+    }else {
+      setExpandedRows(e.data);
+    }
   };
 
   function formatReadableDate(dateString) {
@@ -66,8 +76,8 @@ export default function ProjectTable() {
         return [];
       }
       return recommendations
-        .split(/\d+\.\s*/)  // Split by the number followed by a period and space
-        .filter(item => item.trim() !== '');  // Filter out empty strings
+        .split(/\d+\.\s*/)  
+        .filter(item => item.trim() !== ''); 
     };
     const recommendationsList = processRecommendations(data.recommendations);
 

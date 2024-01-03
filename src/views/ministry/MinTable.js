@@ -31,8 +31,14 @@ export default function MinTable() {
     .catch(error => console.error('Error fetching projects:', error));
 
   // console.log(projectData)
-  const onRowToggle = (e) => {
-    setExpandedRows(e.data);
+   const onRowToggle = (e) => {
+    
+    if(expandedRows && expandedRows.id === e.data.id){
+      console.log("expandedRows", expandedRows)
+      setExpandedRows(null)
+    }else {
+      setExpandedRows(e.data);
+    }
   };
 
   function formatReadableDate(dateString) {

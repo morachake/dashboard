@@ -11,7 +11,8 @@ export default function CabinetTable() {
   const [expandedRows, setExpandedRows] = useState(null);
   const user = useAuth()
 
-  const accessToken = localStorage.getItem('accessToken')
+ useEffect(() =>{
+   const accessToken = localStorage.getItem('accessToken')
   fetch(`${config.backendURL}/forms`, {
     headers: {
       'Authorization': `Bearer ${accessToken}`
@@ -26,8 +27,15 @@ export default function CabinetTable() {
     .catch(error => console.error('Error fetching projects:', error));
 
   // console.log(projectData)
-  const onRowToggle = (e) => {
-    setExpandedRows(e.data);
+ },[])
+    const onRowToggle = (e) => {
+    
+    if(expandedRows && expandedRows.id === e.data.id){
+      console.log("expandedRows", expandedRows)
+      setExpandedRows(null)
+    }else {
+      setExpandedRows(e.data);
+    }
   };
 
   function formatReadableDate(dateString) {
