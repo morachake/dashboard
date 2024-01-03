@@ -4,7 +4,7 @@
     top: 30px; /* Position from the top */
     right: 30px; /* Position from the right */
     border-radius: 8px; /* Rounded corners */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+    /* box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);  */
     overflow: hidden; /* Ensures the border radius applies to children elements */
   }
   
@@ -17,9 +17,9 @@
   
   .notification-item {
     padding: 10px 15px;
-    border-bottom: 1px solid #eaecef; /* Border for each message */
-    background-color: #ffffff; /* You can set a background color for each message */
-    transition: background-color 0.3s; /* Transition for hover effect */
+    /* border-bottom: 1px solid #eaecef;  */
+    background-color: #ffffff;
+    transition: background-color 0.3s; 
   }
   
   .notification-item:hover {
@@ -32,15 +32,14 @@
   
   .notification-modal .modal-header,
   .notification-modal .modal-footer {
-    border-bottom: 1px solid #eaecef; /* Add border to header and footer for separation */
-    background-color: #f7f7f7; /* Different background for header and footer */
+    background-color: #f7f7f7; 
     padding: 10px 20px;
   }
   
   .notification-modal .modal-body {
-    padding: 0; /* Remove padding to allow full-width message items */
-    max-height: calc(100vh - 210px); /* Height management for overflow */
-    overflow-y: auto; /* Scroll for overflow content */
+    padding: 0; 
+    max-height: calc(100vh - 210px); 
+    overflow-y: auto; 
   }
   
   /* adminbar.css */
@@ -49,7 +48,7 @@
   position: absolute;
   top: -12px;
   right: -5px;
-  font-size: 17px; /* Adjust as needed */
+  font-size: 17px; 
   border-radius: 50%;
 }
 
@@ -59,4 +58,8 @@
 .modal-backdrop.show {
     opacity: 0.8; /* Darker */
     backdrop-filter: blur(5px); /* Blurry */
+}
+.notification-modal .modal-body {
+    max-height: 500px; /* Example max height */
+    overflow-y: auto; /* Adds scrollbar when content overflows */
 }

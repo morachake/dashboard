@@ -34,6 +34,7 @@ const NotificationModal = ({ isOpen, toggle, notifications }) => {
         console.log('Reply');
     }
     return (
+        
         <Modal 
         isOpen={isOpen} 
         toggle={toggle}
@@ -44,7 +45,8 @@ const NotificationModal = ({ isOpen, toggle, notifications }) => {
             <ModalHeader toggle={toggle}>Notifications</ModalHeader>
             <ModalBody>
                 <ListGroup>
-                    {notifications.map(notification => (
+                    {notifications.length > 0 ? (
+                        notifications.map(notification => (
                         <ListGroupItem key={notification.id} className="notification-item" onClick={() => handleNotificationClick(notification.id)}>
                             <h3 className="notification-message">
                                 {notification.subject}
@@ -73,7 +75,13 @@ const NotificationModal = ({ isOpen, toggle, notifications }) => {
                                   <p className="notification-details">{trimText(notification.details, 50)}</p>
                             )}
                         </ListGroupItem>
-                    ))}
+                    ))
+                    ) :(
+                        <Card>
+                            <p>You have no new notifications</p>
+                        </Card>
+                    )}
+                   
                 </ListGroup>
             </ModalBody>
         </Modal>
