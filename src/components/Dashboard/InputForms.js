@@ -124,7 +124,6 @@ export default function InputForm() {
             user_id: user.id
 
         };
-        console.log('Form data:', formData);
         const accessToken = localStorage.getItem('accessToken');
         fetch(`${config.backendURL}/create_form`, {
             method: 'POST',

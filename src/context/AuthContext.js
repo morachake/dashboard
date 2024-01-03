@@ -26,13 +26,13 @@ export const AuthProvider = ({ children }) => {
         },
         body: JSON.stringify({ username, password })
       });
-      console.log("user is authenticated",user);
+     
       if (response.ok) {
         const data = await response.json();        
         setUser(data.user);
         setIsAuthenticated(true);
         const accessToken = data.access_token;
-        console.log("Access Token:", accessToken); // Log the access token
+    
 
         localStorage.setItem('user', JSON.stringify(data.user)); 
         localStorage.setItem('accessToken', accessToken);
@@ -49,9 +49,9 @@ export const AuthProvider = ({ children }) => {
         }
         
       } else {
-        console.log("Login failed");
+      
         const errorData = await response.json();
-        console.log("error data is", errorData.message);
+
       }
     } catch (error) {
       console.error("An error occurred:", error);
@@ -71,10 +71,10 @@ export const AuthProvider = ({ children }) => {
 
       if (response.ok) {
         const data = await response.json();
-        console.log("Password reset successfully", data);
+        
       } else {
         const errorData = await response.json();
-        console.log("Password reset failed", errorData.message);
+      
       }
     } catch (error) {
       console.error("An error occurred:", error);

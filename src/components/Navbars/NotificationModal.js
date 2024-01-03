@@ -31,7 +31,6 @@ const NotificationModal = ({ isOpen, toggle, notifications }) => {
     };
     const handleReply = (event) => {
         event.stopPropagation();
-        console.log('Reply');
     }
     return (
         

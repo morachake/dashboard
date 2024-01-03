@@ -2,7 +2,7 @@ import React from 'react';
 import { Container, Row, Col, Input, FormGroup, Label } from "reactstrap";
 
 const Header = ({ onSectorChange, onLocationChange,onWardChange, sectors, locations,wards }) => {
-  console.log("Wards in Header:", wards);
+
 
   return (
     <>

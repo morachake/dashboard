@@ -32,7 +32,6 @@ export default function NoteTaker() {
         })
         .then(response => response.json())
         .then(data => {
-            console.log('Success:', data);
             setDepartment(data);
         })
         .catch((error) => {
@@ -84,7 +83,6 @@ export default function NoteTaker() {
         })
         .then(response => response.json())
         .then(data => {
-            console.log('Success:', data);
             setAssignedTo([]); 
             setDetails(''); 
             setSubject(''); 

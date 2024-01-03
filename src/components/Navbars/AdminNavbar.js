@@ -37,11 +37,11 @@ const AdminNavbar = (props) => {
        return response.json()
       })
       .then(data => {
-        console.log("Notifications",data)
+       
         const sortedData = data.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
         setNotifications(sortedData);
       });
-  }, []); console.log(user);
+  }, []);
   const unreadCount = notifications.filter(notification => !readNotifications.has(notification.id)).length;
 
   return (

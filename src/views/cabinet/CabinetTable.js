@@ -26,12 +26,10 @@ export default function CabinetTable() {
     })
     .catch(error => console.error('Error fetching projects:', error));
 
-  // console.log(projectData)
  },[])
     const onRowToggle = (e) => {
     
     if(expandedRows && expandedRows.id === e.data.id){
-      console.log("expandedRows", expandedRows)
       setExpandedRows(null)
     }else {
       setExpandedRows(e.data);

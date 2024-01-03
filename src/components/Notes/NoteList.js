@@ -22,7 +22,6 @@ export default function NoteList() {
         })
         .then(response => response.json())  
         .then(data => {
-            console.log("Successfully fetched",data)
             const sortedData = data.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
             setNotes(sortedData);
         })

@@ -44,13 +44,11 @@ const Profile = () => {
         setIsError(false);
         setOldPassword(' ')
         setNewPassword(' ')
-        console.log('reset successfule', data);
       } else {
         setMessage(data.error || "Password Reset Failed");
         setIsError(true);
         setOldPassword(' ')
         setNewPassword(' ')
-        console.log('reset failed', data);
       }
     } catch (error) {
       console.error('Error', error);

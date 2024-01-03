@@ -31,9 +31,7 @@ export default function ProjectTable() {
   },[])
 
   const onRowToggle = (e) => {
-    
     if(expandedRows && expandedRows.id === e.data.id){
-      console.log("expandedRows", expandedRows)
       setExpandedRows(null)
     }else {
       setExpandedRows(e.data);

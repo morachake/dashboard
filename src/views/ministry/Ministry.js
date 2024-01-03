@@ -39,7 +39,6 @@ const Index = () => {
   }, []);
   
   useEffect(() => {
-    console.log("Unique subcounties:", uniqueSubcounties); // Check the unique subcounties
   }, [projects]);
   
 

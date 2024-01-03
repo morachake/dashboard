@@ -30,7 +30,7 @@ const Index = () => {
         setProjects(data);
         setFilteredProjects(data);
         const allLocations = data.flatMap(project => project.locations)
-        console.log(allLocations);
+
         setUniqueSectors([...new Set(data.map(project => project.sector))]);
         setUniqueSubcounties([...new Set(allLocations.map(project => project.subcounty))]);
         setUniqueWards([...new Set(allLocations.map(project => project.ward))]);
@@ -73,7 +73,7 @@ const Index = () => {
   const handleSubcountyChange = (e) => {
     const selectedSubcounty = e.target.value;
     setSubcountyFilter(selectedSubcounty);
-    console.log("Subcounty selected:", selectedSubcounty);
+  
     setWardFilter('');
     const wardsInSubcounty = projects
       .flatMap(project => project.locations.filter(location => location.subcounty === selectedSubcounty))
@@ -81,9 +81,8 @@ const Index = () => {
     setUniqueWards([...new Set(wardsInSubcounty)]);
   };
 
-  console.log("Wards:", uniqueWards);
+
   const handleWardChange = (e) => {
-    console.log("Ward selected:", e.target.value);
     setWardFilter(e.target.value);
   };
 
