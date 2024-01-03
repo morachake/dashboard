@@ -48,6 +48,7 @@ export default function Messaging() {
     const remarkData = {
       form_id: formId,
       remark: remarkText,
+      user_id : user.id
     };
 
     fetch(`${config.backendURL}/remarks`, {
