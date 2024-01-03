@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { 
     Button, 
     Modal, 
@@ -10,29 +10,71 @@ import {
     Input 
 } from 'reactstrap';
 
-function EditForm({toggle ,args ,modal}) {
-//   const [modal, setModal] = useState(false);
+function EditForm({ toggle, modal, project }) {
+  const [projectData, setProjectData] = useState(project)
+  const [projectName, setProjectName] = useState(project?.project_name || '');
+  const [contractorDetails, setContractorDetails] = useState(project?.contractor_details || '');
+  const [contractSum, setContractSum] = useState(project?.contract_sum || '');
+  const [description, setDescription] = useState(project?.description || '');
+  const [status, setStatus] = useState(project?.status || '');
+  const [startDate, setStartDate] = useState(project?.start_date || '');
+  const [endDate, setEndDate] = useState(project?.end_date || '');
+  const [beforeImages, setBeforeImages] = useState(project?.before_images || '');
+  const [afterImages, setAfterImages] = useState(project?.after_images || '');
+  const [certificates, setCertificates] = useState(JSON.stringify(project?.certificates || []));
+  const [locations, setLocations] = useState(JSON.stringify(project?.locations || []));
+  const [remarks, setRemarks] = useState(JSON.stringify(project?.remarks || []));
+  const [recommendations, setRecommendations] = useState(project?.recommendations || '');
+  const [sector, setSector] = useState(project?.sector || '');
+  const [statusPercentage, setStatusPercentage] = useState(project?.project_status_percentage || 0);
 
-//   const toggle = () => setModal(!modal);
+  useEffect(( ) =>{
+    setProjectData(project)
+  },[project])
+
+  const handleSubmit = () => {
+    // Logic to handle form submission
+    // Include other fields in the update logic
+    toggle(); 
+  };
 
   return (
-      <Modal isOpen={modal} toggle={toggle} {...args}>
-        <ModalHeader toggle={toggle}>Modal title</ModalHeader>
+      <Modal isOpen={modal} toggle={toggle}>
+        <ModalHeader toggle={toggle}>{projectName}</ModalHeader>
         <ModalBody>
           <FormGroup>
-            <Label for="Certficate number">Cerfificate Number</Label>
-            <Input type="number"  id="certno" placeholder="Certificate Number" />
+            <Label for="projectName">Project Name</Label>
+            <Input type="text" value={projectName} onChange={(e) => setProjectName(e.target.value)} />
           </FormGroup>
           <FormGroup>
-            <Label for="Amount">Amount</Label>
-            <Input type="number" name="amount" placeholder="Amount " />
+            <Label for="contractorDetails">Contractor Details</Label>
+            <Input type="text" value={contractorDetails} onChange={(e) => setContractorDetails(e.target.value)} />
           </FormGroup>
-          
+          <FormGroup>
+            <Label for="beforeImages">Contract Sum</Label>
+            <Input type="text" value={contractSum} onChange={(e) => setContractSum(e.target.value)} />
+          </FormGroup>
+          <FormGroup>
+            <Label for="certificates">Certificates No</Label>
+            <Input type="text" placeholder='certificate Number'/>
+          </FormGroup>
+          <FormGroup>
+            <Label for="locations">Amount </Label>
+            <Input type="text" placeholder='Amount Approved'/>
+          </FormGroup>
+          <FormGroup>
+            <Label for="locations">Sub County</Label>
+            <Input type='text' placeholder='locationAmount Approved'/>
+          </FormGroup>
+          <FormGroup>
+            <Label for="ward">Ward</Label>
+            <Input type='text' placeholder='Ward'/>
+          </FormGroup>
         </ModalBody>
         <ModalFooter>
-          <Button color="primary" onClick={toggle}>
-            Do Something
-          </Button>{' '}
+          <Button color="primary" onClick={handleSubmit}>
+            Update
+          </Button>
           <Button color="secondary" onClick={toggle}>
             Cancel
           </Button>

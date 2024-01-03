@@ -33,7 +33,6 @@ const NotificationModal = ({ isOpen, toggle, notifications }) => {
         event.stopPropagation();
     }
     return (
-        
         <Modal 
         isOpen={isOpen} 
         toggle={toggle}

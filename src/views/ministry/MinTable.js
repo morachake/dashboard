@@ -12,10 +12,12 @@ export default function MinTable() {
   const [projectData, setProjects] = useState([]);
   const [expandedRows, setExpandedRows] = useState(null);
   const [modal ,setModal] = useState(false);
+  const [selectedProject, setSelectedProject] = useState(null)
   const toggle = () => setModal(!modal);
 
   const user = useAuth()
 
+  
   const accessToken = localStorage.getItem('accessToken')
   fetch(`${config.backendURL}/forms`, {
     headers: {
@@ -70,6 +72,13 @@ export default function MinTable() {
     return isNaN(num) ? 'N/A' : num.toLocaleString();
   };
   const rowExpansionTemplate = (data) => {
+  
+  
+  const toggleEditModal = () =>{
+    setSelectedProject(data);
+    toggle();
+  }
+
     const processRecommendations = (recommendations) => {
       if (!recommendations) {
         return [];
@@ -225,7 +234,7 @@ export default function MinTable() {
           </Row>
         </CardBody>
         <CardFooter>
-          <Button className='rounded-md' onClick={toggle}>
+          <Button className='rounded-md' onClick={toggleEditModal}>
             Update Project Details
           </Button>
         </CardFooter>
@@ -239,11 +248,15 @@ export default function MinTable() {
         <CardHeader>
 
         {/* edit modal */}
-          <EditForm
+        {
+          selectedProject && (
+            <EditForm
             toggle={toggle}
             modal={modal}
-            
+            project={selectedProject}
           />
+          )
+        }
 
 
           <div className="card">
