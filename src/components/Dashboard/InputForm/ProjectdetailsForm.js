@@ -1,9 +1,9 @@
 import ValidatedInput from 'components/Reusable/ValidatedInput';
 import React from 'react';
-import { Row, Col, Input, Label } from 'reactstrap';
+import { Row, Col, Input, Label,FormFeedback } from 'reactstrap';
 
 
-export const ProjectDetailsForm = ({ formData, handleInputChange, handleValidationStateChange, requiredValidator }) => {
+export const ProjectDetailsForm = ({ formData, handleInputChange, handleValidationStateChange,formErrors, requiredValidator }) => {
   return (
     <div>
       <Row lg={4} md={6} xs={12}>
@@ -18,7 +18,9 @@ export const ProjectDetailsForm = ({ formData, handleInputChange, handleValidati
             onChange={handleInputChange}
             validator={(value) => !value ? 'Required' : ''}
             onValidationStateChange={handleValidationStateChange}
-          /></Col>
+            error={formErrors.project_name}
+          />
+          </Col>
         <Col md={6} lg={3}>
           <Label for="status">Select Status</Label>
           <Input
@@ -26,12 +28,14 @@ export const ProjectDetailsForm = ({ formData, handleInputChange, handleValidati
             type="select"
             value={formData.status}
             onChange={handleInputChange}
+            error={formErrors.status}
           >
             <option value="">Select Status</option>
             <option value="ongoing">Ongoing</option>
             <option value="complete">Complete</option>
             <option value="stalled">Stalled</option>
           </Input>
+          {/* <FormFeedback>{formErrors.status}</FormFeedback> */}
         </Col>
         <Col md={6} lg={3}>
           <ValidatedInput
@@ -44,6 +48,7 @@ export const ProjectDetailsForm = ({ formData, handleInputChange, handleValidati
             onChange={handleInputChange}
             validator={requiredValidator}
             onValidationStateChange={handleValidationStateChange}
+            error={formErrors.project_status_percentage}
           />
 
         </Col>
@@ -56,6 +61,7 @@ export const ProjectDetailsForm = ({ formData, handleInputChange, handleValidati
         onChange={handleInputChange}
         validator={(value) => !value ? 'Required' : ''}
         onValidationStateChange={handleValidationStateChange}
+        error={formErrors.description}
       />
       <ValidatedInput
         label="Remarks"
@@ -67,11 +73,8 @@ export const ProjectDetailsForm = ({ formData, handleInputChange, handleValidati
         onChange={handleInputChange}
         validator={requiredValidator}
         onValidationStateChange={handleValidationStateChange}
+        error={formErrors.remarks}
       />
-
-
-
-
       <ValidatedInput
         label="Recommendations"
         id="recommendations"
@@ -82,6 +85,7 @@ export const ProjectDetailsForm = ({ formData, handleInputChange, handleValidati
         onChange={handleInputChange}
         validator={requiredValidator}
         onValidationStateChange={handleValidationStateChange}
+        error={formErrors.recommendations}
       />
        <ValidatedInput
         label="Contractor Details"
@@ -93,6 +97,7 @@ export const ProjectDetailsForm = ({ formData, handleInputChange, handleValidati
         onChange={handleInputChange}
         validator={requiredValidator}
         onValidationStateChange={handleValidationStateChange}
+        error={formErrors.contractor_details}
       />
 
       <Row lg={4} md={6} xs={12}>
@@ -105,6 +110,7 @@ export const ProjectDetailsForm = ({ formData, handleInputChange, handleValidati
             onChange={handleInputChange}
             validator={requiredValidator}
             onValidationStateChange={handleValidationStateChange}
+            error={formErrors.start_date}
           />
         </Col>
         <Col md={6} lg={4}>
@@ -116,6 +122,7 @@ export const ProjectDetailsForm = ({ formData, handleInputChange, handleValidati
             onChange={handleInputChange}
             validator={requiredValidator}
             onValidationStateChange={handleValidationStateChange}
+            error={formErrors.end_date}
           />
         </Col>
         <Col md={6} lg={4}>
@@ -129,6 +136,7 @@ export const ProjectDetailsForm = ({ formData, handleInputChange, handleValidati
             onChange={handleInputChange}
             //validator={numberValidator}
             onValidationStateChange={handleValidationStateChange}
+            error={formErrors.contract_sum}
           />
         </Col>
 

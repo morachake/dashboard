@@ -5,6 +5,7 @@ import { Form, Button, Card, CardBody } from 'reactstrap';
 import config from 'config';
 import { ProjectDetailsForm } from './InputForm/ProjectdetailsForm';
 import { Certandloc } from './InputForm/Certand loc';
+import { validateFormStep } from './InputForm/formValidator';
 
 
 const subCountyWards = {
@@ -45,6 +46,12 @@ export default function InputForm() {
     });
     const [formValid, setFormValid] = useState({});
     // const [updatedLocations ,setUpdatedLocations] = useState([])
+    const  validateCurrentStep = () =>{
+        const {isValid, errors} = validateFormStep(currentStep,formData)
+        setFormErrors(errors)
+        setFormValid(isValid)
+        return isValid
+    }
 
     const handleLocationChange = (index, key, value) => {
         const updatedLocations = [...formData.locations];
@@ -91,16 +98,6 @@ export default function InputForm() {
         }));
     };
 
-    const handleSubCountyChange = (event) => {
-        const subCounty = event.target.value;
-        setSelectedSubCounty(subCounty);
-        setWards(subCountyWards[subCounty] || []);
-        setFormData({ ...formData, subcounty: subCounty });
-    };
-
-    const handleWardChange = (event) => {
-        setFormData({ ...formData, ward: event.target.value });
-    };
 
     const handleSubmit = (event) => {
         event.preventDefault();
@@ -164,41 +161,7 @@ export default function InputForm() {
         }
         return errors;
     };
-    const canSubmit = () => {
-        let isValid = true;
-        let newErrors = {};
-        Object.keys(formData).forEach(key => {
-            let error = '';
-            switch (key) {
-                case 'project_name':
-                case 'description':
-                case 'contractor_details':
-                case 'status':
-                case 'remarks':
-                case 'recommendations':
-                    error = requiredValidator(formData[key]);
-                    break;
-                case 'contract_sum':
-                case 'time_frame':
-                    error = numberValidator(formData[key]);
-                    break;
-                case 'certificates':
-                    newErrors.certificates = formData.certificates.map(validateCertificateData);
-                    if (newErrors.certificates.some(certError => Object.values(certError).some(e => e))) {
-                        isValid = false;
-                    }
-                    return;
-                default:
-                    break;
-            }
-            newErrors[key] = error;
-            if (error) isValid = false;
-        });
-
-        setFormErrors(newErrors);
-        return isValid;
-    };
-
+ 
     const handleCertificateItemChange = (event, index) => {
         const { name, value } = event.target;
         const updatedCertificates = [...formData.certificates];
@@ -255,14 +218,17 @@ export default function InputForm() {
         return Object.values(formValid).every(Boolean);
     };
     const totalSteps = 2
+
     const nextStep = () => {
-        if (currentStep < 2) { 
+        if(validateCurrentStep()){
+           if (currentStep < 2) { 
             setCurrentStep(currentStep + 1);
+        }  
         }
     };
 
     const prevStep = () => {
-        if (currentStep > 1) {
+            if (currentStep > 1) {
             setCurrentStep(currentStep - 1);
         }
     };
@@ -275,6 +241,8 @@ export default function InputForm() {
                     handleValidationStateChange={handleValidationStateChange}
                     requiredValidator={requiredValidator}
                     numberValidator={numberValidator}
+                    formErrors={formErrors}
+
                 />
             case 2:
                 return <Certandloc
