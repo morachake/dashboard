@@ -1,6 +1,6 @@
 .notification-modal {
     max-width: 660px;  
-    /* position: fixed; */
+    position: fixed;
     top: 30px; /* Position from the top */
     right: 30px; /* Position from the right */
     border-radius: 8px; /* Rounded corners */
