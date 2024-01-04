@@ -1,8 +1,5 @@
 import React, { useEffect, useState } from "react";
-import Chart from "chart.js";
 import { Card, CardHeader, CardBody, Container, Row, Col } from "reactstrap";
-// import { chartOptions, parseOptions } from "variables/charts.js";
-import Header from "components/Headers/Header.js";
 import ProjectsTable from "components/Dashboard/ProjectsTable";
 import BudgetBars from "components/Dashboard/BudgetBars";
 import config from "config";
@@ -11,12 +8,6 @@ import UserHeader from "components/Headers/UserHeader";
 const Index = () => {
   const [projects, setProjects] = useState([]);
   const [filteredProjects, setFilteredProjects] = useState([]);
-  const [sectorFilter, setSectorFilter] = useState('');
-  const [subcountyFilter, setSubcountyFilter] = useState('');
-  const [wardFilter, setWardFilter] = useState('');
-  const [uniqueSectors, setUniqueSectors] = useState([]);
-  const [uniqueSubcounties, setUniqueSubcounties] = useState([]);
-  const [uniqueWards, setUniqueWards] = useState([]);
 
   useEffect(() => {
     const accessToken = localStorage.getItem('accessToken');
@@ -31,9 +22,7 @@ const Index = () => {
       .then(data => {
         setProjects(data);
         setFilteredProjects(data);
-        setUniqueSectors([...new Set(data.map(project => project.sector))]);
-        setUniqueSubcounties([...new Set(data.map(project => project.subcounty))]);
-        setUniqueWards([...new Set(data.map(project => project.ward))]);
+        
       })
       .catch(error => console.error('Error fetching projects:', error));
   }, []);
@@ -42,30 +31,15 @@ const Index = () => {
   }, [projects]);
   
 
-  //   if (window.Chart) {
-  //     parseOptions(Chart, chartOptions());
-  //   }
-  // }, []);
-
   const filterProjects = () => {
     let result = projects;
-  
-    if (sectorFilter) {
-      result = result.filter(project => project.sector === sectorFilter);
-    }
-    if (subcountyFilter) {
-      result = result.filter(project => project.subcounty === subcountyFilter);
-    }
-    if (wardFilter) {
-      result = result.filter(project => project.ward === wardFilter);
-    }
   
     setFilteredProjects(result);
   };
 
   useEffect(() => {
     filterProjects();
-  }, [sectorFilter, subcountyFilter, wardFilter, projects]);
+  }, []);
   
 
   return (
