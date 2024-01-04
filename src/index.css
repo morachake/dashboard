@@ -123,7 +123,7 @@
 .notification-item .notification-details {
   margin-top: 10px;
   padding-top: 10px;
-  border-top: 1px solid #ddd; /* Separator for details */
+  /* border-top: 1px solid #ddd; */
   font-size: 0.85rem; /* Smaller font size for details */
 }
 

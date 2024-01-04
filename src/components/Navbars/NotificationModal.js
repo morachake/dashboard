@@ -20,11 +20,9 @@ const NotificationModal = ({ isOpen, toggle, notifications }) => {
         localStorage.setItem('readNotifications', JSON.stringify(Array.from(updatedReadNotifications)));
     };
 
-    console.log(notifications)
-
     const formatDate = (timestamp) => {
         const date = new Date(timestamp);
-        return date.toLocaleString(); // Formats the date and time according to the local setting
+        return date.toLocaleString(); 
     };
 
     const trimText = (text, length) => {
@@ -32,9 +30,6 @@ const NotificationModal = ({ isOpen, toggle, notifications }) => {
         return text.length > length ? text.substring(0, length) + "..." : text;
     };
 
-    const handleReply = (event) => {
-        event.stopPropagation();
-    }
 
     return (
         <Modal 
@@ -47,26 +42,27 @@ const NotificationModal = ({ isOpen, toggle, notifications }) => {
             <ModalHeader toggle={toggle}>Notifications</ModalHeader>
             <ModalBody>
                 <ListGroup>
-                    {notifications.filter(notification => !readNotifications.has(notification.id)).length > 0 ? (
-                        notifications.filter(notification => !readNotifications.has(notification.id))
-                        .map(notification => (
+                    {notifications.length > 0 ? (
+                        notifications.map(notification => (
                             <ListGroupItem key={notification.id} className="notification-item" onClick={() => handleNotificationClick(notification.id)}>
                                 <h3 className="notification-message">
                                     {notification.subject}
-                                    <Badge color="primary">New</Badge>
+                                    {readNotifications.has(notification.id)
+                                        ? <Badge color="secondary">Read</Badge>
+                                        : <Badge color="primary">New</Badge>
+                                    }
                                 </h3>
                                 {expandedNotificationId === notification.id && (
-                                    <Card onClick={handleReply}>
-                                        <p className="notification-details">{notification.message}</p> 
-                                        <p className="notification-details">{trimText(notification.type, 50)}</p>
-                                        <p>{formatDate(notification.timestamp)}</p>     
-                                    </Card>
+                                    < >
+                                        <p className="notification-details">{notification.message}</p>      
+                                        <p>{formatDate(notification.timestamp)}</p>
+                                    </>
                                 )}
                             </ListGroupItem>
                         ))
                     ) : (
                         <Card>
-                            <p>You have no new notifications</p>
+                            <p>You have no notifications</p>
                         </Card>
                     )}
                 </ListGroup>

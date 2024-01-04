@@ -59,7 +59,6 @@ export const Certandloc = ({
                                             value={certificate.amount_certified}
                                             onChange={(e) => handleCertificateItemChange(e, index)}
                                         />
-                                        {/* Display validation error if any */}
                                         {validateCertificateData(certificate).amount_certified && (
                                             <div className="text-danger">
                                                 {validateCertificateData(certificate).amount_certified}
