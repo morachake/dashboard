@@ -10,7 +10,7 @@ const Header = ({ onSectorChange, onLocationChange,onWardChange, sectors, locati
         <Container fluid>
           <div className="header-body">
             <Row>
-            <Col>
+            <Col md='4' sm="6" xs="12" >
                 <FormGroup>
                   <Label for="locationSelect">
                     Filter by Subcounty

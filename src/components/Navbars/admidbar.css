@@ -1,65 +1,66 @@
 .notification-modal {
-    max-width: 660px;  
-    /* position: fixed; */
-    top: 30px; /* Position from the top */
-    right: 30px; /* Position from the right */
-    border-radius: 8px; /* Rounded corners */
-    /* box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);  */
-    overflow: hidden; /* Ensures the border radius applies to children elements */
+  max-width: 660px;
+  top: 30px;
+  right: 30px;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+/* Adjustments for smaller screens */
+@media (max-width: 768px) {
+  .notification-modal {
+    max-width: 80%; /* Use a higher percentage of the screen width */
+    top: 10px; /* Closer to the top */
+    left: 20px; /* Closer to the right */
   }
-  
+
   .notification-button {
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    z-index: 1030; /* Above other page elements */
+    top: 10px;
+    right: 10px;
   }
-  
-  .notification-item {
-    padding: 10px 15px;
-    /* border-bottom: 1px solid #eaecef;  */
-    background-color: #ffffff;
-    transition: background-color 0.3s; 
+
+  .notification-badge {
+    font-size: 14px; /* Smaller font size for badges */
   }
-  
-  .notification-item:hover {
-    background-color: #f6f8fa; /* Slightly different color on hover */
-  }
-  
-  .notification-item:last-child {
-    border-bottom: none; /* Remove the border for the last item */
-  }
-  
-  .notification-modal .modal-header,
-  .notification-modal .modal-footer {
-    background-color: #f7f7f7; 
-    padding: 10px 20px;
-  }
-  
-  .notification-modal .modal-body {
-    padding: 0; 
-    max-height: calc(100vh - 210px); 
-    overflow-y: auto; 
-  }
-  
-  /* adminbar.css */
+}
+
+.notification-item {
+  padding: 10px 15px;
+  background-color: #ffffff;
+  transition: background-color 0.3s;
+}
+
+.notification-item:hover {
+  background-color: #f6f8fa;
+}
+
+.notification-modal .modal-header,
+.notification-modal .modal-footer {
+  background-color: #f7f7f7;
+  padding: 10px 20px;
+}
+
+.notification-modal .modal-body {
+  padding: 0;
+  max-height: calc(100vh - 210px);
+  overflow-y: auto;
+}
+
 .notification-badge {
   background-color: #eaecef;
   position: absolute;
   top: -12px;
   right: -5px;
-  font-size: 17px; 
+  font-size: 17px;
   border-radius: 50%;
 }
 
-
-/* styles.css */
-
 .modal-backdrop.show {
-    opacity: 0.8; /* Darker */
-    backdrop-filter: blur(5px); /* Blurry */
+  opacity: 0.8;
+  backdrop-filter: blur(5px);
 }
+
 .notification-modal .modal-body {
-    max-height: 500px; /* Example max height */
-    overflow-y: auto; /* Adds scrollbar when content overflows */
+  max-height: 500px;
+  overflow-y: auto;
 }

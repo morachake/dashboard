@@ -1,11 +1,8 @@
 
 /*eslint-disable*/
-import { useState } from "react";
+import { useState ,useEffect} from "react";
 import { NavLink as NavLinkRRD, Link } from "react-router-dom";
-// nodejs library to set properties for components
 import { PropTypes } from "prop-types";
-
-// reactstrap components
 import {
   Collapse,
   DropdownMenu,
@@ -23,13 +20,38 @@ import {
   Col,
 } from "reactstrap";
 import { useAuth } from "context/AuthContext";
+import NotificationModal from "components/Navbars/NotificationModal";
+import config from "config";
 
 var ps;
 
 const Sidebar = (props) => {
   const [collapseOpen, setCollapseOpen] = useState();
   const {user,logout} = useAuth()
+  const [modal, setModal] = useState(false);
+  const toggle = () => setModal(!modal);
   // verifies if routeName is the one active (in browser input)
+  const [notifications, setNotifications] = useState([]);
+  const [readNotifications, setReadNotifications] = useState(new Set(JSON.parse(localStorage.getItem('readNotifications') || '[]')));
+  useEffect(() => {
+    const accessToken = localStorage.getItem('accessToken');
+    fetch(`${config.backendURL}/notifications`,{
+      headers: { 'Authorization': `Bearer  ${accessToken}`}
+    })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+       return response.json()
+      })
+      .then(data => {
+        const sortedData = data.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+        console.log(sortedData);
+        setNotifications(sortedData);
+      });
+  }, []);
+  const unreadCount = notifications.filter(notification => !readNotifications.has(notification.id)).length;
+
   const activeRoute = (routeName) => {
     return props.location.pathname.indexOf(routeName) > -1 ? "active" : "";
   };
@@ -115,7 +137,10 @@ const Sidebar = (props) => {
               <DropdownItem className="noti-title" header tag="div">
                 <h6 className="text-overflow m-0">Welcome!{user.username}</h6>
               </DropdownItem>
-             
+             <DropdownItem onClick={toggle}>
+                 <i className="ni ni-bell-55" />
+                <span>Notifications</span>
+             </DropdownItem>
               <DropdownItem to="/admin/user-profile" tag={Link}>
                 <i className="ni ni-settings-gear-65" />
                 <span>Settings</span>
@@ -160,6 +185,8 @@ const Sidebar = (props) => {
           </div>
           <Nav navbar>{createLinks(routes)}</Nav>  
         </Collapse>
+      <NotificationModal isOpen={modal} toggle={toggle} notifications={notifications} />
+
       </Container>
     </Navbar>
   );

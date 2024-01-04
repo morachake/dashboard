@@ -29,7 +29,7 @@ const NotificationModal = ({ isOpen, toggle, notifications }) => {
             isOpen={isOpen} 
             toggle={toggle}
             className="notification-modal"
-            size='lg'
+            size='md'
             backdrop="static"
         >
             <ModalHeader toggle={toggle}>Notifications</ModalHeader>

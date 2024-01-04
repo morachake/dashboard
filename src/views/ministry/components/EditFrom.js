@@ -23,7 +23,6 @@ function EditForm({ toggle, modal, project }) {
   const [afterImages, setAfterImages] = useState(project?.after_images || '');
   const [certificates, setCertificates] = useState(JSON.stringify(project?.certificates || []));
   const [locations, setLocations] = useState(JSON.stringify(project?.locations || []));
-  const [remarks, setRemarks] = useState(JSON.stringify(project?.remarks || []));
   const [recommendations, setRecommendations] = useState(project?.recommendations || '');
   const [sector, setSector] = useState(project?.sector || '');
   const [statusPercentage, setStatusPercentage] = useState(project?.project_status_percentage || 0);
@@ -33,8 +32,6 @@ function EditForm({ toggle, modal, project }) {
   },[project])
 
   const handleSubmit = () => {
-    // Logic to handle form submission
-    // Include other fields in the update logic
     toggle(); 
   };
 
