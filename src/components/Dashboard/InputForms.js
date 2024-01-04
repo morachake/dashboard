@@ -35,7 +35,6 @@ const initialFormData = {
 
 export default function InputForm() {
     const { user } = useAuth();
-    const [selectedSubCounty, setSelectedSubCounty] = useState('');
     const [wards, setWards] = useState([]);
     const [formErrors, setFormErrors] = useState({});
     const [locationErrors, setLocationErrors] = useState({});
@@ -147,7 +146,7 @@ export default function InputForm() {
     };
     const clearForm = () => {
         setFormData({ ...initialFormData });
-        setSelectedSubCounty('');
+        // setSelectedSubCounty('');
         setWards([]);
     }
 
@@ -182,32 +181,7 @@ export default function InputForm() {
         updatedCertificates.splice(index, 1);
         setFormData({ ...formData, certificates: updatedCertificates });
     };
-    const validateField = (name, value) => {
-        if (!value) return 'This field is required';
-        if (name === 'contract_sum' && isNaN(value)) return 'Must be a number';
-        return '';
-    };
 
-    const validateForm = () => {
-        let errors = {};
-        Object.keys(formData).forEach(key => {
-            if (key !== 'certificates') {
-                errors[key] = validateField(key, formData[key]);
-            } else {
-                errors.certificates = formData.certificates.map(validateCertificate);
-            }
-        });
-        setFormErrors(errors);
-        return !Object.values(errors).some(error => error);
-    };
-    const validateCertificate = (certificate) => {
-        let errors = {};
-        if (!certificate.certificate_number) errors.certificate_number = 'Certificate number is required';
-        if (!certificate.amount_certified || isNaN(parseFloat(certificate.amount_certified))) {
-            errors.amount_certified = 'Valid amount certified is required';
-        }
-        return errors;
-    };
     const requiredValidator = value => value.trim() ? '' : 'required';
     const numberValidator = value => !isNaN(value) && value.trim() !== '' ? '' : 'number';
 

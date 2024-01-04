@@ -51,7 +51,7 @@ export const AuthProvider = ({ children }) => {
       } else {
       
         const errorData = await response.json();
-
+        console.log(errorData.message);
       }
     } catch (error) {
       console.error("An error occurred:", error);
@@ -74,7 +74,7 @@ export const AuthProvider = ({ children }) => {
         
       } else {
         const errorData = await response.json();
-      
+        console.error(errorData.message);
       }
     } catch (error) {
       console.error("An error occurred:", error);

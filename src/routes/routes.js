@@ -5,9 +5,7 @@ import Notes from "views/admin/Notes.js";
 import Tables from "views/admin/Tables.js";
 import Messaging from "views/admin/Messaging.js";
 import DataForm from "views/admin/DataForm.js";
-
 import Executive from "views/executive/Executive";
-import Cabinet from "views/cabinet/Cabinet";
 import ExcNotes from "views/executive/ExcNotes";
 import CabinetTable from "views/cabinet/CabinetTable";
 import MinTable from "views/ministry/MinTable";
@@ -36,13 +34,6 @@ const adminRoutes = [
     component: <Messaging />,
     layout: "/admin",
   },
-  // {
-  //   path: "/adddata",
-  //   name: "Add Data",
-  //   icon: "ni ni-fat-add",
-  //   component: <DataForm />,
-  //   layout: "/admin",
-  // },
   {
     path: "/tables",
     name: "Tables",

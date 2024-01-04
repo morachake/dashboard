@@ -1,9 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, {  useState } from 'react';
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import { CardHeader, Container, Card, Col, CardBody, Row, ListGroup, ListGroupItem, CardImg, Table,CardFooter } from 'reactstrap';
 import UserHeader from 'components/Headers/UserHeader';
-import { useAuth } from 'context/AuthContext';
 import config from 'config';
 import { Button } from 'primereact/button';
 import EditForm from './components/EditFrom';
@@ -15,9 +14,6 @@ export default function MinTable() {
   const [selectedProject, setSelectedProject] = useState(null)
   const toggle = () => setModal(!modal);
 
-  const user = useAuth()
-
-  
   const accessToken = localStorage.getItem('accessToken')
   fetch(`${config.backendURL}/forms`, {
     headers: {

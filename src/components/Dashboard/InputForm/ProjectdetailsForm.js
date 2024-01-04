@@ -1,6 +1,6 @@
 import ValidatedInput from 'components/Reusable/ValidatedInput';
 import React from 'react';
-import { Row, Col, Input, Label,FormFeedback } from 'reactstrap';
+import { Row, Col, Input, Label } from 'reactstrap';
 
 
 export const ProjectDetailsForm = ({ formData, handleInputChange, handleValidationStateChange,formErrors, requiredValidator }) => {

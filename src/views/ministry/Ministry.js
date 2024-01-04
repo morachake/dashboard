@@ -33,14 +33,10 @@ const Index = () => {
 
   const filterProjects = () => {
     let result = projects;
-  
     setFilteredProjects(result);
   };
 
-  useEffect(() => {
-    filterProjects();
-  }, []);
-  
+
 
   return (
     <>

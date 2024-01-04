@@ -3,13 +3,11 @@ import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import { CardHeader, Container, Card, Col, CardBody, Row, ListGroup, ListGroupItem, CardImg, Table } from 'reactstrap';
 import UserHeader from 'components/Headers/UserHeader';
-import { useAuth } from 'context/AuthContext';
 import config from 'config';
 
 export default function ProjectTable() {
   const [projectData, setProjects] = useState([]);
   const [expandedRows, setExpandedRows] = useState(null);
-  const user = useAuth()
 
   useEffect(() => {
 

@@ -1,12 +1,8 @@
 import React, { useEffect, useState } from "react";
-import Chart from "chart.js";
 import { Card, CardHeader, CardBody, Container, Row, Col } from "reactstrap";
-// import { chartOptions, parseOptions } from "variables/charts.js";
-import Header from "components/Headers/Header.js";
 import ProjectsTable from "components/Dashboard/ProjectsTable";
 import BudgetBars from "components/Dashboard/BudgetBars";
 import config from "config";
-import BarChart from "components/Dashboard/BarChart";
 import UserHeader from "components/Headers/UserHeader";
 
 const Index = () => {

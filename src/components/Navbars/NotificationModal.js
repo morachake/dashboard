@@ -24,13 +24,6 @@ const NotificationModal = ({ isOpen, toggle, notifications }) => {
         const date = new Date(timestamp);
         return date.toLocaleString(); 
     };
-
-    const trimText = (text, length) => {
-        if (typeof text !== 'string') return ''; 
-        return text.length > length ? text.substring(0, length) + "..." : text;
-    };
-
-
     return (
         <Modal 
             isOpen={isOpen} 
