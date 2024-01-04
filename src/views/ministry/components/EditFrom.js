@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { Form } from 'react-router-dom';
 import { 
     Button, 
     Modal, 
@@ -11,72 +12,95 @@ import {
 } from 'reactstrap';
 
 function EditForm({ toggle, modal, project }) {
-  const [projectData, setProjectData] = useState(project)
-  const [projectName, setProjectName] = useState(project?.project_name || '');
-  const [contractorDetails, setContractorDetails] = useState(project?.contractor_details || '');
-  const [contractSum, setContractSum] = useState(project?.contract_sum || '');
-  const [description, setDescription] = useState(project?.description || '');
-  const [status, setStatus] = useState(project?.status || '');
-  const [startDate, setStartDate] = useState(project?.start_date || '');
-  const [endDate, setEndDate] = useState(project?.end_date || '');
-  const [beforeImages, setBeforeImages] = useState(project?.before_images || '');
-  const [afterImages, setAfterImages] = useState(project?.after_images || '');
-  const [certificates, setCertificates] = useState(JSON.stringify(project?.certificates || []));
-  const [locations, setLocations] = useState(JSON.stringify(project?.locations || []));
-  const [recommendations, setRecommendations] = useState(project?.recommendations || '');
-  const [sector, setSector] = useState(project?.sector || '');
-  const [statusPercentage, setStatusPercentage] = useState(project?.project_status_percentage || 0);
 
-  useEffect(( ) =>{
-    setProjectData(project)
+  const [formData,setFormaDta] = useState({
+    projectName:'',
+    contractorDetails:'',
+    contractSum:'',
+    description:'',
+    status:'',
+    startDate:'',
+    endDate:'',
+    afterImages:'',
+    certificates:'[]',
+    locations:'[]',
+    sectorName:'',
+    statusPercentage:'',
+  })
+  useEffect(() =>{
+    if(project){
+      setFormaDta({
+        projectName : project.project_name || '',
+        contractorDetails : project.contractor_details || '',
+        contractSum : project.contract_sum || '',
+        description : project.description || '',
+        status: project.status || '',
+        startDate : project.startDate || '',
+        endDate : project.endDate || '',
+        afterImages: project.afterImages || '',
+        certificates: JSON.stringify(project.certificates || []),
+        locations: JSON.stringify(project.locations || []),
+        statusPercentage : project.project_status_percentage || '',
+      })
+    }
   },[project])
+
+  const handleChange = (e) =>{
+    const {name, value} = e.target;
+    setFormaDta(prevState =>({
+        ...prevState,
+        [name] : value
+    }))
+  }
+
 
   const handleSubmit = () => {
     toggle(); 
   };
 
   return (
-      <Modal isOpen={modal} toggle={toggle}>
-        <ModalHeader toggle={toggle}>{projectName}</ModalHeader>
-        <ModalBody>
-          <FormGroup>
-            <Label for="projectName">Project Name</Label>
-            <Input type="text" value={projectName} onChange={(e) => setProjectName(e.target.value)} />
-          </FormGroup>
-          <FormGroup>
-            <Label for="contractorDetails">Contractor Details</Label>
-            <Input type="text" value={contractorDetails} onChange={(e) => setContractorDetails(e.target.value)} />
-          </FormGroup>
-          <FormGroup>
-            <Label for="beforeImages">Contract Sum</Label>
-            <Input type="text" value={contractSum} onChange={(e) => setContractSum(e.target.value)} />
-          </FormGroup>
-          <FormGroup>
-            <Label for="certificates">Certificates No</Label>
-            <Input type="text" placeholder='certificate Number'/>
-          </FormGroup>
-          <FormGroup>
-            <Label for="locations">Amount </Label>
-            <Input type="text" placeholder='Amount Approved'/>
-          </FormGroup>
-          <FormGroup>
-            <Label for="locations">Sub County</Label>
-            <Input type='text' placeholder='locationAmount Approved'/>
-          </FormGroup>
-          <FormGroup>
-            <Label for="ward">Ward</Label>
-            <Input type='text' placeholder='Ward'/>
-          </FormGroup>
-        </ModalBody>
-        <ModalFooter>
-          <Button color="primary" onClick={handleSubmit}>
-            Update
-          </Button>
-          <Button color="secondary" onClick={toggle}>
-            Cancel
-          </Button>
-        </ModalFooter>
-      </Modal>
+     <Modal isOpen={modal} toggle={toggle}>
+      <ModalHeader toggle={toggle}>Edit Project: {formData.projectName}</ModalHeader>
+      <ModalBody>
+        <FormGroup>
+          <Label for="projectName">Project Name</Label>
+          <Input type="text" name="projectName" value={formData.projectName} onChange={handleChange} />
+        </FormGroup>
+        <FormGroup>
+          <Label for="contractorDetails">Contractor Details</Label>
+          <Input type="text" name="contractorDetails" value={formData.contractorDetails} onChange={handleChange} />
+        </FormGroup>
+        {/* ... Add other form fields similarly ... */}
+        <FormGroup>
+          <Label for="contractSum">Contract Sum</Label>
+          <Input type="text" name="contractSum" value={formData.contractSum} onChange={handleChange} />
+        </FormGroup>
+       <FormGroup>
+          <Label for="Description">Description</Label>
+          <Input type='textarea' value={formData.description} onChange={handleChange}/>
+       </FormGroup>
+       <FormGroup>
+          <Label for="Status">Status</Label>
+          <Input type='text' value={formData.status} onChange={handleChange} />
+       </FormGroup> 
+       <FormGroup>
+          <Label for="Startdate">Start date</Label>
+          <Input type='date' value={formData.startDate} onChange={handleChange}/>
+       </FormGroup>
+       <FormGroup>
+          <Label for="Enddate">End date</Label>
+          <Input type='date' value={formData.endDate} onChange={handleChange}/>
+       </FormGroup>
+       <FormGroup>
+        <Label for="Statuspercentage">status Percentage</Label>
+        <Input type='text' value={formData.statusPercentage} onChange={handleChange} />
+       </FormGroup>
+      </ModalBody>
+      <ModalFooter>
+        <Button color="primary" onClick={handleSubmit}>Update</Button>
+        <Button color="secondary" onClick={toggle}>Cancel</Button>
+      </ModalFooter>
+    </Modal>
   );
 }
 

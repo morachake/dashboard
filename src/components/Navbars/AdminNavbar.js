@@ -38,7 +38,7 @@ const AdminNavbar = (props) => {
       })
       .then(data => {
         const sortedData = data.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
-        console.log(sortedData);
+        // console.log(sortedData);
         setNotifications(sortedData);
       });
   }, []);

@@ -149,92 +149,68 @@ export default function MinTable() {
 
     return (
       <Card>
+  <CardHeader>
+    <h5>Details for {data.project_name}</h5>
+  </CardHeader>
+  <CardBody>
+    <Row>
+      <Col lg="6" md="12">
+        <p><h4>Description:</h4> {data.description}</p>
+        <p><h4>Contractor Details:</h4> {data.contractor_details}</p>
+        <p><h4>Contract Sum:</h4> {formattedContractSum}</p>
+        <p><h4>Status:</h4> {data.status}</p>
+        <p><h4>Starting date:</h4> {formatReadableDate(data.start_date)}</p>
+        <p><h4>Completion Date:</h4> {formatReadableDate(data.end_date)}</p>
+        <p><h4>Certificates:</h4></p>
+        <ListGroup>
+          {renderCertificates(data.certificates)}
+        </ListGroup>
+      </Col>
+      <Col lg="6" md="12">
+        <Card body className="my-2">
+          <h4>Project Location</h4>
+          <div>{renderLocation(data.locations)}</div>
+        </Card>
+        <Card body className="my-2">
+          <h4>Remarks:</h4>
+          <p> {renderRemarks(data.remarks).slice(0, 2)}</p>
+        </Card>
+        <Card body className="my-2">
+          <p><h4>Recommendations:</h4></p>
+          <ListGroup>
+            {renderListItems(recommendationsList)}
+          </ListGroup>
+        </Card>
         <CardHeader>
-          <h5>Details for {data.project_name}</h5>
+          <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-around', alignItems: 'center' }}>
+            {data.before_images && (
+              <>
+                <h5>Previous</h5>
+                <Card style={{ maxWidth: '18rem', marginBottom: '1rem' }}>
+                  <img src={data.before_images} alt={data.project_name} style={{ width: '100%', height: 'auto' }} />
+                </Card>
+              </>
+            )}
+            {data.after_images && (
+              <>
+                <h5>Present</h5>
+                <Card style={{ maxWidth: '18rem', marginBottom: '1rem' }}>
+                  <CardImg top style={{ width: '100%', height: 'auto' }} src={data.after_images} alt={data.project_name} />
+                </Card>
+              </>
+            )}
+          </div>
         </CardHeader>
-        <CardBody>
-          <Row>
-            <Col lg="6" md="12">
-              <p><h4>Description:</h4> {data.description}</p>
-              <p><h4>Contractor Details:</h4> {data.contractor_details}</p>
-              <p><h4>Contract Sum:</h4> {formattedContractSum}</p>
-              <p><h4>Status:</h4> {data.status}</p>
-              <p><h4>Starting date:</h4> {formatReadableDate(data.start_date)}</p>
-              <p><h4>Completion Date:</h4> {formatReadableDate(data.end_date)}</p>
-              <p><h4>Certificates:</h4></p>
-              <ListGroup>
-                {renderCertificates(data.certificates)}
-              </ListGroup>
-            </Col>
-            <Col lg="6" md="12">
-              <Card body
-                className="my-2">
-                <h4>Project Location</h4>
-                <div>{renderLocation(data.locations)}</div>
-              </Card>
+      </Col>
+    </Row>
+  </CardBody>
+  <CardFooter>
+    <Button className='rounded-md' onClick={toggleEditModal}>
+      Update Project Details
+    </Button>
+  </CardFooter>
+</Card>
 
-              <Card body
-                className="my-2">
-                <h4>Remarks:</h4>
-                <p> {renderRemarks(data.remarks).slice(0, 2)}
-                </p>
-              </Card>
-              <Card body
-                className="my-2">
-                <p><h4>Recommendations:</h4></p>
-                <ListGroup>
-                  {renderListItems(recommendationsList)}
-                </ListGroup>
-              </Card>
-
-              <CardHeader>
-                <div style={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center' }}>
-                  <div>
-                    {
-                      data.before_images && (
-                        <>
-                          <h5>Previous </h5>
-                          <Card style={{ width: '18rem', marginBottom: '1rem' }}>
-                            <img src={data.before_images} alt={data.project_name} style={{ width: '100%', height: 'auto' }} />
-                          </Card>
-                        </>
-                      )
-                    }
-
-                  </div>
-                  <div>
-                    {
-                      data.after_images && (
-                        <>
-                          <h5>Present</h5>
-
-                          <Card style={{ width: '18rem', marginBottom: '1rem' }}>
-                            <CardImg
-                              top
-                              style={{ width: '100%', height: 'auto' }}
-                              src={data.after_images}
-                              alt={data.project_name}
-                            />
-                          </Card>
-
-                        </>
-
-                      )
-
-                    }
-
-                  </div>
-                </div>
-              </CardHeader>
-            </Col>
-          </Row>
-        </CardBody>
-        <CardFooter>
-          <Button className='rounded-md' onClick={toggleEditModal}>
-            Update Project Details
-          </Button>
-        </CardFooter>
-      </Card>
     );
   };
   return (
