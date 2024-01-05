@@ -43,41 +43,51 @@ export default function Messaging() {
       setMessage('');
     }
   };
-
-  const addRemark = (formId, remarkText) => {
-    const remarkData = {
-      form_id: formId,
-      remark: remarkText,
-      user_id : user.id
-    };
-
-    fetch(`${config.backendURL}/remarks`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${accessToken}`
-      },
-      body: JSON.stringify(remarkData),
-    })
-    .then(response => {
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
-      }
-      return response.json();
-    })
-    .then(newRemark => {
-      setRemarks(prevRemarks => [...prevRemarks, newRemark]); // Update global remarks
-      if (activeChat && activeChat.id === formId) {
-        setActiveChat(prevActiveChat => ({
-          ...prevActiveChat,
-          messages: [...prevActiveChat.messages, newRemark] // Update active chat messages
-        }));
-      }
-    }) 
-    .catch(error => {
-      console.error('Error sending message:', error);
-    });
+const addRemark = (formId, remarkText) => {
+  const remarkData = {
+    form_id: formId,
+    remark: remarkText,
+    user_id: user.id,
+    // Assuming you need a timestamp for the new remark
+    timestamp: new Date().toISOString()
   };
+
+  // Optimistically update the active chat with the new message
+  if (activeChat && activeChat.id === formId) {
+    const newMessage = {
+      ...remarkData,
+      user: user.id,
+      text: remarkText
+    };
+    setActiveChat(prevActiveChat => ({
+      ...prevActiveChat,
+      messages: [...prevActiveChat.messages, newMessage]
+    }));
+  }
+
+  fetch(`${config.backendURL}/remarks`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${accessToken}`
+    },
+    body: JSON.stringify(remarkData),
+  })
+  .then(response => {
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+    return response.json();
+  })
+  .then(newRemark => {
+    setRemarks(prevRemarks => [...prevRemarks, newRemark]);
+  })
+  .catch(error => {
+    console.error('Error sending message:', error);
+    // Handle error by possibly removing the optimistic update
+  });
+};
+
 
   const selectChat = (projectId) => {
     const selectedProject = projects.find(project => project.id === projectId);
@@ -90,13 +100,13 @@ export default function Messaging() {
   };
 
   const userContainerStyle = {
-    height: '400px',
+     height: '400px',
     overflowY: 'scroll'
   };
 
   const messageContainerStyle = {
-    height: '500px',
-    overflowY: 'scroll'
+   height: '500px',
+   overflowY: 'scroll'
   };
   return (
     <>
@@ -126,22 +136,25 @@ export default function Messaging() {
           <Col xl="9" lg="8" md="8">
             <Card className="shadow">
               <CardBody>
-                <div className="chat-box message-container" style={messageContainerStyle}>
-                  {activeChat && activeChat.messages.length > 0 ? (
-                    activeChat.messages.map((remark, index) => (
-                      <div key={index} className={`mb-3 message ${remark.user === user.id ? 'sender-message' : 'receiver-message'}`}>
-                      <span className='username'>{remark.user}</span>
-                      <p className='message-text'>{remark.text}</p>
-                      <small className='timestamp'>{new Date(remark.timestamp).toLocaleString()}</small>
-                    </div>
-                    
-                    ))
-                  ) : (
-                    <div className="no-messages">
-                      <p>No chat history with this project.</p>
-                    </div>
-                  )}
-                </div>
+               <div className="chat-box message-container" style={messageContainerStyle}>
+                    {activeChat && activeChat.messages.length > 0 ? (
+                      activeChat.messages.map((remark, index) => (
+                       <div key={index} className={`message ${remark.user_id === user.id ? 'sender-message' : 'receiver-message'}`}>
+                          {remark.user_id !== user.id &&
+                           <span className='username'>{remark.user}</span>
+                          }
+                          <p className='message-text'>{remark.text}</p>
+                          <small className='timestamp'>{new Date(remark.timestamp).toLocaleString()}</small>
+                        </div>
+                      ))
+                    ) : (
+                      <div className="no-messages">
+                        <p>Please select a project to add a remark</p>
+                      </div>
+                    )}
+                  </div>
+
+
                 {activeChat && (
                   <Row form>
                     <Col md="10">
