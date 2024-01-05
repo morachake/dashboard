@@ -39,7 +39,7 @@ export const ProjectDetailsForm = ({ formData, handleInputChange, handleValidati
         </Col>
         <Col md={6} lg={3}>
           <ValidatedInput
-            label="Status"
+            label="Completion Pecentage"
             id="project_status_percentage"
             name="project_status_percentage"
             placeholder="Enter the project status"
@@ -63,43 +63,6 @@ export const ProjectDetailsForm = ({ formData, handleInputChange, handleValidati
         onValidationStateChange={handleValidationStateChange}
         error={formErrors.description}
       />
-      <ValidatedInput
-        label="Remarks"
-        id="remarks"
-        name="remarks"
-        placeholder="Enter any remarks"
-        type="textarea"
-        value={formData.remarks}
-        onChange={handleInputChange}
-        validator={requiredValidator}
-        onValidationStateChange={handleValidationStateChange}
-        error={formErrors.remarks}
-      />
-      <ValidatedInput
-        label="Recommendations"
-        id="recommendations"
-        name="recommendations"
-        placeholder="Enter any recommendations"
-        type="textarea"
-        value={formData.recommendations}
-        onChange={handleInputChange}
-        validator={requiredValidator}
-        onValidationStateChange={handleValidationStateChange}
-        error={formErrors.recommendations}
-      />
-       <ValidatedInput
-        label="Contractor Details"
-        id="contractor_details"
-        name="contractor_details"
-        placeholder="Enter any Contractor Detailes"
-        type="textarea"
-        value={formData.contractor_details}
-        onChange={handleInputChange}
-        validator={requiredValidator}
-        onValidationStateChange={handleValidationStateChange}
-        error={formErrors.contractor_details}
-      />
-
       <Row lg={4} md={6} xs={12}>
         <Col md={6} lg={4}>
           <ValidatedInput
@@ -139,8 +102,44 @@ export const ProjectDetailsForm = ({ formData, handleInputChange, handleValidati
             error={formErrors.contract_sum}
           />
         </Col>
-
-      </Row>
+        </Row>
+          <ValidatedInput
+        label="Contractor Details"
+        id="contractor_details"
+        name="contractor_details"
+        placeholder="Enter any Contractor Detailes"
+        type="text"
+        value={formData.contractor_details}
+        onChange={handleInputChange}
+        validator={requiredValidator}
+        onValidationStateChange={handleValidationStateChange}
+        error={formErrors.contractor_details}
+      />
+      <ValidatedInput
+        label="Remarks"
+        id="remarks"
+        name="remarks"
+        placeholder="Enter any remarks"
+        type="textarea"
+        value={formData.remarks}
+        onChange={handleInputChange}
+        validator={requiredValidator}
+        onValidationStateChange={handleValidationStateChange}
+        error={formErrors.remarks}
+      />
+      <ValidatedInput
+        label="Recommendations"
+        id="recommendations"
+        name="recommendations"
+        placeholder="Enter any recommendations"
+        type="textarea"
+        value={formData.recommendations}
+        onChange={handleInputChange}
+        validator={requiredValidator}
+        onValidationStateChange={handleValidationStateChange}
+        error={formErrors.recommendations}
+      />
+     
     </div>
   );
 };

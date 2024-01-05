@@ -17,7 +17,7 @@ const validateProjectDetails = (formData) => {
 
     // Validation for Project Status Percentage - ensure it's a valid number
     if (isNaN(formData.project_status_percentage) || formData.project_status_percentage === '') {
-        errors.project_status_percentage = "Project Status Percentage must be a number";
+        errors.project_status_percentage = "Percentage must be a number";
         isValid = false;
     }
 
