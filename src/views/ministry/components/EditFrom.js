@@ -45,6 +45,29 @@ function EditForm({ toggle, modal, project }) {
     }
   },[project])
 
+  const handleSubmit = () =>{
+    const accessToken = localStorage.getItem('accessToke')
+    fetch(`{config.BackendUrl}/update_form`,{
+      method : 'POST' ,
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization' : `Bearer ${accessToken}`
+      },
+    })
+    .then((response) => { 
+      if(!response.ok){
+        throw new Error(`Could not not send update request : ${response.status}`)
+      }
+      return response.json()
+    })
+    .then((response) => {
+      console.log("Successfully")
+    })
+    .catch((err) => {
+      console.error("na error occures" + err)
+    });
+  }
+
   const handleChange = (e) =>{
     const {name, value} = e.target;
     setFormaDta(prevState =>({
@@ -54,9 +77,9 @@ function EditForm({ toggle, modal, project }) {
   }
 
 
-  const handleSubmit = () => {
-    toggle(); 
-  };
+  // const handleSubmit = () => {
+  //   toggle(); 
+  // };
 
   return (
      <Modal isOpen={modal} toggle={toggle}>

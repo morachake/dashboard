@@ -173,7 +173,7 @@ export default function MinTable() {
         </Card>
         <Card body className="my-2">
           <h4>Remarks:</h4>
-          <p> {renderRemarks(data.remarks).slice(0, 2)}</p>
+          <p> {renderRemarks(data.remarks).slice(0,4)}</p>
         </Card>
         <Card body className="my-2">
           <p><h4>Recommendations:</h4></p>
