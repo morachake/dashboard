@@ -94,7 +94,7 @@ const cabinetRoutes = [
   {
     path: "/",
     name: "Dashboard",
-    icon: "ni ni-tv-2 text-primary",
+    icon: "ni ni-tv-2 text-primary", 
     component: <Executive />,
     layout: "/cabinet",
   },
