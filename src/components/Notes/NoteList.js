@@ -24,7 +24,7 @@ export default function NoteList() {
         .then(data => {
             const sortedData = data.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
             setNotes(sortedData);
-            console.log(sortedData)
+            console.log(data)
         })
         .catch(error => console.error("An error occurred while fetching notes: ", error));
     }, []); 

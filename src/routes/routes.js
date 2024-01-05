@@ -98,6 +98,13 @@ const cabinetRoutes = [
     component: <Executive />,
     layout: "/cabinet",
   },
+   {
+    path: "/notes",
+    name: "Governor's Notes",
+    icon: "ni ni-note-03",
+    component: <ExcNotes />,
+    layout: "/cabinet",
+  },
   {
     path: "/remarks",
     name: "Remarks",
