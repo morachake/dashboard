@@ -1,5 +1,7 @@
 const config ={
-    backendURL:'http://192.248.159.170:5000'
+    // backendURL:'http://127.0.0.1:5000'
+        backendURL:'https://www.bakriproperties.co.ke'
+
 }
 
 export default config;
