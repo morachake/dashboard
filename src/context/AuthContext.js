@@ -49,14 +49,14 @@ export const AuthProvider = ({ children }) => {
         }  else {
           navigate('/login');
         }
-        
+       return { success: true }; 
       } else {
       
         const errorData = await response.json();
-        console.log(errorData.message);
+       return {error : errorData.message}
       }
     } catch (error) {
-      console.error("An error occurred:", error);
+      return {error: error.message};
     }
   };
 

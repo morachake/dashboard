@@ -15,16 +15,24 @@ import {
   InputGroup,
   Row,
   Col,
+  FormFeedback
 } from "reactstrap";
 
 const Login = () => {
   const [username,setUsername] = useState("");
   const [password,setPassword] = useState("");
+  const [error,setError] = useState("");
   const {login} = useAuth()
 
   const handleLogin = async () => {
-    await login(username, password); 
+    const result = await login(username, password); 
+    if (result.error) {
+      setError(result.error);
+    } else {
+      setError("")
+    }
   };
+  console.log("an arror occured: ",error);
   return (
     <>
       <Col lg="5" md="7">
@@ -36,6 +44,7 @@ const Login = () => {
           </CardHeader>
           <CardBody className="px-lg-5 py-lg-5">
             <Form role="form">
+             {error && <div className="text-center text-danger mb-3">{error}</div>} {/* Display error message */}
               <FormGroup className="mb-3">
                 <InputGroup className="input-group-alternative">
                   <InputGroupAddon addonType="prepend">
