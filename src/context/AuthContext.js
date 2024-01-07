@@ -36,7 +36,7 @@ export const AuthProvider = ({ children }) => {
 
         localStorage.setItem('user', JSON.stringify(data.user)); 
         localStorage.setItem('accessToken', accessToken);
-        console.log('Your token is now authenticated', localStorage.getItem('accessToken'));
+       
 
         if (data.user.user_type === 'admin') {
           navigate('/admin/index');

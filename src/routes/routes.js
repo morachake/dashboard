@@ -13,7 +13,7 @@ import Ministry from "views/ministry/Ministry"
 
 const adminRoutes = [
   {
-    path: "/index",
+    path: "/",
     name: "Dashboard",
     icon: "ni ni-tv-2 text-primary",
     component: <Index />,

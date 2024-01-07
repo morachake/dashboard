@@ -61,7 +61,7 @@ const CabinetLayout = (props) => {
         />
         <Routes>
           {getRoutes(cabinetRoutes)}
-          <Route path="*" element={<Navigate to="/cabinet/index" replace />} />
+          <Route path="*" element={<Navigate to="/cabinet/" replace />} />
         </Routes>
         <Container fluid>
           <AdminFooter />

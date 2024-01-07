@@ -44,8 +44,8 @@ root.render(
             <MinLayout />
           </ProtectedRoute>
         } />
-        <Route path="/auth/*" element={<AuthLayout />} />
-        <Route path="*" element={<Navigate to="/auth/login" replace />} />
+        <Route path="/login/*" element={<AuthLayout />} />
+        <Route path="*" element={<Navigate to="/login" replace />} />
       </Routes>
     </AuthProvider>
   </BrowserRouter>

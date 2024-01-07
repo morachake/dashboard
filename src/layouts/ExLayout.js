@@ -61,7 +61,7 @@ const ExLayout = (props) => {
         />
         <Routes>
           {getRoutes(executiveRoutes)}
-          <Route path="*" element={<Navigate to="/executive/index" replace />} />
+          <Route path="*" element={<Navigate to="/executive/" replace />} />
         </Routes>
         <Container fluid>
           <AdminFooter />
