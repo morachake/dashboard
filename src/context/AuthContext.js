@@ -61,27 +61,28 @@ export const AuthProvider = ({ children }) => {
   };
 
   const accessToken = localStorage.getItem('accessToken')
-  const resetPassword = async ( oldPassword, newPassword) => {
-    try {
-      const response = await fetch(`${config.backendURL}/reset_password`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization' : `Bearer ${accessToken}`
-        },
-        body: JSON.stringify({old_password: oldPassword, new_password: newPassword }),
-      });
-      const data = await response.json();
+ const resetPassword = async (oldPassword, newPassword) => {
+  try {
+    const response = await fetch(`${config.backendURL}/reset_password`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${accessToken}`
+      },
+      body: JSON.stringify({ old_password: oldPassword, new_password: newPassword }),
+    });
+    const data = await response.json();
 
-      if (response.ok) {
-        return {success : false, message : data.error || 'An error occurred'}
-      } else {
-        return {success: true, message : 'Password reset Successful'}
-      }
-    } catch (error) {
-     return {success : false, message : error.message || 'Netwrok Error .'}
+    if (response.ok) {
+      return { success: true, message: 'Password reset successful' };
+    } else {
+      return { success: false, message: data.error || 'An error occurred' };
     }
-  };
+  } catch (error) {
+    return { success: false, message: error.message || 'Network error.' };
+  }
+};
+
   const logout = () => {
     localStorage.removeItem('authToken');
     localStorage.removeItem('accessToken');

@@ -14,7 +14,7 @@ import {
 import UserHeader from "components/Headers/UserHeader.js";
 import { useAuth } from "context/AuthContext";
 import { useState } from "react";
-import config from "config";
+
 
 const Profile = () => {
   const { user } = useAuth()
@@ -22,38 +22,18 @@ const Profile = () => {
   const [newPassword, setNewPassword] = useState('')
   const [message, setMessage] = useState('')
   const [isError, setIsError] = useState(false)
+  const {resetPassword} = useAuth()
+   const handlePasswordReset = async (e) => {
+  e.preventDefault();
+  const response = await resetPassword(oldPassword, newPassword);
 
-  const handlePasswordReset = async () => {
-    try {
-      const response = await fetch(`${config.backendURL}/reset_password`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
+  setMessage(response.message);
+  setIsError(!response.success);
 
-        },
-        body: JSON.stringify({
-          username: user.username,
-          old_password: oldPassword,
-          new_password: newPassword
-        })
-      });
-      const data = await response.json();
-      if (response.ok) {
-        setMessage("Password Reset Successful");
-        setIsError(false);
-        setOldPassword(' ')
-        setNewPassword(' ')
-      } else {
-        setMessage(data.error || "Password Reset Failed");
-        setIsError(true);
-        setOldPassword(' ')
-        setNewPassword(' ')
-      }
-    } catch (error) {
-      console.error('Error', error);
-    }
-  }
+  setOldPassword("");
+  setNewPassword("");
+};
+
   return (
     <>
       <UserHeader />
@@ -133,7 +113,7 @@ const Profile = () => {
                             className="form-control-alternative"
                             id="input-first-name"
                             placeholder="First name"
-                            type="text"
+                            type="password"
                             value={oldPassword}
                             onChange={(e) => setOldPassword(e.target.value)}
                           />
@@ -151,7 +131,7 @@ const Profile = () => {
                             className="form-control-alternative"
                             id="input-last-name"
                             placeholder="Last name"
-                            type="text"
+                            type="password"
                             value={newPassword}
                             onChange={(e) => setNewPassword(e.target.value)}
                           />

@@ -16,7 +16,6 @@ import {
 } from 'reactstrap';
 
 const ResetPass = () => {
-  const [username, setUsername] = useState('');
   const [oldPassword, setOldPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [alert, setAlert] = useState('');
@@ -24,7 +23,7 @@ const ResetPass = () => {
   const handleResetPassword = async (e) => {
     e.preventDefault();
     try {
-      await resetPassword(username, oldPassword, newPassword);
+      await resetPassword(oldPassword, newPassword);
       setAlert({ message: 'Password reset successfully.', type: 'success' });
     } catch (error) {
       setAlert({ message: 'Failed to reset password.', type: 'danger' });
@@ -35,7 +34,7 @@ const ResetPass = () => {
       <Card className="bg-secondary shadow border-0">
         <CardHeader className="bg-transparent pb-5">
           <div className="text-muted text-center mt-2 mb-3">
-            <small>Reset Password</small>
+            {/* <small>Reset Password</small> */}
           </div>
         </CardHeader>
         <CardBody className="px-lg-5 py-lg-5">
@@ -45,22 +44,6 @@ const ResetPass = () => {
             </Alert>
           )}
           <Form role="form" onSubmit={handleResetPassword}>
-            <FormGroup>
-              <InputGroup className="input-group-alternative mb-3">
-                <InputGroupAddon addonType="prepend">
-                  <InputGroupText>
-                    <i className="ni ni-circle-08" />
-                  </InputGroupText>
-                </InputGroupAddon>
-                <Input
-                  placeholder="Username"
-                  type="text"
-                  value={username}
-                  onChange={(e) => setUsername(e.target.value)}
-                  required
-                />
-              </InputGroup>
-            </FormGroup>
             <FormGroup>
               <InputGroup className="input-group-alternative">
                 <InputGroupAddon addonType="prepend">
