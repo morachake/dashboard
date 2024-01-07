@@ -1,3 +1,4 @@
+import config from 'config';
 import React, { useEffect, useState } from 'react';
 import { Form } from 'react-router-dom';
 import { 
@@ -13,7 +14,7 @@ import {
 
 function EditForm({ toggle, modal, project }) {
 
-  const [formData,setFormaDta] = useState({
+  const [formData,setFormaData] = useState({
     projectName:'',
     contractorDetails:'',
     contractSum:'',
@@ -29,7 +30,7 @@ function EditForm({ toggle, modal, project }) {
   })
   useEffect(() =>{
     if(project){
-      setFormaDta({
+      setFormaData({
         projectName : project.project_name || '',
         contractorDetails : project.contractor_details || '',
         contractSum : project.contract_sum || '',
@@ -46,13 +47,14 @@ function EditForm({ toggle, modal, project }) {
   },[project])
 
   const handleSubmit = () =>{
-    const accessToken = localStorage.getItem('accessToke')
-    fetch(`{config.BackendUrl}/update_form`,{
+    const accessToken = localStorage.getItem('accessToken')
+     fetch(`${config.backendURL}/update_form`, {
       method : 'POST' ,
       headers: {
         'Content-Type': 'application/json',
         'Authorization' : `Bearer ${accessToken}`
       },
+      body: JSON.stringify(formData)
     })
     .then((response) => { 
       if(!response.ok){
@@ -61,7 +63,8 @@ function EditForm({ toggle, modal, project }) {
       return response.json()
     })
     .then((response) => {
-      console.log("Successfully")
+      console.log("Successfully",response)
+      toggle();
     })
     .catch((err) => {
       console.error("na error occures" + err)
@@ -70,7 +73,7 @@ function EditForm({ toggle, modal, project }) {
 
   const handleChange = (e) =>{
     const {name, value} = e.target;
-    setFormaDta(prevState =>({
+    setFormaData(prevState =>({
         ...prevState,
         [name] : value
     }))

@@ -1,4 +1,4 @@
-import React, {  useState } from 'react';
+import React, {  useEffect, useState } from 'react';
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import { CardHeader, Container, Card, Col, CardBody, Row, ListGroup, ListGroupItem, CardImg, Table,CardFooter } from 'reactstrap';
@@ -14,7 +14,8 @@ export default function MinTable() {
   const [selectedProject, setSelectedProject] = useState(null)
   const toggle = () => setModal(!modal);
 
-  const accessToken = localStorage.getItem('accessToken')
+  useEffect(() =>{
+     const accessToken = localStorage.getItem('accessToken')
   fetch(`${config.backendURL}/forms`, {
     headers: {
       'Authorization': `Bearer ${accessToken}`
@@ -29,6 +30,8 @@ export default function MinTable() {
     })
     .catch(error => console.error('Error fetching projects:', error));
 
+  },[])
+ 
    const onRowToggle = (e) => {
     
     if(expandedRows && expandedRows.id === e.data.id){
