@@ -22,6 +22,7 @@ export default function MinTable() {
   })
     .then(response => response.ok ? response.json() : Promise.reject('Network response was not ok'))
     .then(data => {
+      
       // const filteredProjects = data.filter(project => project.user_id === user.id);
       setProjects(data)
 

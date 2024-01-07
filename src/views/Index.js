@@ -20,13 +20,16 @@ const Index = () => {
 
   useEffect(() => {
     const accessToken = localStorage.getItem('accessToken');
+    console.log("your token is: " + accessToken);
     fetch(`${config.backendURL}/forms`, {
-      headers: {
-        'Authorization': `Bearer ${accessToken}`
-      }
+     headers: {
+        'Authorization': `Bearer ${localStorage.getItem('accessToken')}`
+    }
+
     })
       .then(response => response.json())
       .then(data => {
+        console.log("heres are projects" ,data);
         setProjects(data);
         setFilteredProjects(data);
         const allLocations = data.flatMap(project => project.locations)
@@ -88,8 +91,8 @@ const Index = () => {
 
   return (
     <>
-      {/* {projects.length > 0 && ( */}
-        <Header
+    
+      <Header
           onSectorChange={handleSectorChange}
           onLocationChange={handleSubcountyChange}
           onWardChange={handleWardChange}
@@ -97,8 +100,9 @@ const Index = () => {
           locations={uniqueSubcounties}
           wards={uniqueWards}
         />
-      {/* )} */}
-      <Container className="mt--7" fluid>
+      {projects.length > 0 ?(
+        <>
+         <Container className="mt--7" fluid>
         <Row>
           <Col xl="12">
             <Card className="bg-gradient-default shadow">
@@ -106,6 +110,7 @@ const Index = () => {
               </CardHeader>
               <CardBody>
                 <div className="chart">
+
                   <BarChart
                     data={filteredProjects}
                     //isWardFilterApplied={wardFilter !== ''}
@@ -124,6 +129,18 @@ const Index = () => {
           </Col>
         </Row>
       </Container>
+      </>
+       ) : (
+        <Card>
+                <CardHeader>
+                  No data available
+                </CardHeader>
+                <CardBody>
+                  Please Proceed to add data to your account for it to be visible here
+                </CardBody>
+              </Card>
+       )}
+     
     </>
   );
 };

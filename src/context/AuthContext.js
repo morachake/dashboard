@@ -36,6 +36,8 @@ export const AuthProvider = ({ children }) => {
 
         localStorage.setItem('user', JSON.stringify(data.user)); 
         localStorage.setItem('accessToken', accessToken);
+        console.log('Your token is now authenticated', localStorage.getItem('accessToken'));
+
         if (data.user.user_type === 'admin') {
           navigate('/admin/index');
         } else if (data.user.user_type === 'cec') {
@@ -82,7 +84,7 @@ export const AuthProvider = ({ children }) => {
   };
   const logout = () => {
     localStorage.removeItem('authToken');
-    localStorage.removeItem('user'); // Clear the user from local storage
+   localStorage.removeItem('accessToken');
     setUser(null); // Reset the user state
     setIsAuthenticated(false);
     navigate('/auth/login'); // Navigate back to the login page
