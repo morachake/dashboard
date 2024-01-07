@@ -47,6 +47,7 @@ const Index = () => {
             <Card className="bg-gradient-default shadow">
               <CardHeader className="bg-transparent">
                 {/* ... */}
+                
               </CardHeader>
               <CardBody>
                 <div className="chart">
