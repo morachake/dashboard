@@ -9,12 +9,18 @@ import {
     ModalFooter,
     FormGroup,
     Label, 
-    Input 
+    Input,
+    Col,
+    Row,
+    Card,
+    CardHeader
 } from 'reactstrap';
 
 function EditForm({ toggle, modal, project }) {
+  const [currentPage ,setCurrentPage] = useState(1)
+  const totalPages = 3
 
-  const [formData,setFormaData] = useState({
+  const [formData,setFormData] = useState({
     projectName:'',
     contractorDetails:'',
     contractSum:'',
@@ -30,7 +36,8 @@ function EditForm({ toggle, modal, project }) {
   })
   useEffect(() =>{
     if(project){
-      setFormaData({
+      setFormData({
+        form_id : project.id,
         projectName : project.project_name || '',
         contractorDetails : project.contractor_details || '',
         contractSum : project.contract_sum || '',
@@ -45,7 +52,7 @@ function EditForm({ toggle, modal, project }) {
       })
     }
   },[project])
-
+console.log("here is your projetc",project.certificates)
   const handleSubmit = () =>{
     const accessToken = localStorage.getItem('accessToken')
      fetch(`${config.backendURL}/update_form`, {
@@ -73,7 +80,7 @@ function EditForm({ toggle, modal, project }) {
 
   const handleChange = (e) =>{
     const {name, value} = e.target;
-    setFormaData(prevState =>({
+    setFormData(prevState =>({
         ...prevState,
         [name] : value
     }))
@@ -83,48 +90,146 @@ function EditForm({ toggle, modal, project }) {
   // const handleSubmit = () => {
   //   toggle(); 
   // };
-
+  const goToNextPage = () =>{
+    setCurrentPage(currentPage + 1)
+  }
+  const goToPreviuosPage = () =>{
+    setCurrentPage(currentPage -1)
+  }
   return (
-     <Modal isOpen={modal} toggle={toggle}>
-      <ModalHeader toggle={toggle}>Edit Project: {formData.projectName}</ModalHeader>
+     <Modal isOpen={modal} toggle={toggle} size='lg'>
+      <ModalHeader toggle={toggle}>Edit Project: {project.projectName}</ModalHeader>
       <ModalBody>
-        <FormGroup>
-          <Label for="projectName">Project Name</Label>
-          <Input type="text" name="projectName" value={formData.projectName} onChange={handleChange} />
-        </FormGroup>
-        <FormGroup>
-          <Label for="contractorDetails">Contractor Details</Label>
-          <Input type="text" name="contractorDetails" value={formData.contractorDetails} onChange={handleChange} />
-        </FormGroup>
-        {/* ... Add other form fields similarly ... */}
-        <FormGroup>
-          <Label for="contractSum">Contract Sum</Label>
-          <Input type="text" name="contractSum" value={formData.contractSum} onChange={handleChange} />
-        </FormGroup>
-       <FormGroup>
-          <Label for="Description">Description</Label>
-          <Input type='textarea' value={formData.description} onChange={handleChange}/>
-       </FormGroup>
-       <FormGroup>
-          <Label for="Status">Status</Label>
-          <Input type='text' value={formData.status} onChange={handleChange} />
-       </FormGroup> 
-       <FormGroup>
-          <Label for="Startdate">Start date</Label>
-          <Input type='date' value={formData.startDate} onChange={handleChange}/>
-       </FormGroup>
-       <FormGroup>
-          <Label for="Enddate">End date</Label>
-          <Input type='date' value={formData.endDate} onChange={handleChange}/>
-       </FormGroup>
-       <FormGroup>
-        <Label for="Statuspercentage">status Percentage</Label>
-        <Input type='text' value={formData.statusPercentage} onChange={handleChange} />
-       </FormGroup>
+        {currentPage === 1 && (
+          <Card>
+          <Col> 
+                  <Row>
+                    <Col>
+                    <FormGroup>
+                    <Label for="contractorDetails">Contractor Details</Label>
+                    <Input type="text" name="contractorDetails" value={formData.contractorDetails} onChange={handleChange} />
+                  </FormGroup>
+                    </Col>
+                    <Col>
+                    <FormGroup>
+                      <Label for="contractSum">Contract Sum</Label>
+                      <Input type="text" name="contractSum" value={formData.contractSum} onChange={handleChange} />
+                    </FormGroup> 
+                    </Col>      
+                  </Row>
+          </Col>
+          <Col>
+              <Row>
+                  <Col>
+                    <FormGroup>
+                      <Label for="projectName">Project Name</Label>
+                      <Input type="text" name="projectName" value={formData.projectName} onChange={handleChange} />
+                    </FormGroup>
+                  </Col>
+                  <Col>
+                    <FormGroup>
+                        <Label for="Status">Status</Label>
+                        <Input type='text' value={formData.status} onChange={handleChange} />
+                    </FormGroup> 
+                  </Col>
+              </Row>
+        </Col>
+        </Card> 
+        )}
+        {currentPage === 2 && (
+           <Card>
+            <CardHeader>You Project Locations</CardHeader>
+              {project.locations.map((location,index) =>(
+                <Col key={index}>
+                    <Row>
+                    <Col md={6} xs={12}>
+                      <FormGroup>
+                        <Label for="Status">Subcounty</Label>
+                        <Input type='text' value={location.subcounty}  onChange={handleChange}/>
+                      </FormGroup>
+                      </Col>
+                      <Col>
+                        <FormGroup>
+                          <Label for="Ward">Ward</Label>
+                          <Input type='text' value={location.ward} onChange={handleChange}/>
+                        </FormGroup>
+                    </Col>
+                </Row>
+              </Col>
+          ))}
+       </Card>
+        )}   
+      
+      {currentPage === 3 && (
+          <Card>
+              <CardHeader>You Current Certificates</CardHeader>
+                    {project.certificates.map((certificate,index) =>(
+                    <Col md={12} xs={12} key={index}>
+                        <Row>
+                        <Col>
+                          <FormGroup>
+                            <Label for="certno">Cert No</Label>
+                            <Input type='text' value={certificate.certificate_number} onChange={handleChange}/>
+                          </FormGroup>
+                        </Col>
+                        <Col>
+                            <FormGroup>
+                              <Label for="Ward">Amount</Label>
+                              <Input type='text' value={certificate.amount_certified} onChange={handleChange}/>
+                            </FormGroup>
+                        </Col>
+                        <Col>
+                          <Button type="submit" color='danger'>Delete</Button>
+                      </Col>       
+                  </Row>
+                  </Col>
+                  ))}
+            </Card>
+      )}
+     
+       {currentPage === 3 &&(
+         <Card>
+              <FormGroup>
+                  <Label for="Description">Description</Label>
+                  <Input type='textarea' name='decsription' value={project.description} onChange={handleChange}/>
+              </FormGroup>
+                <Col>
+                    <Row>
+                      <Col>
+                      <FormGroup>
+                          <Label for="Startdate">Start date</Label>
+                          <Input type='date' value={formData.startDate} onChange={handleChange} />
+                      </FormGroup>
+                      </Col>
+                      <Col>
+                      <FormGroup>
+                          <Label for="Enddate">End date</Label>
+                          <Input type='date' value={formData.endDate} onChange={handleChange}/>
+                      </FormGroup>
+                      </Col>
+                      <Col>
+                      <FormGroup>
+                          <Label for="Statuspercentage">status Percentage</Label>
+                          <Input type='text' value={formData.statusPercentage} onChange={handleChange} />
+                        </FormGroup>
+                      </Col>
+                    </Row>
+            </Col>
+          </Card>
+       )}
       </ModalBody>
       <ModalFooter>
-        <Button color="primary" onClick={handleSubmit}>Update</Button>
-        <Button color="secondary" onClick={toggle}>Cancel</Button>
+        {currentPage > 1 && totalPages &&(
+             <Button color="primary" onClick={goToPreviuosPage}>Back</Button>
+        )
+        }
+        {currentPage < totalPages && (
+             <Button color="primary" onClick={goToNextPage}>Next</Button>
+        )}
+        {currentPage === totalPages && (
+          <Button color="primary" onClick={handleSubmit}>Update</Button>
+        ) }
+        {/* <Button color="secondary" onClick={toggle}>Cancel</Button> */}
       </ModalFooter>
     </Modal>
   );

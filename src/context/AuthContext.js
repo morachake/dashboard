@@ -60,34 +60,34 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-
-  const resetPassword = async (username, oldPassword, newPassword) => {
+  const accessToken = localStorage.getItem('accessToken')
+  const resetPassword = async ( oldPassword, newPassword) => {
     try {
       const response = await fetch(`${config.backendURL}/reset_password`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization' : `Bearer ${accessToken}`
         },
-        body: JSON.stringify({ username, old_password: oldPassword, new_password: newPassword }),
+        body: JSON.stringify({old_password: oldPassword, new_password: newPassword }),
       });
+      const data = await response.json();
 
       if (response.ok) {
-        const data = await response.json();
-        
+        return {success : false, message : data.error || 'An error occurred'}
       } else {
-        const errorData = await response.json();
-        console.error(errorData.message);
+        return {success: true, message : 'Password reset Successful'}
       }
     } catch (error) {
-      console.error("An error occurred:", error);
+     return {success : false, message : error.message || 'Netwrok Error .'}
     }
   };
   const logout = () => {
     localStorage.removeItem('authToken');
-   localStorage.removeItem('accessToken');
+    localStorage.removeItem('accessToken');
     setUser(null); // Reset the user state
     setIsAuthenticated(false);
-    navigate('/auth/login'); // Navigate back to the login page
+    navigate('/login'); // Navigate back to the login page
   };
   
 
