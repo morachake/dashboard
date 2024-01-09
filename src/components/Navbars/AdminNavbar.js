@@ -25,23 +25,23 @@ const AdminNavbar = (props) => {
   const { logout, user } = useAuth()
   const [notifications, setNotifications] = useState([]);
   const [readNotifications, setReadNotifications] = useState(new Set(JSON.parse(localStorage.getItem('readNotifications') || '[]')));
-  // useEffect(() => {
-  //   const accessToken = localStorage.getItem('accessToken');
-  //   fetch(`${config.backendURL}/notifications`,{
-  //     headers: { 'Authorization': `Bearer  ${accessToken}`}
-  //   })
-  //     .then(response => {
-  //       if (!response.ok) {
-  //         throw new Error(`HTTP error! status: ${response.status}`);
-  //       }
-  //      return response.json()
-  //     })
-  //     .then(data => {
-  //       const sortedData = data.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
-  //        console.log(sortedData);
-  //       setNotifications(sortedData);
-  //     });
-  // }, []);
+  useEffect(() => {
+    const accessToken = localStorage.getItem('accessToken');
+    fetch(`${config.backendURL}/notifications`,{
+      headers: { 'Authorization': `Bearer  ${accessToken}`}
+    })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+       return response.json()
+      })
+      .then(data => {
+        const sortedData = data.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+         console.log(sortedData);
+        setNotifications(sortedData);
+      });
+  }, []);
   const unreadCount = notifications.filter(notification => !readNotifications.has(notification.id)).length;
 
   return (
@@ -64,7 +64,7 @@ const AdminNavbar = (props) => {
               )}
             </div>
           </div>
-          {/* <NotificationModal isOpen={modal} toggle={toggle} notifications={notifications} /> */}
+          <NotificationModal isOpen={modal} toggle={toggle} notifications={notifications} />
           <Nav className="align-items-center d-none d-md-flex" navbar>
             <UncontrolledDropdown nav>
               <DropdownToggle className="pr-0" nav>

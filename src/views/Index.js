@@ -29,7 +29,6 @@ const Index = () => {
     })
       .then(response => response.json())
       .then(data => {
-        console.log("heres are projects" ,data);
         setProjects(data);
         setFilteredProjects(data);
         const allLocations = data.flatMap(project => project.locations)
