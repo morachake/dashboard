@@ -105,6 +105,13 @@ const cabinetRoutes = [
     component: <ExcNotes />,
     layout: "/cabinet",
   },
+    {
+    path: "/notes",
+    name: "Governor's Notes",
+    icon: "ni ni-note-03",
+    component: <ExcNotes />,
+    layout: "/cabinet",
+  },
   {
     path: "/remarks",
     name: "Remarks",
@@ -130,7 +137,7 @@ const cabinetRoutes = [
 
 const ministryRoutes = [ 
   {
-    path: "/",
+    path: "",
     name: "Dashboard",
     icon: "ni ni-tv-2 text-primary",
     component: <Ministry />,
@@ -141,6 +148,13 @@ const ministryRoutes = [
     name: "Remarks",
     icon: "ni ni-chat-round",
     component: <Messaging />,
+    layout: "/ministry",
+  },
+    {
+    path: "/notes",
+    name: "Governor's Notes",
+    icon: "ni ni-note-03",
+    component: <ExcNotes />,
     layout: "/ministry",
   },
   {
