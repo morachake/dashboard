@@ -1,6 +1,5 @@
 import config from 'config';
 import React, { useEffect, useState } from 'react';
-import { Form } from 'react-router-dom';
 import { 
     Button, 
     Modal, 
@@ -13,7 +12,8 @@ import {
     Col,
     Row,
     Card,
-    CardHeader
+    CardHeader,
+    Form
 } from 'reactstrap';
 
 function EditForm({ toggle, modal, project }) {
@@ -46,13 +46,13 @@ function EditForm({ toggle, modal, project }) {
         startDate : project.startDate || '',
         endDate : project.endDate || '',
         afterImages: project.afterImages || '',
-        certificates: JSON.stringify(project.certificates || []),
-        locations: JSON.stringify(project.locations || []),
+        certificates: project.certificates || [],
+        locations: project.locations || [],
         statusPercentage : project.project_status_percentage || '',
       })
     }
   },[project])
-console.log("here is your projetc",project.certificates)
+// console.log("here is your projetc",project.certificates)
   const handleSubmit = () =>{
     const accessToken = localStorage.getItem('accessToken')
      fetch(`${config.backendURL}/update_form`, {
@@ -78,18 +78,38 @@ console.log("here is your projetc",project.certificates)
     });
   }
 
-  const handleChange = (e) =>{
-    const {name, value} = e.target;
-    setFormData(prevState =>({
-        ...prevState,
-        [name] : value
-    }))
+ const handleChange = (e, index, type) => {
+  const { name, value } = e.target;
+
+  if (type === 'location') {
+    // Handle changes in locations
+    const updatedLocations = formData.locations.map((location, locIndex) => 
+      index === locIndex ? { ...location, [name]: value } : location
+    );
+    setFormData(prevState => ({
+      ...prevState,
+      locations: updatedLocations
+    }));
+  } else if (type === 'certificate') {
+    // Handle changes in certificates
+    const updatedCertificates = formData.certificates.map((certificate, certIndex) => 
+      index === certIndex ? { ...certificate, [name]: value } : certificate
+    );
+    setFormData(prevState => ({
+      ...prevState,
+      certificates: updatedCertificates
+    }));
+  } else {
+    // Handle changes in other fields
+    setFormData(prevState => ({
+      ...prevState,
+      [name]: value
+    }));
   }
+};
 
+  
 
-  // const handleSubmit = () => {
-  //   toggle(); 
-  // };
   const goToNextPage = () =>{
     setCurrentPage(currentPage + 1)
   }
@@ -100,6 +120,7 @@ console.log("here is your projetc",project.certificates)
      <Modal isOpen={modal} toggle={toggle} size='lg'>
       <ModalHeader toggle={toggle}>Edit Project: {project.projectName}</ModalHeader>
       <ModalBody>
+        <Form onSubmit={handleSubmit} >
         {currentPage === 1 && (
           <Card>
           <Col> 
@@ -145,15 +166,26 @@ console.log("here is your projetc",project.certificates)
                     <Col md={6} xs={12}>
                       <FormGroup>
                         <Label for="Status">Subcounty</Label>
-                        <Input type='text' value={location.subcounty}  onChange={handleChange}/>
+                        <Input 
+                        type='text' 
+                        value={location.subcounty}  
+                        onChange={(e) => handleChange(e,index,'location')}
+                        />
                       </FormGroup>
                       </Col>
                       <Col>
                         <FormGroup>
                           <Label for="Ward">Ward</Label>
-                          <Input type='text' value={location.ward} onChange={handleChange}/>
+                          <Input 
+                          type='text' 
+                          value={location.ward} 
+                          onChange={(e) => handleChange(e,index,'location')}
+                          />
                         </FormGroup>
-                    </Col>
+                      </Col>
+                       <Col>
+                          <Button type="submit" color='danger'>Remove</Button>
+                      </Col>  
                 </Row>
               </Col>
           ))}
@@ -169,17 +201,24 @@ console.log("here is your projetc",project.certificates)
                         <Col>
                           <FormGroup>
                             <Label for="certno">Cert No</Label>
-                            <Input type='text' value={certificate.certificate_number} onChange={handleChange}/>
+                            <Input type='text'
+                            value={certificate.certificate_number} 
+                            onChange={(e) => handleChange(e,index,'certificate')}
+                            />
                           </FormGroup>
                         </Col>
                         <Col>
                             <FormGroup>
                               <Label for="Ward">Amount</Label>
-                              <Input type='text' value={certificate.amount_certified} onChange={handleChange}/>
+                              <Input 
+                              type='text' 
+                              value={certificate.amount_certified} 
+                              onChange={(e) => handleChange(e,index,'certificate')}
+                              />
                             </FormGroup>
                         </Col>
                         <Col>
-                          <Button type="submit" color='danger'>Delete</Button>
+                          <Button type="submit" color='danger'>Remove</Button>
                       </Col>       
                   </Row>
                   </Col>
@@ -217,6 +256,7 @@ console.log("here is your projetc",project.certificates)
             </Col>
           </Card>
        )}
+       </Form>
       </ModalBody>
       <ModalFooter>
         {currentPage > 1 && totalPages &&(
