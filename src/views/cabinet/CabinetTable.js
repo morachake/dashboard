@@ -4,10 +4,13 @@ import { Column } from 'primereact/column';
 import { CardHeader, Container, Card, Col, CardBody, Row, ListGroup, ListGroupItem, CardImg, Table } from 'reactstrap';
 import UserHeader from 'components/Headers/UserHeader';
 import config from 'config';
+import Loading from 'components/Reusable/Loading';
 
 export default function CabinetTable() {
   const [projectData, setProjects] = useState([]);
   const [expandedRows, setExpandedRows] = useState(null);
+  const [loading, setLoading] = useState(true);
+
  useEffect(() =>{
    const accessToken = localStorage.getItem('accessToken')
   fetch(`${config.backendURL}/forms`, {
@@ -18,7 +21,11 @@ export default function CabinetTable() {
     .then(response => response.ok ? response.json() : Promise.reject('Network response was not ok'))
     .then(data => {
       // const filteredProjects = data.filter(project => project.user_id === user.id);
-      setProjects(data)
+      setTimeout(() =>{
+        setProjects(data)
+        setLoading(false)
+
+      },2000)
 
     })
     .catch(error => console.error('Error fetching projects:', error));
@@ -221,6 +228,9 @@ export default function CabinetTable() {
       </Card>
     );
   };
+  if(loading){
+    return <Loading/>
+  }
   return (
     <>
       <UserHeader />
