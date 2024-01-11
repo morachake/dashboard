@@ -6,6 +6,7 @@ import config from 'config';
 import { ProjectDetailsForm } from './InputForm/ProjectdetailsForm';
 import { Certandloc } from './InputForm/Certand loc';
 import { validateFormStep } from './InputForm/formValidator';
+import CustomModal from 'components/Reusable/CustomModal';
 
 
 const subCountyWards = {
@@ -34,8 +35,11 @@ const initialFormData = {
 };
 
 export default function InputForm() {
+    const [isSubmitting,setIsSubmitting] = useState(false)
     const { user } = useAuth();
     const [wards, setWards] = useState([]);
+    const [showModal,setShowModal] = useState(false);
+    const [modalContent,setModalContent] = useState({title:"",message:"",type:""});
     const [formErrors, setFormErrors] = useState({});
     const [locationErrors, setLocationErrors] = useState({});
     const [currentStep, setCurrentStep] = useState(1)
@@ -101,6 +105,7 @@ export default function InputForm() {
     const handleSubmit = (event) => {
         event.preventDefault();
         if (isFormValid()) {
+            setIsSubmitting(true);
             saveData();
         } else {
             console.error('Form validation failed');
@@ -138,11 +143,16 @@ export default function InputForm() {
             })
             .then(data => {
                 console.log("Successfully submitted", data);
+                 setModalContent({ title: 'Success', message: 'Form submitted successfully!', type: 'success' });
+                setShowModal(true);
                 clearForm()
             })
             .catch(err => {
                 console.error("Error during submission:", err.message);
-            });
+                setModalContent({ title: 'Success', message: 'An Eror Occure During submission ! Please try again', type: 'error' });
+                setShowModal(true);
+            })
+            .finally(() => {setIsSubmitting(false)});
     };
     const clearForm = () => {
         setFormData({ ...initialFormData });
@@ -240,6 +250,12 @@ export default function InputForm() {
     return (
         <Card>
            <CardBody>
+            <CustomModal 
+                title={modalContent.title}
+                message={modalContent.message}
+                type={modalContent.type}
+                
+            />
                 <Form onSubmit={handleSubmit}>
                     {renderStep()}
                     <div className="form-navigation">
@@ -250,7 +266,9 @@ export default function InputForm() {
                             <Button onClick={nextStep} type='button' color='primary'>Next</Button>
                         )}
                         {currentStep === totalSteps && (
-                            <Button type="submit" color='primary' disabled={!isFormValid()}>Submit</Button>
+                            <Button type="submit" color='primary' disabled={!isFormValid() || isSubmitting}>
+                                {isSubmitting ? "Submitting...." : "Submit"}
+                            </Button>
                         )}
                     </div>
                 </Form>

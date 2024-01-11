@@ -20,13 +20,8 @@ export default function CabinetTable() {
   })
     .then(response => response.ok ? response.json() : Promise.reject('Network response was not ok'))
     .then(data => {
-      // const filteredProjects = data.filter(project => project.user_id === user.id);
-      setTimeout(() =>{
         setProjects(data)
         setLoading(false)
-
-      },2000)
-
     })
     .catch(error => console.error('Error fetching projects:', error));
 
