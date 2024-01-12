@@ -29,8 +29,8 @@ function EditForm({ toggle, modal, project }) {
     startDate:'',
     endDate:'',
     afterImages:'',
-    certificates:'[]',
-    locations:'[]',
+   // certificates:'[]',
+   // locations:'[]',
     sectorName:'',
     statusPercentage:'',
   })
@@ -46,8 +46,8 @@ function EditForm({ toggle, modal, project }) {
         startDate : project.startDate || '',
         endDate : project.endDate || '',
         afterImages: project.afterImages || '',
-        certificates: project.certificates || [],
-        locations: project.locations || [],
+       // certificates: project.certificates || [],
+       // locations: project.locations || [],
         statusPercentage : project.project_status_percentage || '',
       })
     }
@@ -78,35 +78,24 @@ function EditForm({ toggle, modal, project }) {
     });
   }
 
- const handleChange = (e, index, type) => {
+
+
+const handleChange = (e, index, type) => {
   const { name, value } = e.target;
 
-  if (type === 'location') {
-    // Handle changes in locations
-    const updatedLocations = formData.locations.map((location, locIndex) => 
-      index === locIndex ? { ...location, [name]: value } : location
-    );
-    setFormData(prevState => ({
-      ...prevState,
-      locations: updatedLocations
-    }));
-  } else if (type === 'certificate') {
-    // Handle changes in certificates
-    const updatedCertificates = formData.certificates.map((certificate, certIndex) => 
-      index === certIndex ? { ...certificate, [name]: value } : certificate
-    );
-    setFormData(prevState => ({
-      ...prevState,
-      certificates: updatedCertificates
-    }));
-  } else {
-    // Handle changes in other fields
-    setFormData(prevState => ({
-      ...prevState,
-      [name]: value
-    }));
-  }
+  // if (type === 'location') {
+  //   const updatedLocations = [...formData.locations];
+  //   updatedLocations[index] = { ...updatedLocations[index], [name]: value };
+  //   setFormData({ ...formData, locations: updatedLocations });
+  // } else if (type === 'certificate') {
+  //   const updatedCertificates = [...formData.certificates];
+  //   updatedCertificates[index] = { ...updatedCertificates[index], [name]: value };
+  //   setFormData({ ...formData, certificates: updatedCertificates });
+  // } else {
+    setFormData({ ...formData, [name]: value });
+  // }
 };
+
 
   
 
@@ -157,7 +146,7 @@ function EditForm({ toggle, modal, project }) {
         </Col>
         </Card> 
         )}
-        {currentPage === 2 && (
+        {/* {currentPage === 2 && (
            <Card>
             <CardHeader>You Project Locations</CardHeader>
               {project.locations.map((location,index) =>(
@@ -190,9 +179,9 @@ function EditForm({ toggle, modal, project }) {
               </Col>
           ))}
        </Card>
-        )}   
+        )}    */}
       
-      {currentPage === 3 && (
+      {/* {currentPage === 3 && (
           <Card>
               <CardHeader>You Current Certificates</CardHeader>
                     {project.certificates.map((certificate,index) =>(
@@ -224,7 +213,7 @@ function EditForm({ toggle, modal, project }) {
                   </Col>
                   ))}
             </Card>
-      )}
+      )} */}
      
        {currentPage === 3 &&(
          <Card>
@@ -269,7 +258,6 @@ function EditForm({ toggle, modal, project }) {
         {currentPage === totalPages && (
           <Button color="primary" onClick={handleSubmit}>Update</Button>
         ) }
-        {/* <Button color="secondary" onClick={toggle}>Cancel</Button> */}
       </ModalFooter>
     </Modal>
   );
