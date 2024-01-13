@@ -48,6 +48,24 @@ export default function ProjectTable() {
   const startDateTemplate = (rowData) => {
     return <span>{formatReadableDate(rowData.start_date)}</span>;
   };
+  const statusBodyTemplate =(rowData) =>{
+        let statusClass = '';
+        switch (rowData.status){
+          case 'Complete' :
+            statusClass = 'status-complete'
+            break
+          case 'Ongoing':
+            statusClass = 'status-ongoing'
+            break
+          case 'Stalled' :
+            statusClass = 'status-stalled'
+            break
+          default:
+            statusClass = ''
+        }
+        return <span className={statusClass}>{rowData.status}</span>
+    }
+
 
   const endDateTemplate = (rowData) => {
     return <span>{formatReadableDate(rowData.end_date)}</span>;
@@ -139,6 +157,7 @@ export default function ProjectTable() {
       );
     };
 
+    
     return (
       <Card>
         <CardHeader>
@@ -151,7 +170,7 @@ export default function ProjectTable() {
               <p><h4>Contractor Details:</h4> {data.contractor_details}</p>
               <p><h4>Contract Sum:</h4> {formattedContractSum}</p>
               <p><h4>Status:</h4> {data.status}</p>
-              <p><h4>Completion Percentage :</h4> {data.project_status_percentage}%</p>
+              <p><h4>Completion Percentage :</h4> {data.project_status_percentage}</p>
               <p><h4>Starting date:</h4> {formatReadableDate(data.start_date)}</p>
               <p><h4>Completion Date:</h4> {formatReadableDate(data.end_date)}</p>
               <p><h4>Certificates:</h4></p>
@@ -244,7 +263,7 @@ export default function ProjectTable() {
               >
                 <Column expander style={{ width: '3em' }} />
                 <Column field="project_name" header="Project Name" />
-                <Column field="status" header="Status" />
+                <Column field="status" header="Status"body={statusBodyTemplate} />
                 <Column field="start_date" header="Start Date" body={startDateTemplate} />
                 <Column field="end_date" header="End Date" body={endDateTemplate} />
                 <Column field="contract_sum" header="Contract Sum" />

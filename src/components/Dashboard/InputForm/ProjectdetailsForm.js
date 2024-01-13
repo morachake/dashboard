@@ -31,11 +31,10 @@ export const ProjectDetailsForm = ({ formData, handleInputChange, handleValidati
             error={formErrors.status}
           >
             <option value="">Select Status</option>
-            <option value="ongoing">Ongoing</option>
-            <option value="complete">Complete</option>
-            <option value="stalled">Stalled</option>
+            <option value="Ongoing">Ongoing</option>
+            <option value="Complete">Complete</option>
+            <option value="Stalled">Stalled</option>
           </Input>
-          {/* <FormFeedback>{formErrors.status}</FormFeedback> */}
         </Col>
         <Col md={6} lg={3}>
           <ValidatedInput

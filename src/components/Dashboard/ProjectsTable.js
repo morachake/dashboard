@@ -16,7 +16,7 @@ export default function ProjectsTable({ projectData }) {
                 return 'success';
             case 'Stalled':
                 return 'danger';
-            case 'Incomplete':
+            case 'Ongoing':
                 return 'info';
             default:
                 return 'secondary';
@@ -58,7 +58,6 @@ export default function ProjectsTable({ projectData }) {
                             header="Percentage"
                             body={rowData => `${rowData.project_status_percentage}%`}
                         />
-                        {/* <Column field="project_status_percentage" header="Percentage"  /> */}
                         <Column field="status" header="Status" body={statusBodyTemplate} />
                         <Column field="contract_sum" header="Contract Sum" body={contractSumBodyTemplate} />
                     </DataTable>
