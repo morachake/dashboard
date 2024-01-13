@@ -12,6 +12,7 @@ import {
   Media,
   NavbarBrand,
   Navbar,
+
   NavItem,
   NavLink,
   Nav, 
@@ -22,6 +23,7 @@ import {
 import { useAuth } from "context/AuthContext";
 import NotificationModal from "components/Navbars/NotificationModal";
 import config from "config";
+import { Button } from "primereact/button";
 
 var ps;
 
@@ -184,6 +186,9 @@ const Sidebar = (props) => {
             </Row>
           </div>
           <Nav navbar>{createLinks(routes)}</Nav>  
+
+             <Button style={{marginTop: 100 }} color="danger" onClick={logout}>  <i className="ni ni-user-run" />Logout</Button>
+        
         </Collapse>
       <NotificationModal isOpen={modal} toggle={toggle} notifications={notifications} />
 

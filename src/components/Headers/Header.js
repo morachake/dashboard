@@ -10,7 +10,7 @@ const Header = ({ onSectorChange, onLocationChange,onWardChange, sectors, locati
         <Container fluid>
           <div className="header-body">
             <Row>
-            <Col md='4' sm="6" xs="12" >
+             <Col md='4' sm="6" xs="12" >
                 <FormGroup>
                   <Label for="locationSelect">
                     Filter by Subcounty
@@ -65,8 +65,41 @@ const Header = ({ onSectorChange, onLocationChange,onWardChange, sectors, locati
                 </FormGroup>
               </Col>
             </Row>
-            <Row>
+              <Row>
+             <Col md='6' sm="8" xs="12" >
+                <FormGroup>
+                  <Label for="locationSelect">
+                    Filter by Type
+                  </Label>
+                  <Input
+                    id="locationSelect"
+                    name="select"
+                    type="select"
+                    onChange={onLocationChange}
+                  >
+                    <option value="">Select</option>
+                   
+                  </Input>
+                </FormGroup>
+              </Col>
+              <Col md="6" sm="6" xs="12">
+                <FormGroup>
+                  <Label for="sectorSelect">
+                    Filter by Date
+                  </Label>
+                  <Input
+                    id="sectorSelect"
+                    name="select"
+                    type="select"
+                    onChange={onSectorChange}
+                  >
+                   
+                  </Input>
+                </FormGroup>
+              </Col>
             </Row>
+            <Row>
+          </Row>
           </div>
         </Container>
       </div>
