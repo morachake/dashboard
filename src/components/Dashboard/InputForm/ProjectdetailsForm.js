@@ -103,42 +103,42 @@ export const ProjectDetailsForm = ({ formData, handleInputChange, handleValidati
         </Col>
         </Row>
           <ValidatedInput
-        label="Contractor Details"
-        id="contractor_details"
-        name="contractor_details"
-        placeholder="Enter any Contractor Detailes"
-        type="text"
-        value={formData.contractor_details}
-        onChange={handleInputChange}
-        validator={requiredValidator}
-        onValidationStateChange={handleValidationStateChange}
-        error={formErrors.contractor_details}
-      />
-      <ValidatedInput
-        label="Remarks"
-        id="remarks"
-        name="remarks"
-        placeholder="Enter any remarks"
-        type="textarea"
-        value={formData.remarks}
-        onChange={handleInputChange}
-        validator={requiredValidator}
-        onValidationStateChange={handleValidationStateChange}
-        error={formErrors.remarks}
-      />
-      <ValidatedInput
-        label="Recommendations"
-        id="recommendations"
-        name="recommendations"
-        placeholder="Enter any recommendations"
-        type="textarea"
-        value={formData.recommendations}
-        onChange={handleInputChange}
-        validator={requiredValidator}
-        onValidationStateChange={handleValidationStateChange}
-        error={formErrors.recommendations}
-      />
-     
+              label="Contractor Details"
+              id="contractor_details"
+              name="contractor_details"
+              placeholder="Enter any Contractor Detailes"
+              type="text"
+              value={formData.contractor_details}
+              onChange={handleInputChange}
+              validator={requiredValidator}
+              onValidationStateChange={handleValidationStateChange}
+              error={formErrors.contractor_details}
+            />      
+            <ValidatedInput
+              label="Remarks (Optional)"
+              id="remarks"
+              name="remarks"
+              placeholder="Enter any remarks"
+              type="textarea"
+              value={formData.remarks}
+              onChange={handleInputChange}
+              // validator={requiredValidator}
+              // onValidationStateChange={handleValidationStateChange}
+              // error={formErrors.remarks}
+            />
+            <ValidatedInput
+              label="Recommendations (Optional)"
+              id="recommendations"
+              name="recommendations"
+              placeholder="Enter any recommendations"
+              type="textarea"
+              value={formData.recommendations}
+              onChange={handleInputChange}
+              // validator={requiredValidator}
+              // onValidationStateChange={handleValidationStateChange}
+              // error={formErrors.recommendations}
+            />    
+          
     </div>
   );
 };

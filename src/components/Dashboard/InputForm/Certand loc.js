@@ -1,5 +1,5 @@
 import ImageUpload from 'components/Reusable/ImageUpload';
-import { Row, Col, Input, FormGroup, Card, Label, Button, CardBody, CardHeader } from 'reactstrap';
+import { Row, Col, Input, FormGroup, Card, Label, Button, CardBody, CardHeader ,subCountyWards} from 'reactstrap';
 export const Certandloc = ({
     handleImageUpload,
     formData,
@@ -117,26 +117,21 @@ export const Certandloc = ({
                             </Col>
                             <Col md={6} lg={4}>
                                 <Label for={`ward-${index}`}>Ward</Label>
-                                <Input
-                                    id={`ward-${index}`}
-                                    name={`ward-${index}`}
-                                    type="select"
-                                    value={location.ward}
-                                    onChange={(e) => {
-                                        handleLocationChange(index, 'ward', e.target.value);
-                                        validateLocation(index, location.subcounty, e.target.value);
-                                    }}
-                                >
-                                    {wards.length === 0 ? (
-                                        <option>No wards available</option>
-                                    ) : (
-                                        wards.map((ward, index) => (
-                                            <option key={index} value={ward}>
-                                                {ward}
-                                            </option>
-                                        ))
-                                    )}
-                                </Input>
+                                        <Input
+                                            id={`ward-${index}`}
+                                            name={`ward-${index}`}
+                                            type="select"
+                                            value={location.ward}
+                                            onChange={(e) => handleLocationChange(index, 'ward', e.target.value)}
+                                        >
+                                            <option value="">Select Ward</option>
+                                            {location.subcounty && subCountyWards[location.subcounty].map((ward, wardIndex) => (
+                                                <option key={wardIndex} value={ward}>
+                                                    {ward}
+                                                </option>
+                                            ))}
+                                        </Input>
+
                                 {locationErrors[index]?.ward && (
                                     <div className="text-danger">{locationErrors[index].ward}</div>
                                 )}
@@ -153,7 +148,7 @@ export const Certandloc = ({
                     ))}
                 </CardBody>
             </Card>
-            <Card
+            {/* <Card
                 body
                 className="my-2"
             >
@@ -179,7 +174,7 @@ export const Certandloc = ({
                     </Card>
                 </Col>       
             </Row>
-            </Card>
+            </Card> */}
         </div>
     )
 }

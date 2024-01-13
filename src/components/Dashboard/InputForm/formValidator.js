@@ -28,16 +28,16 @@ const validateProjectDetails = (formData) => {
     }
 
     // Validation for Remarks
-    if (!formData.remarks.trim()) {
-        errors.remarks = "Remarks are required";
-        isValid = false;
-    }
+    // if (!formData.remarks.trim()) {
+    //     errors.remarks = "Remarks are required";
+    //     isValid = false;
+    // }
 
     // Validation for Recommendations
-    if (!formData.recommendations.trim()) {
-        errors.recommendations = "Recommendations are required";
-        isValid = false;
-    }
+    // if (!formData.recommendations.trim()) {
+    //     errors.recommendations = "Recommendations are required";
+    //     isValid = false;
+    // }
 
     // Validation for Contractor Details
     if (!formData.contractor_details.trim()) {

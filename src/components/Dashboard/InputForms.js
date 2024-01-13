@@ -56,16 +56,54 @@ export default function InputForm() {
         return isValid
     }
 
+    // const handleLocationChange = (index, key, value) => {
+    //     const updatedLocations = [...formData.locations];
+    //     if (key === 'subcounty') {
+    //         updatedLocations[index] = { subcounty: value, ward: '' }; // Reset ward when subcounty changes
+    //         setWards(subCountyWards[value] || []); // Update wards for the UI
+    //     } else {
+    //         updatedLocations[index][key] = value;
+    //     }
+    //     setFormData({ ...formData, locations: updatedLocations });
+    // };
+// 
+    // const handleLocationChange = (index,key,value) => {
+    //     let updatedLocations = [...formData.locations];
+    //     if(key === 'subcounty'){
+    //         if(value === 'all'){
+    //             updatedLocations = Object.entries(subCountyWards).flatMap(([subcounty,wards]) =>
+    //                 wards.map(ward => ({subcounty, ward}))
+    //             )
+    //         } else {
+    //             updatedLocations[index] ={subcounty: value , ward: ''}
+    //             setWards(subCountyWards[value] || []);
+    //         }
+    //     } else {
+    //         updatedLocations[index][key] = value;
+    //     }
+    //     setFormData({...formData , locations:updatedLocations});
+    // }
     const handleLocationChange = (index, key, value) => {
-        const updatedLocations = [...formData.locations];
-        if (key === 'subcounty') {
-            updatedLocations[index] = { subcounty: value, ward: '' }; // Reset ward when subcounty changes
-            setWards(subCountyWards[value] || []); // Update wards for the UI
+    let updatedLocations = [...formData.locations];
+
+    if (key === 'subcounty') {
+        // Case: 'All Subcounties' selected
+        if (value === 'all') {
+            updatedLocations = Object.entries(subCountyWards).flatMap(([subcounty, wards]) =>
+                wards.map(ward => ({ subcounty, ward }))
+            );
         } else {
-            updatedLocations[index][key] = value;
+            // Case: Specific subcounty selected, add all related wards
+            const relatedWards = subCountyWards[value];
+            updatedLocations.splice(index, 1, ...relatedWards.map(ward => ({ subcounty: value, ward })));
         }
-        setFormData({ ...formData, locations: updatedLocations });
-    };
+    } else {
+        updatedLocations[index][key] = value;
+    }
+    setFormData({ ...formData, locations: updatedLocations });
+};
+
+
     const validateLocation = (index, subcounty, ward) => {
         const newLocationErrors = { ...locationErrors };
         newLocationErrors[index] = {
@@ -242,6 +280,7 @@ export default function InputForm() {
                     locationErrors={locationErrors}
                     wards={wards}
                     removeLocation={removeLocation}
+                    subCountyWards={subCountyWards}
                 />
             default:
                 return null
