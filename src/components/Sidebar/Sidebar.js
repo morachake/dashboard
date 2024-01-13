@@ -12,7 +12,7 @@ import {
   Media,
   NavbarBrand,
   Navbar,
-
+  Badge,
   NavItem,
   NavLink,
   Nav, 
@@ -124,36 +124,14 @@ const Sidebar = (props) => {
         ) : null}
         {/* User */}
         <Nav className="align-items-center d-md-none">
-          <UncontrolledDropdown nav>
-            <DropdownToggle nav>
-              <Media className="align-items-center">
-                <span className="avatar avatar-sm rounded-circle">
-                  <img
-                    alt="..."
-                    src={`https://ui-avatars.com/api/?name=${user.username.charAt(0)}&background=random&color=fff&size=128`}
-                  />
-                </span>
-              </Media>
-            </DropdownToggle>
-            <DropdownMenu className="dropdown-menu-arrow" right>
-              <DropdownItem className="noti-title" header tag="div">
-                <h6 className="text-overflow m-0">Welcome!{user.username}</h6>
-              </DropdownItem>
-             <DropdownItem onClick={toggle}>
-                 <i className="ni ni-bell-55" />
-                <span>Notifications</span>
-             </DropdownItem>
-              <DropdownItem to="/admin/user-profile" tag={Link}>
-                <i className="ni ni-settings-gear-65" />
-                <span>Settings</span>
-              </DropdownItem>
-              <DropdownItem divider />
-              <DropdownItem href="#pablo" onClick={logout}>
-                <i className="ni ni-user-run" />
-                <span>Logout</span>
-              </DropdownItem>
-            </DropdownMenu>
-          </UncontrolledDropdown>
+          <Button className="rounded" onClick={toggle}>
+              <i className="ni ni-bell-55" />
+                {unreadCount > 0 && (
+                <Badge color="danger" className="notification-badge">
+                  {unreadCount}
+                </Badge>
+              )}
+          </Button>
         </Nav>
         {/* Collapse */}
         <Collapse navbar isOpen={collapseOpen}>
@@ -186,9 +164,7 @@ const Sidebar = (props) => {
             </Row>
           </div>
           <Nav navbar>{createLinks(routes)}</Nav>  
-
              <Button style={{marginTop: 100 }} color="danger" onClick={logout}>  <i className="ni ni-user-run" />Logout</Button>
-        
         </Collapse>
       <NotificationModal isOpen={modal} toggle={toggle} notifications={notifications} />
 
