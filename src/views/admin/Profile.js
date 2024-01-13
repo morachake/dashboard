@@ -9,7 +9,10 @@ import {
   Container,
   Row,
   Col,
-  Alert
+  Alert,
+  InputGroupAddon,
+  InputGroupText,
+  InputGroup
 } from "reactstrap";
 import UserHeader from "components/Headers/UserHeader.js";
 import { useAuth } from "context/AuthContext";
@@ -20,9 +23,13 @@ const Profile = () => {
   const { user } = useAuth()
   const [oldPassword, setOldPassword] = useState('')
   const [newPassword, setNewPassword] = useState('')
+  const [showPassword, setShowPassword] = useState(false)
   const [message, setMessage] = useState('')
   const [isError, setIsError] = useState(false)
   const {resetPassword} = useAuth()
+  const toggleShowPassword =() =>{
+    setShowPassword(!showPassword)
+  }
    const handlePasswordReset = async (e) => {
   e.preventDefault();
   const response = await resetPassword(oldPassword, newPassword);
@@ -109,32 +116,45 @@ const Profile = () => {
                           >
                             Old Password
                           </label>
+                          <InputGroup>
                           <Input
                             className="form-control-alternative"
                             id="input-first-name"
-                            placeholder="First name"
-                            type="password"
+                            type={showPassword ? "text" : "password"}
                             value={oldPassword}
                             onChange={(e) => setOldPassword(e.target.value)}
                           />
+                          <InputGroupAddon addonType="append">
+                          <InputGroupText onClick={toggleShowPassword} style={{ cursor: 'pointer' }}>
+                            <i className={showPassword ? "fa fa-eye-slash" : "fa fa-eye"} />
+                          </InputGroupText>
+                        </InputGroupAddon>
+                         </InputGroup>
                         </FormGroup>
                       </Col>
                       <Col lg="6">
                         <FormGroup>
-                          <label
-                            className="form-control-label"
-                            htmlFor="input-last-name"
-                          >
-                            New Password
-                          </label>
-                          <Input
-                            className="form-control-alternative"
-                            id="input-last-name"
-                            placeholder="Last name"
-                            type="password"
-                            value={newPassword}
-                            onChange={(e) => setNewPassword(e.target.value)}
-                          />
+                              <label
+                                className="form-control-label"
+                                htmlFor="input-last-name"
+                              >
+                                New Password
+                              </label>
+                              <InputGroup>
+                                <Input
+                                  className="form-control-alternative"
+                                  id="input-last-name"
+                                  placeholder="Last name"
+                                  type={showPassword ? "text" : "password"}
+                                  value={newPassword}
+                                  onChange={(e) => setNewPassword(e.target.value)}
+                                />
+                                <InputGroupAddon addonType="append">
+                              <InputGroupText onClick={toggleShowPassword} style={{ cursor: 'pointer' }}>
+                                <i className={showPassword ? "fa fa-eye-slash" : "fa fa-eye"} />
+                              </InputGroupText>
+                              </InputGroupAddon>
+                              </InputGroup>
                         </FormGroup>
                       </Col>
                     </Row>
