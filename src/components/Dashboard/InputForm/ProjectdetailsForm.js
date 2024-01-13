@@ -38,7 +38,7 @@ export const ProjectDetailsForm = ({ formData, handleInputChange, handleValidati
         </Col>
         <Col md={6} lg={3}>
           <ValidatedInput
-            label="Completion Pecentage"
+            label="Pecentage"
             id="project_status_percentage"
             name="project_status_percentage"
             placeholder="Enter the project status"

@@ -117,7 +117,7 @@ export const Certandloc = ({
                             </Col>
                             <Col md={6} lg={4}>
                                 <Label for={`ward-${index}`}>Ward</Label>
-                                        <Input
+                                        {/* <Input
                                             id={`ward-${index}`}
                                             name={`ward-${index}`}
                                             type="select"
@@ -130,7 +130,7 @@ export const Certandloc = ({
                                                     {ward}
                                                 </option>
                                             ))}
-                                        </Input>
+                                        </Input> */}
 
                                 {locationErrors[index]?.ward && (
                                     <div className="text-danger">{locationErrors[index].ward}</div>

@@ -9,7 +9,7 @@ const UserHeader = () => {
       <div
         className="header pb-8 pt-5 pt-lg-8 d-flex align-items-center"
         style={{
-          minHeight: "600px",
+          minHeight: "200px",
           backgroundImage:
             "url(https://web.mombasa.go.ke/wp-content/uploads/elementor/thumbs/msa-county-pvpwt97u9pzd6lh7rs4eyuajx9c5n3tbhn01h7rg14.png)",
           backgroundSize: "cover",
@@ -21,9 +21,7 @@ const UserHeader = () => {
         <Container className="d-flex align-items-center" fluid>
           <Row>
             <Col lg="7" md="10">
-              <h1 className="text-white mt-0 mb-5">
-                WelcomeBack
-              </h1>
+             
             </Col>
           </Row>
         </Container>

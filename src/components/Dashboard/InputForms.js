@@ -287,7 +287,7 @@ export default function InputForm() {
         }
     }
     return (
-        <Card>
+        <Card >
            <CardBody>
             <CustomModal 
                 title={modalContent.title}
