@@ -21,12 +21,11 @@ import config from "config";
 
 const AdminNavbar = (props) => {
   const [modal, setModal] = useState(false);
-  const toggle = () => setModal(!modal);
   const { logout, user } = useAuth()
   const [notifications, setNotifications] = useState([]);
   const [readNotifications, setReadNotifications] = useState(new Set(JSON.parse(localStorage.getItem('readNotifications') || '[]')));
+  const accessToken = localStorage.getItem('accessToken');
   useEffect(() => {
-    const accessToken = localStorage.getItem('accessToken');
     fetch(`${config.backendURL}/notifications`,{
       headers: { 'Authorization': `Bearer  ${accessToken}`}
     })
@@ -44,6 +43,29 @@ const AdminNavbar = (props) => {
   }, []);
   const unreadCount = notifications.filter(notification => !readNotifications.has(notification.id)).length;
 
+  const markNotificationsAsRead = () => {
+    fetch(`${config.backendURL}/mark_notifications_read`,{
+      method: 'POST',
+      headers: {'Authorization': `Bearer ${accessToken }`}
+    })
+    .then(response => {
+      if(!response.ok){
+        throw new Error(`HTTP error: ${response.status}`);
+      }
+      return response.json();
+    })
+    .then(data => {
+      console.log(data.message);
+      setReadNotifications(new Set(notifications.map(n => n.id)));
+    })
+    .catch( error => console.error("an error occure",error));
+  };
+ const toggle = () => {
+    if(!modal){
+      markNotificationsAsRead();
+    }
+    setModal(!modal)
+  };
   return (
     <>
       <Navbar className="navbar-top navbar-dark" expand="md" id="navbar-main">
