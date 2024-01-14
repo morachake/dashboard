@@ -1,6 +1,6 @@
 
-import InputForm from 'components/Dashboard/InputForms';
-import TopTabs from 'components/Dashboard/TopTabs';
+import ProgramForm from 'components/Dashboard/ProgramForm';
+import ProjectForm from 'components/Dashboard/ProjectFrom';
 import UserHeader from 'components/Headers/UserHeader';
 import React, { useState } from 'react';
 import {
@@ -14,8 +14,6 @@ import {
     TabPane,
     Row,
     Col,
-    CardText,
-    CardTitle
 } from 'reactstrap';
 
 export default function DataForm() {
@@ -48,23 +46,16 @@ export default function DataForm() {
                         </NavLink>
                     </NavItem>
                     </Nav> 
-                
-                
                 <TabContent activeTab={activeTab}>
                     <TabPane tabId='1'>
-                        {/* <Row> */}
                             <Col className="mb-5 mb-xl-0 p-3" xl="8">      
-                                <InputForm/>
+                                <ProjectForm/>
                             </Col>
-                           
-                        {/* </Row> */}
                     </TabPane>
                     <TabPane tabId='2'>
-                        <Row>
-                             <Col xl="4 p-3">
-                               <Button>A new </Button>
-                            </Col> 
-                        </Row>
+                               <Col className="mb-5 mb-xl-0 p-3" xl="8">
+                               <ProgramForm/>
+                            </Col>   
                     </TabPane>
                 </TabContent>  
             </Card>     

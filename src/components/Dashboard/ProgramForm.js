@@ -7,6 +7,7 @@ import { ProjectDetailsForm } from './InputForm/ProjectdetailsForm';
 import { Certandloc } from './InputForm/Certand loc';
 import { validateFormStep } from './InputForm/formValidator';
 import CustomModal from 'components/Reusable/CustomModal';
+import { ProgramDetailsForm } from './InputForm/ProgramDetailsForm';
 
 
 const subCountyWards = {
@@ -34,7 +35,7 @@ const initialFormData = {
     after_images_url: '',
 };
 
-export default function InputForm() {
+export default function ProgramForm() {
     const [isSubmitting,setIsSubmitting] = useState(false)
     const { user } = useAuth();
     const [wards, setWards] = useState([]);
@@ -112,31 +113,6 @@ export default function InputForm() {
         };
 
         setLocationErrors(newLocationErrors);
-    };
-
-    const removeLocation = (index) => {
-        const updatedLocations = [...formData.locations].filter((_, locIndex) => locIndex !== index);
-        setFormData({ ...formData, locations: updatedLocations });
-
-        const newLocationErrors = { ...locationErrors };
-        delete newLocationErrors[index];
-        setLocationErrors(newLocationErrors);
-    };
-
-
-    const addLocation = () => {
-        setFormData(prevFormData => ({
-            ...prevFormData,
-            locations: [...prevFormData.locations, { subcounty: '', ward: '' }]
-        }));
-    }
-
-
-    const handleImageUpload = (url, imageType) => {
-        setFormData((prevFormData) => ({
-            ...prevFormData,
-            [imageType]: url
-        }));
     };
 
 
@@ -239,53 +215,7 @@ export default function InputForm() {
     const isFormValid = () => {
         return Object.values(formValid).every(Boolean);
     };
-    const totalSteps = 2
-
-    const nextStep = () => {
-        if(validateCurrentStep()){
-           if (currentStep < 2) { 
-            setCurrentStep(currentStep + 1);
-        }  
-        }
-    };
-
-    const prevStep = () => {
-            if (currentStep > 1) {
-            setCurrentStep(currentStep - 1);
-        }
-    };
-    const renderStep = () => {
-        switch (currentStep) {
-            case 1:
-                return <ProjectDetailsForm
-                    handleInputChange={handleInputChange}
-                    formData={formData}
-                    handleValidationStateChange={handleValidationStateChange}
-                    requiredValidator={requiredValidator}
-                    numberValidator={numberValidator}
-                    formErrors={formErrors}
-
-                />
-            case 2:
-                return <Certandloc
-                    handleImageUpload={handleImageUpload}
-                    formData={formData}
-                    handleCertificateItemChange={handleCertificateItemChange}
-                    validateCertificateData={validateCertificateData}
-                    removeCertificateItem={removeCertificateItem}
-                    addCertificateItem={addCertificateItem}
-                    addLocation={addLocation}
-                    validateLocation={validateLocation}
-                    handleLocationChange={handleLocationChange}
-                    locationErrors={locationErrors}
-                    wards={wards}
-                    removeLocation={removeLocation}
-                    subCountyWards={subCountyWards}
-                />
-            default:
-                return null
-        }
-    }
+ 
     return (
         <Card >
            <CardBody>
@@ -295,20 +225,20 @@ export default function InputForm() {
                 type={modalContent.type}
                 
             />
+             <ProgramDetailsForm
+                    handleInputChange={handleInputChange}
+                    formData={formData}
+                    handleValidationStateChange={handleValidationStateChange}
+                    requiredValidator={requiredValidator}
+                    numberValidator={numberValidator}
+                    formErrors={formErrors}
+
+                />
                 <Form onSubmit={handleSubmit}>
-                    {renderStep()}
-                    <div className="form-navigation">
-                        {currentStep > 1 && (
-                            <Button onClick={prevStep} type='button' color='secondary'>Previous</Button>
-                        )}
-                        {currentStep < totalSteps && (
-                            <Button onClick={nextStep} type='button' color='primary'>Next</Button>
-                        )}
-                        {currentStep === totalSteps && (
+                    <div className="form-navigation">                   
                             <Button type="submit" color='primary' disabled={!isFormValid() || isSubmitting}>
                                 {isSubmitting ? "Submitting...." : "Submit"}
                             </Button>
-                        )}
                     </div>
                 </Form>
             </CardBody>
