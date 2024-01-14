@@ -1,8 +1,8 @@
 {
   "name": "msacsdb",
-  
   "version": "1.2.3",
-  "description": "React version of Argon Dashboard by Creative Tim",
+  "description": "Msa County",
+  
   "main": "index.js",
   "repository": {
     "type": "git",
@@ -23,7 +23,7 @@
   "bugs": {
     "url": "git+https://github.com/morachake/morachake"
   },
-  "homepage": ".",
+ 
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
