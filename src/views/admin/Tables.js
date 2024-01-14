@@ -269,14 +269,15 @@ export default function ProjectTable() {
                 <Column field="contract_sum" header="Contract Sum" />
               </DataTable>
             ) : (
-              <Card>
-                <CardHeader>
+             <Card>
+                <CardHeader className="center-text">
                   No data available
                 </CardHeader>
-                <CardBody>
+                <CardBody className="center-text">
                   Please Proceed to add data to your account for it to be visible here
                 </CardBody>
               </Card>
+
             )}
           </div>
         </CardHeader>
