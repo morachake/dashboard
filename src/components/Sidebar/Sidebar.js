@@ -26,6 +26,7 @@ const Sidebar = (props) => {
   const [collapseOpen, setCollapseOpen] = useState();
   const {user,logout} = useAuth()
   const [modal, setModal] = useState(false);
+  const [loading,setLoading] = useState(false);
   const toggle = () => setModal(!modal);
   // verifies if routeName is the one active (in browser input)
   const [notifications, setNotifications] = useState([]);
@@ -56,7 +57,13 @@ const Sidebar = (props) => {
   const toggleCollapse = () => {
     setCollapseOpen((data) => !data);
   };
+  const handleLogout = async () =>{
+    setLoading(true)
 
+    await new Promise(resolve  => setTimeout(resolve,2000))
+    await logout()
+    setLoading(false)
+  }
   const closeCollapse = () => {
     setCollapseOpen(false);
   };
@@ -159,7 +166,9 @@ const Sidebar = (props) => {
             </Row>
           </div>
           <Nav navbar>{createLinks(routes)}</Nav>  
-             <Button style={{marginTop: 100 }} color="danger" onClick={logout}>  <i className="ni ni-user-run" />Logout</Button>
+             <Button style={{marginTop: 100 }} color="danger" onClick={handleLogout}>  
+              {loading ? 'Logging out...' : <><i className="ni ni-user-run" />Logout</> }
+             </Button>
         </Collapse>
       <NotificationModal isOpen={modal} toggle={toggle} notifications={notifications} />
 
