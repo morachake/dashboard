@@ -4,6 +4,7 @@ import ProjectsTable from "components/Dashboard/ProjectsTable";
 import BudgetBars from "components/Dashboard/BudgetBars";
 import config from "config";
 import UserHeader from "components/Headers/UserHeader";
+import BarChart from "components/Dashboard/BarChart";
 
 const Index = () => {
   const [projects, setProjects] = useState([]);
@@ -50,7 +51,8 @@ const Index = () => {
         </Row>
         <Row className="mt-5">
           <Col xl="12">
-          <ProjectsTable projectData={filteredProjects} />
+          {/* <ProjectsTable projectData={filteredProjects} /> */}
+          <BarChart projectData={filteredProjects} />
           </Col>
         </Row>
       </Container>

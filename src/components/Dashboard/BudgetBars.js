@@ -1,3 +1,4 @@
+import { Tooltip } from 'chart.js';
 import React from 'react';
 import {
   BarChart,
@@ -5,12 +6,10 @@ import {
   XAxis,
   YAxis,
   CartesianGrid,
-  Legend,
   ResponsiveContainer,
 } from 'recharts';
 
 export default function BudgetBars({ filteredProjects, currentFilter }) {
-  // Determine the key for the x-axis based on the current filter
   const labelKey = currentFilter && currentFilter.ward ? 'ward' 
                   : currentFilter && currentFilter.subcounty ? 'subcounty' 
                   : 'sector'; // default to sector if no filter is applied
@@ -35,7 +34,7 @@ export default function BudgetBars({ filteredProjects, currentFilter }) {
         <XAxis dataKey="label" />
         <YAxis />
         {/* <Tooltip /> */}
-        <Legend />
+        {/* <Legend /> */}
         <Bar
           dataKey="contractSum"
           fill="#3498db"

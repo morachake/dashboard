@@ -39,7 +39,7 @@ const Index = () => {
               </CardHeader>
               <CardBody>
                 <div className="chart">
-                <BudgetBars filteredProjects={filteredProjects} />
+                  <BudgetBars filteredProjects={filteredProjects} />
                 </div>
               </CardBody>
             </Card>
