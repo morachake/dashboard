@@ -15,7 +15,6 @@ import {
   InputGroup,
   Row,
   Col,
-  FormFeedback
 } from "reactstrap";
 
 const Login = () => {
@@ -23,17 +22,33 @@ const Login = () => {
   const [password,setPassword] = useState("");
   const [error,setError] = useState("");
   const [showPassword,setShowPassword] = useState(false);
+  const [loading,setLoading] = useState(false);
+  const [buttonText,setButtonText] = useState('Sign in');
   const {login} = useAuth()
   const toggleShowPassword = () =>{
     setShowPassword(!showPassword)
   }
   const handleLogin = async () => {
-    const result = await login(username, password); 
-    if (result.error) {
-      setError(result.error);
-    } else {
-      setError("")
+    setLoading(true);
+    setButtonText('Loading...');
+    setTimeout(() => setButtonText('Please Wait ....'),1500)
+
+    await new Promise(resolve => setTimeout(resolve, 3000))
+    try{
+      const result = await login(username, password); 
+        setLoading(false);
+        if (result.error) {
+          setError(result.error);
+        } else {
+          setError("")
+        }
+    } catch (error){
+      setError("An Error occured")
+    } finally{
+      setLoading(false);
+      setButtonText("Sign In");
     }
+  
   };
   console.log("an arror occured: ",error);
   return (
@@ -99,7 +114,7 @@ const Login = () => {
               </div>
               <div className="text-center">
                 <Button className="my-4" color="primary" type="button" onClick={ handleLogin}>
-                  Sign in
+                  {loading ? buttonText: 'Sign in'}
                 </Button>
               </div>
             </Form>
