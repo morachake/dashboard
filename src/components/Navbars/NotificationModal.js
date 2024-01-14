@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Modal, ModalHeader, ModalBody, ListGroup, ListGroupItem, Badge } from "reactstrap";
-import { Card } from 'primereact/card';
+import { Modal, ModalHeader, ModalBody, ListGroup, ListGroupItem, Card,CardTitle,CardBody,CardFooter } from "reactstrap";
 
 const NotificationModal = ({ isOpen, toggle, notifications }) => {
     const [expandedNotificationId, setExpandedNotificationId] = useState(null);
@@ -38,15 +37,13 @@ const NotificationModal = ({ isOpen, toggle, notifications }) => {
                         notifications.map(notification => (
                             <ListGroupItem key={notification.id} className="notification-item" onClick={() => handleNotificationClick(notification.id)}>
                                 <h3 className="notification-message">
-                                    {notification.subject}
-                                    <Badge color="secondary">Read</Badge>
-                                </h3>
-                                {expandedNotificationId === notification.id && (
-                                    <>
-                                        <p className="notification-details">{notification.message}</p>      
-                                        <p>{formatDate(notification.timestamp)}</p>
-                                    </>
-                                )}
+                                    
+                                </h3>                   
+                                    <Card>
+                                        <CardBody className="notification-details">{notification.message}</CardBody>     
+                                        <CardFooter><small>{formatDate(notification.timestamp)}</small></CardFooter>   
+                                    </Card>
+ 
                             </ListGroupItem>
                         ))
                     ) : (
