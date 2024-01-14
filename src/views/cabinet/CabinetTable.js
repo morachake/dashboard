@@ -266,13 +266,14 @@ export default function CaninetTable() {
               </DataTable>
             ) : (
               <Card>
-                <CardHeader>
-                  No data available
-                </CardHeader>
-                <CardBody>
-                  Please Proceed to add data to your account for it to be visible here
-                </CardBody>
-              </Card>
+                  <CardHeader className="center-text">
+                    No data available
+                  </CardHeader>
+                  <CardBody className="center-text">
+                    Please Proceed to add data to your account for it to be visible here
+                  </CardBody>
+                </Card>
+
             )}
           </div>
         </CardHeader>
