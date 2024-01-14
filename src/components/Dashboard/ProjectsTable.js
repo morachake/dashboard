@@ -2,7 +2,7 @@ import React from 'react';
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import { Tag } from 'primereact/tag';
-import { CardHeader } from 'reactstrap';
+import { CardHeader,Card,CardBody } from 'reactstrap';
 
 export default function ProjectsTable({ projectData }) {
 
@@ -62,7 +62,15 @@ export default function ProjectsTable({ projectData }) {
                         <Column field="contract_sum" header="Contract Sum" body={contractSumBodyTemplate} />
                     </DataTable>
                 ) : (
-                    <div>No data available</div>
+                    <Card>
+                        <CardHeader className="center-text">
+                            No data available
+                        </CardHeader>
+                        <CardBody className="center-text">
+                            Please Proceed to add data to your account for it to be visible here
+                        </CardBody>
+                    </Card>
+
                 )}
             </div>
         </CardHeader>
