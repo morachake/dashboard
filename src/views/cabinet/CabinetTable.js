@@ -4,15 +4,14 @@ import { Column } from 'primereact/column';
 import { CardHeader, Container, Card, Col, CardBody, Row, ListGroup, ListGroupItem, CardImg, Table } from 'reactstrap';
 import UserHeader from 'components/Headers/UserHeader';
 import config from 'config';
-import Loading from 'components/Reusable/Loading';
 
-export default function CabinetTable() {
+export default function CaninetTable() {
   const [projectData, setProjects] = useState([]);
   const [expandedRows, setExpandedRows] = useState(null);
-  const [loading, setLoading] = useState(true);
 
- useEffect(() =>{
-   const accessToken = localStorage.getItem('accessToken')
+  useEffect(() => {
+
+  const accessToken = localStorage.getItem('accessToken')
   fetch(`${config.backendURL}/forms`, {
     headers: {
       'Authorization': `Bearer ${accessToken}`
@@ -20,14 +19,12 @@ export default function CabinetTable() {
   })
     .then(response => response.ok ? response.json() : Promise.reject('Network response was not ok'))
     .then(data => {
-        setProjects(data)
-        setLoading(false)
+      setProjects(data)
     })
     .catch(error => console.error('Error fetching projects:', error));
+  },[])
 
- },[])
-    const onRowToggle = (e) => {
-    
+  const onRowToggle = (e) => {
     if(expandedRows && expandedRows.id === e.data.id){
       setExpandedRows(null)
     }else {
@@ -47,6 +44,24 @@ export default function CabinetTable() {
   const startDateTemplate = (rowData) => {
     return <span>{formatReadableDate(rowData.start_date)}</span>;
   };
+  const statusBodyTemplate =(rowData) =>{
+        let statusClass = '';
+        switch (rowData.status){
+          case 'Complete' :
+            statusClass = 'status-complete'
+            break
+          case 'Ongoing':
+            statusClass = 'status-ongoing'
+            break
+          case 'Stalled' :
+            statusClass = 'status-stalled'
+            break
+          default:
+            statusClass = ''
+        }
+        return <span className={statusClass}>{rowData.status}</span>
+    }
+
 
   const endDateTemplate = (rowData) => {
     return <span>{formatReadableDate(rowData.end_date)}</span>;
@@ -71,8 +86,8 @@ export default function CabinetTable() {
         return [];
       }
       return recommendations
-        .split(/\d+\.\s*/)  // Split by the number followed by a period and space
-        .filter(item => item.trim() !== '');  // Filter out empty strings
+        .split(/\d+\.\s*/)  
+        .filter(item => item.trim() !== ''); 
     };
     const recommendationsList = processRecommendations(data.recommendations);
 
@@ -138,6 +153,7 @@ export default function CabinetTable() {
       );
     };
 
+    
     return (
       <Card>
         <CardHeader>
@@ -149,10 +165,10 @@ export default function CabinetTable() {
               <p><h4>Description:</h4> {data.description}</p>
               <p><h4>Contractor Details:</h4> {data.contractor_details}</p>
               <p><h4>Contract Sum:</h4> {formattedContractSum}</p>
-              <p><h4>Status:</h4> {data.status}</p>
-              <p><h4>Completion Percentage</h4>{data.project_status_percentage}</p>
-              <p><h4>Starting date:</h4> {formatReadableDate(data.start_date)}</p>
-              <p><h4>Completion Date:</h4> {formatReadableDate(data.end_date)}</p>
+              {/* <p><h4>Status:</h4> {data.status}</p> */}
+              <p><h4>Completion Percentage :</h4> {data.project_status_percentage}</p>
+              {/* <p><h4>Starting date:</h4> {formatReadableDate(data.start_date)}</p> */}
+              {/* <p><h4>Completion Date:</h4> {formatReadableDate(data.end_date)}</p> */}
               <p><h4>Certificates:</h4></p>
               <ListGroup>
                 {renderCertificates(data.certificates)}
@@ -224,9 +240,6 @@ export default function CabinetTable() {
       </Card>
     );
   };
-  if(loading){
-    return <Loading/>
-  }
   return (
     <>
       <UserHeader />
@@ -246,11 +259,10 @@ export default function CabinetTable() {
               >
                 <Column expander style={{ width: '3em' }} />
                 <Column field="project_name" header="Project Name" />
-                <Column field="status" header="Status" />
+                <Column field="status" header="Status"body={statusBodyTemplate} />
                 <Column field="start_date" header="Start Date" body={startDateTemplate} />
                 <Column field="end_date" header="End Date" body={endDateTemplate} />
                 <Column field="contract_sum" header="Contract Sum" />
-               
               </DataTable>
             ) : (
               <Card>
