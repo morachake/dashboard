@@ -19,7 +19,7 @@ import {
 function EditForm({ toggle, modal, project }) {
   const [currentPage ,setCurrentPage] = useState(1)
   const totalPages = 3
-
+  console.log(project)
   const [formData,setFormData] = useState({
     projectName:'',
     contractorDetails:'',
@@ -53,7 +53,9 @@ function EditForm({ toggle, modal, project }) {
     }
   },[project])
 // console.log("here is your projetc",project.certificates)
-  const handleSubmit = () =>{
+  const handleSubmit = (e) =>{
+    e.preventDefault();
+    console.log("dtata submittef",formData)
     const accessToken = localStorage.getItem('accessToken')
      fetch(`${config.backendURL}/update_form`, {
       method : 'POST' ,
@@ -79,10 +81,9 @@ function EditForm({ toggle, modal, project }) {
   }
 
 
-
 const handleChange = (e, index, type) => {
   const { name, value } = e.target;
-
+   console.log("Handling change for:", name, value);
   // if (type === 'location') {
   //   const updatedLocations = [...formData.locations];
   //   updatedLocations[index] = { ...updatedLocations[index], [name]: value };
@@ -98,6 +99,9 @@ const handleChange = (e, index, type) => {
 
 
   
+useEffect(()=>{
+  console.log("current formdata loaded",formData)
+})
 
   const goToNextPage = () =>{
     setCurrentPage(currentPage + 1)
@@ -110,7 +114,7 @@ const handleChange = (e, index, type) => {
       <ModalHeader toggle={toggle}>Edit Project: {project.projectName}</ModalHeader>
       <ModalBody>
         <Form onSubmit={handleSubmit} >
-        {currentPage === 1 && (
+        {/* {currentPage === 1 && ( */}
           <Card>
           <Col> 
                   <Row>
@@ -145,8 +149,36 @@ const handleChange = (e, index, type) => {
               </Row>
         </Col>
         </Card> 
-        )}
-        {/* {currentPage === 2 && (
+        {/* )} */}
+         <Card>
+              <FormGroup>
+                  <Label for="Description">Description</Label>
+                  <Input type='textarea' name='decsription' value={formData.description} onChange={handleChange}/>
+              </FormGroup>
+                <Col>
+                    <Row>
+                      <Col>
+                      <FormGroup>
+                          <Label for="Startdate">Start date</Label>
+                          <Input type='date' value={formData.startDate} onChange={handleChange} />
+                      </FormGroup>
+                      </Col>
+                      <Col>
+                      <FormGroup>
+                          <Label for="Enddate">End date</Label>
+                          <Input type='date' value={formData.endDate} onChange={handleChange}/>
+                      </FormGroup>
+                      </Col>
+                      <Col>
+                      <FormGroup>
+                          <Label for="Statuspercentage">status Percentage</Label>
+                          <Input type='text' value={formData.statusPercentage} onChange={handleChange} />
+                        </FormGroup>
+                      </Col>
+                    </Row>
+            </Col>
+          </Card>
+       {/* {currentPage === 2 && ( */}
            <Card>
             <CardHeader>You Project Locations</CardHeader>
               {project.locations.map((location,index) =>(
@@ -179,9 +211,9 @@ const handleChange = (e, index, type) => {
               </Col>
           ))}
        </Card>
-        )}    */}
+        {/* )}     */}
       
-      {/* {currentPage === 3 && (
+       {/* {currentPage === 3 && ( */}
           <Card>
               <CardHeader>You Current Certificates</CardHeader>
                     {project.certificates.map((certificate,index) =>(
@@ -213,51 +245,21 @@ const handleChange = (e, index, type) => {
                   </Col>
                   ))}
             </Card>
-      )} */}
-     
-       {currentPage === 3 &&(
-         <Card>
-              <FormGroup>
-                  <Label for="Description">Description</Label>
-                  <Input type='textarea' name='decsription' value={project.description} onChange={handleChange}/>
-              </FormGroup>
-                <Col>
-                    <Row>
-                      <Col>
-                      <FormGroup>
-                          <Label for="Startdate">Start date</Label>
-                          <Input type='date' value={formData.startDate} onChange={handleChange} />
-                      </FormGroup>
-                      </Col>
-                      <Col>
-                      <FormGroup>
-                          <Label for="Enddate">End date</Label>
-                          <Input type='date' value={formData.endDate} onChange={handleChange}/>
-                      </FormGroup>
-                      </Col>
-                      <Col>
-                      <FormGroup>
-                          <Label for="Statuspercentage">status Percentage</Label>
-                          <Input type='text' value={formData.statusPercentage} onChange={handleChange} />
-                        </FormGroup>
-                      </Col>
-                    </Row>
-            </Col>
-          </Card>
-       )}
+        
+       {/* )} */}
        </Form>
       </ModalBody>
       <ModalFooter>
-        {currentPage > 1 && totalPages &&(
+        {/* {currentPage > 1 && totalPages &&(
              <Button color="primary" onClick={goToPreviuosPage}>Back</Button>
         )
         }
         {currentPage < totalPages && (
              <Button color="primary" onClick={goToNextPage}>Next</Button>
-        )}
-        {currentPage === totalPages && (
+        )} */}
+        {/* {currentPage === totalPages && ( */}
           <Button color="primary" onClick={handleSubmit}>Update</Button>
-        ) }
+        {/* ) } */}
       </ModalFooter>
     </Modal>
   );

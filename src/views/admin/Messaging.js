@@ -143,6 +143,15 @@ const addRemark = (formId, remarkText) => {
                           {remark.user_id !== user.id &&
                            <span className='username'>{remark.user}</span>
                           }
+                          <Card>
+                            <CardBody>
+                              <img
+                                src={remark.file_url}
+                                alt={remark.text}
+                                style={{ width: '200px', height: '150px' }} 
+                              />
+                            </CardBody>
+                          </Card>
                           <p className='message-text'>{remark.text}</p>
                           <small className='timestamp'>{new Date(remark.timestamp).toLocaleString()}</small>
                         </div>

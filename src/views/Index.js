@@ -20,7 +20,6 @@ const Index = () => {
 
   useEffect(() => {
     const accessToken = localStorage.getItem('accessToken');
-     console.log('Your token is now authenticated', localStorage.getItem('accessToken'));
     fetch(`${config.backendURL}/forms`, {
      headers: {
         'Authorization': `Bearer ${localStorage.getItem('accessToken')}`

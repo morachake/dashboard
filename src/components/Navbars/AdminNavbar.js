@@ -37,7 +37,7 @@ const AdminNavbar = (props) => {
       })
       .then(data => {
         const sortedData = data.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
-         console.log(sortedData);
+
         setNotifications(sortedData);
       });
   }, []);
@@ -55,7 +55,6 @@ const AdminNavbar = (props) => {
       return response.json();
     })
     .then(data => {
-      console.log(data.message);
       setReadNotifications(new Set(notifications.map(n => n.id)));
     })
     .catch( error => console.error("an error occure",error));

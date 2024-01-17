@@ -2,7 +2,6 @@
   "name": "msacsdb",
   "version": "1.2.3",
   "description": "Msa County",
-  
   "main": "index.js",
   "repository": {
     "type": "git",
@@ -23,7 +22,6 @@
   "bugs": {
     "url": "git+https://github.com/morachake/morachake"
   },
- 
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
@@ -66,6 +64,7 @@
     "react-data-grid": "^7.0.0-beta.41",
     "react-datetime": "3.2.0",
     "react-dom": ">=16.0.0",
+    "react-img-hover-zoom": "^0.1.8",
     "react-router-dom": "^6.11.1",
     "react-scripts": "^5.0.1",
     "reactstrap": "8.10.0",
