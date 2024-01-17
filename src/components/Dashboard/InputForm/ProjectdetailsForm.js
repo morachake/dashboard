@@ -10,7 +10,7 @@ export const ProjectDetailsForm = ({ formData, handleInputChange, handleValidati
         <Col md={6} lg={6}>
           <ValidatedInput
             label="Project Name"
-            id="project_name"
+            id="program_name"
             name="project_name"
             placeholder="Enter the project name"
             type="text"
@@ -61,6 +61,16 @@ export const ProjectDetailsForm = ({ formData, handleInputChange, handleValidati
         validator={(value) => !value ? 'Required' : ''}
         onValidationStateChange={handleValidationStateChange}
         error={formErrors.description}
+      />
+       <ValidatedInput
+        label="Project Finacier"
+        name="Finencier"
+        type="text"
+        // value={formData.description}
+        // onChange={handleInputChange}
+        // validator={(value) => !value ? 'Required' : ''}
+        // onValidationStateChange={handleValidationStateChange}
+        // error={formErrors.description}
       />
       <Row lg={4} md={6} xs={12}>
         <Col md={6} lg={4}>

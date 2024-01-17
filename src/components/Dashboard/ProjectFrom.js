@@ -18,6 +18,7 @@ const subCountyWards = {
     Jomvu: ["Jomvu Kuu", "Magongo", "Mikindini"]
 };
 const initialFormData = {
+    isProject: true,
     project_name: '',
     description: '',
     contractor_details: '',

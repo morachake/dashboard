@@ -3,6 +3,7 @@ import UserHeader from 'components/Headers/UserHeader';
 import { Container, Row, Col, Card, CardBody, Input, Button, ListGroup, ListGroupItem } from "reactstrap";
 import { useAuth } from 'context/AuthContext';
 import config from 'config';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 export default function Messaging() {
   const { user } = useAuth();
@@ -98,7 +99,8 @@ const addRemark = (formId, remarkText) => {
       messages: projectRemarks
     });
   };
-
+  const handleImageUpload = () => {};
+  const handlePdfUpload =() =>{}
   const userContainerStyle = {
      height: '400px',
     overflowY: 'scroll'
@@ -165,19 +167,47 @@ const addRemark = (formId, remarkText) => {
 
 
                 {activeChat && (
-                  <Row form>
-                    <Col md="10">
-                      <Input
-                        type="text"
-                        value={message}
-                        onChange={(e) => setMessage(e.target.value)}
-                        placeholder={`Message ${activeChat.name}...`}
-                      />
-                    </Col>
-                    <Col md="2">
-                      <Button color="primary" onClick={handleSendMessage}>Send</Button>
-                    </Col>
-                  </Row>
+                  <Row form className="align-items-center">
+                      <Col md="6">
+                        <Input
+                          type="text"
+                          value={message}
+                          onChange={(e) => setMessage(e.target.value)}
+                          placeholder={`Message ${activeChat.name}...`}
+                        />
+                      </Col>
+                      <Col md="2">
+                        <label htmlFor="imageUpload" className="btn btn-primary btn-sm">
+                          <FontAwesomeIcon icon="fa-solid fa-paperclip" style={{ color: "#FFD43B", fontSize: "16px" }} />
+                          <input
+                            type="file"
+                            id="imageUpload"
+                            name="imageUpload"
+                            accept=".png, .jpg, .jpeg"
+                            style={{ display: 'none' }}
+                            onChange={(e) => handleImageUpload(e.target.files)}
+                          />
+                        </label>
+                      </Col>
+                      <Col md="2">
+                        <label htmlFor="pdfUpload" className="btn btn-primary btn-sm">
+                          <FontAwesomeIcon icon="fa-solid fa-paperclip" style={{ fontSize: "16px" }} />
+                          <input
+                            type="file"
+                            id="pdfUpload"
+                            name="pdfUpload"
+                            accept=".pdf"
+                            style={{ display: 'none' }}
+                            onChange={(e) => handlePdfUpload(e.target.files)}
+                          />
+                        </label>
+                      </Col>
+                      <Col md="1">
+                        <Button color="primary" size="sm" onClick={handleSendMessage}>
+                          Send
+                        </Button>
+                      </Col>
+                </Row>
                 )}
               </CardBody>
             </Card>

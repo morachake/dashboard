@@ -3,22 +3,11 @@ import React, { useState } from 'react';
 import { Form, Button, Card, CardBody } from 'reactstrap';
 
 import config from 'config';
-import { ProjectDetailsForm } from './InputForm/ProjectdetailsForm';
-import { Certandloc } from './InputForm/Certand loc';
-import { validateFormStep } from './InputForm/formValidator';
 import CustomModal from 'components/Reusable/CustomModal';
 import { ProgramDetailsForm } from './InputForm/ProgramDetailsForm';
 
 
-const subCountyWards = {
-    Mvita: ["Mji Wa Kale/Makadara", "Tudor", "Tononoka", "Shimanzi/Ganjoni", "Majengo"],
-    Likoni: ["Mtongwe", "Shika Adabu", "Bofu", "Likoni", "Timbwani"],
-    Changamwe: ["Port Reitz", "Kipevu", "Airport", "Miritini", "Chaani"],
-    Kisauni: ["Mjambere", "Junda", "Bamburi", "Mwakirunge", "Mtopanga", "Magogoni", "Shanzu"],
-    Nyali: ["Frere Town", "Ziwa la Ng’ombe", "Mkomani", "Kongowea", "Kadzandani"],
-    Jomvu: ["Jomvu Kuu", "Magongo", "Mikindini"]
-};
-const initialFormData = {
+const initialFormData ={ 
     project_name: '',
     description: '',
     contractor_details: '',
@@ -29,92 +18,18 @@ const initialFormData = {
     end_date: '',
     contract_sum: '',
     certificates: [],
-    recommendations: '',
-    locations: [],
-    before_images_url: '',
-    after_images_url: '',
 };
 
 export default function ProgramForm() {
     const [isSubmitting,setIsSubmitting] = useState(false)
     const { user } = useAuth();
-    const [wards, setWards] = useState([]);
-    const [showModal,setShowModal] = useState(false);
     const [modalContent,setModalContent] = useState({title:"",message:"",type:""});
     const [formErrors, setFormErrors] = useState({});
-    const [locationErrors, setLocationErrors] = useState({});
-    const [currentStep, setCurrentStep] = useState(1)
     const [formData, setFormData] = useState({
         ...initialFormData,
         user_id: user.id
     });
     const [formValid, setFormValid] = useState({});
-    // const [updatedLocations ,setUpdatedLocations] = useState([])
-    const  validateCurrentStep = () =>{
-        const {isValid, errors} = validateFormStep(currentStep,formData)
-        setFormErrors(errors)
-        setFormValid(isValid)
-        return isValid
-    }
-
-    // const handleLocationChange = (index, key, value) => {
-    //     const updatedLocations = [...formData.locations];
-    //     if (key === 'subcounty') {
-    //         updatedLocations[index] = { subcounty: value, ward: '' }; // Reset ward when subcounty changes
-    //         setWards(subCountyWards[value] || []); // Update wards for the UI
-    //     } else {
-    //         updatedLocations[index][key] = value;
-    //     }
-    //     setFormData({ ...formData, locations: updatedLocations });
-    // };
-// 
-    // const handleLocationChange = (index,key,value) => {
-    //     let updatedLocations = [...formData.locations];
-    //     if(key === 'subcounty'){
-    //         if(value === 'all'){
-    //             updatedLocations = Object.entries(subCountyWards).flatMap(([subcounty,wards]) =>
-    //                 wards.map(ward => ({subcounty, ward}))
-    //             )
-    //         } else {
-    //             updatedLocations[index] ={subcounty: value , ward: ''}
-    //             setWards(subCountyWards[value] || []);
-    //         }
-    //     } else {
-    //         updatedLocations[index][key] = value;
-    //     }
-    //     setFormData({...formData , locations:updatedLocations});
-    // }
-    const handleLocationChange = (index, key, value) => {
-    let updatedLocations = [...formData.locations];
-
-    if (key === 'subcounty') {
-        // Case: 'All Subcounties' selected
-        if (value === 'all') {
-            updatedLocations = Object.entries(subCountyWards).flatMap(([subcounty, wards]) =>
-                wards.map(ward => ({ subcounty, ward }))
-            );
-        } else {
-            // Case: Specific subcounty selected, add all related wards
-            const relatedWards = subCountyWards[value];
-            updatedLocations.splice(index, 1, ...relatedWards.map(ward => ({ subcounty: value, ward })));
-        }
-    } else {
-        updatedLocations[index][key] = value;
-    }
-    setFormData({ ...formData, locations: updatedLocations });
-};
-
-
-    const validateLocation = (index, subcounty, ward) => {
-        const newLocationErrors = { ...locationErrors };
-        newLocationErrors[index] = {
-            subcounty: subcounty ? '' : 'Subcounty is required',
-            ward: ward ? '' : 'Ward is required',
-        };
-
-        setLocationErrors(newLocationErrors);
-    };
-
 
     const handleSubmit = (event) => {
         event.preventDefault();
