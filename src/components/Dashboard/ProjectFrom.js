@@ -92,13 +92,11 @@ export default function ProjectForm() {
     let updatedLocations = [...formData.locations];
 
     if (key === 'subcounty') {
-        // Case: 'All Subcounties' selected
         if (value === 'all') {
             updatedLocations = Object.entries(subCountyWards).flatMap(([subcounty, wards]) =>
                 wards.map(ward => ({ subcounty, ward }))
             );
         } else {
-            // Case: Specific subcounty selected, add all related wards
             const relatedWards = subCountyWards[value];
             updatedLocations.splice(index, 1, ...relatedWards.map(ward => ({ subcounty: value, ward })));
         }
@@ -168,7 +166,6 @@ export default function ProjectForm() {
             user_id: user.id
 
         };
-        // console.log('Form data:', formData);
         const accessToken = localStorage.getItem('accessToken');
         fetch(`${config.backendURL}/create_form`, {
             method: 'POST',
@@ -185,7 +182,7 @@ export default function ProjectForm() {
                 return response.json();
             })
             .then(data => {
-                if (data.error || data.errorMessage) { // Replace with your API's error response format
+                if (data.error || data.errorMessage) { 
                     throw new Error(data.errorMessage || 'Unknown error occurred');
                 }   
                 console.log("Successfully submitted", data);
