@@ -12,7 +12,8 @@ import {
   Nav,
   Container,
   Media,
-  Badge
+  Badge,
+  Alert
 } from "reactstrap";
 import { useAuth } from "context/AuthContext";
 import NotificationModal from "./NotificationModal";
@@ -23,6 +24,7 @@ const AdminNavbar = (props) => {
   const [modal, setModal] = useState(false);
   const { logout, user } = useAuth()
   const [notifications, setNotifications] = useState([]);
+  const [defaultPass,setDefaultPass] = useState();
   const [readNotifications, setReadNotifications] = useState(new Set(JSON.parse(localStorage.getItem('readNotifications') || '[]')));
   const accessToken = localStorage.getItem('accessToken');
   useEffect(() => {
@@ -42,6 +44,33 @@ const AdminNavbar = (props) => {
       });
   }, []);
   const unreadCount = notifications.filter(notification => !readNotifications.has(notification.id)).length;
+ 
+
+
+    const defaultPassCheck = () => {
+      fetch(`${config.backendURL}/check_default_user_password`, {
+        method: 'GET', // Removed the extra space after 'GET'
+        headers: { 'Authorization': `Bearer ${accessToken}` }
+      })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+      })
+      .then(data => {
+        
+        setDefaultPass(data);
+      })
+      .catch(error => {
+        console.error("An error occurred:", error);
+      });
+}
+
+  useEffect(() => {
+    defaultPassCheck()
+  },[])
+
 
   const markNotificationsAsRead = () => {
     fetch(`${config.backendURL}/mark_notifications_read`,{
@@ -59,6 +88,7 @@ const AdminNavbar = (props) => {
     })
     .catch( error => console.error("an error occure",error));
   };
+  console.log(defaultPass)
  const toggle = () => {
     if(!modal){
       markNotificationsAsRead();
@@ -73,7 +103,14 @@ const AdminNavbar = (props) => {
             className="h4 mb-0 text-white text-uppercase d-none d-lg-inline-block"
             to="/"
           >
-            <h6 style={{ fontSize: '0.9em', color: '#FFFF' }}> Mombasa county service delivery unit</h6>
+            <div>
+            <h6 style={{ fontSize: '0.9em', color: '#FFFF' }}> Mombasa county service delivery units</h6>
+                {defaultPass && defaultPass.is_default_password  &&
+                  <Alert color="danger">
+                    Your password is the default password. Please change it for security reasons.
+                  </Alert>
+              }
+            </div>
           </Link>
           <div className="navbar-search navbar-search-dark form-inline mr-3 d-none d-md-flex ml-lg-auto">
             <div onClick={toggle} style={{ cursor: 'pointer', position: 'relative' }}>
