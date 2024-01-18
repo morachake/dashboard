@@ -197,46 +197,6 @@ export default function ProjectTable() {
                   {renderListItems(recommendationsList)}
                 </ListGroup>
               </Card>
-
-              <CardHeader>
-                <div style={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center' }}>
-                  <div>
-                    {
-                      data.before_images && (
-                        <>
-                          <h5>Previous </h5>
-                          <Card style={{ width: '18rem', marginBottom: '1rem' }}>
-                            <img src={data.before_images} alt={data.project_name} style={{ width: '100%', height: 'auto' }} />
-                          </Card>
-                        </>
-                      )
-                    }
-
-                  </div>
-                  <div>
-                    {
-                      data.after_images && (
-                        <>
-                          <h5>Present</h5>
-
-                          <Card style={{ width: '18rem', marginBottom: '1rem' }}>
-                            <CardImg
-                              top
-                              style={{ width: '100%', height: 'auto' }}
-                              src={data.after_images}
-                              alt={data.project_name}
-                            />
-                          </Card>
-
-                        </>
-
-                      )
-
-                    }
-
-                  </div>
-                </div>
-              </CardHeader>
             </Col>
           </Row>
         </CardBody>
