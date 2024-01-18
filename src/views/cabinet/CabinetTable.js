@@ -195,7 +195,7 @@ export default function CaninetTable() {
                 </ListGroup>
               </Card>
 
-              <CardHeader>
+              {/* <Card>
                 <div style={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center' }}>
                   <div>
                     {
@@ -233,7 +233,7 @@ export default function CaninetTable() {
 
                   </div>
                 </div>
-              </CardHeader>
+              </Card> */}
             </Col>
           </Row>
         </CardBody>
