@@ -1,7 +1,7 @@
 import React from 'react';
 import { Container, Row, Col, Input, FormGroup, Label } from "reactstrap";
 
-const Header = ({ onSectorChange, onLocationChange,onWardChange, sectors, locations,wards }) => {
+const Header = ({ onSectorChange, onLocationChange,onWardChange, sectors, locations,wards,onTypeChange }) => {
 
 
   return (
@@ -75,10 +75,11 @@ const Header = ({ onSectorChange, onLocationChange,onWardChange, sectors, locati
                     id="locationSelect"
                     name="select"
                     type="select"
-                    onChange={onLocationChange}
+                    onChange={onTypeChange}
                   >
-                    <option value="">Select</option>
-                   
+                    <option value="">All</option>
+                     <option value="project">Project</option>
+                      <option value="program">Program</option>
                   </Input>
                 </FormGroup>
               </Col>

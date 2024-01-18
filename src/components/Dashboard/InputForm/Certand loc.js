@@ -1,5 +1,6 @@
-import ImageUpload from 'components/Reusable/ImageUpload';
-import { Row, Col, Input, FormGroup, Card, Label, Button, CardBody, CardHeader ,subCountyWards} from 'reactstrap';
+
+import { ListBox } from 'primereact/listbox';
+import { Row, Col, Input, FormGroup, Card, Label, Button, CardBody, CardHeader } from 'reactstrap';
 export const Certandloc = ({
     handleImageUpload,
     formData,
@@ -12,7 +13,8 @@ export const Certandloc = ({
     handleLocationChange,
     locationErrors,
     wards,
-    removeLocation
+    removeLocation,
+    subCountyWards
 }) => {
     return (
         <div>
@@ -88,9 +90,9 @@ export const Certandloc = ({
                 </CardHeader>
                     
                 <CardBody>
-
-                    {formData.locations.map((location, index) => (
-                        <Row lg={4} md={6} xs={12} key={index} style={{alignItems:'center'}}>
+                   {formData.locations.map((location, index) => (
+                       <Row lg={4} md={6} xs={12} key={index} style={{ alignItems: 'center' }}>
+                            <div style={{ maxHeight: '400px', overflowX: 'auto' }}>
                             <Col md={6} lg={4}>
                                 <Label for={`subcounty-${index}`}>Sub-County</Label>
                                 <Input
@@ -98,12 +100,10 @@ export const Certandloc = ({
                                     name={`subcounty-${index}`}
                                     type="select"
                                     value={location.subcounty}
-                                    onChange={(e) => {
-                                        handleLocationChange(index, 'subcounty', e.target.value);
-                                        validateLocation(index, e.target.value, location.ward);
-                                    }}
+                                    onChange={(e) => handleLocationChange(index, 'subcounty', e.target.value)}
                                 >
                                     <option value="">Select Sub-County</option>
+                                    <option value="all">All</option>
                                     <option value="Mvita">Mvita</option>
                                     <option value="Likoni">Likoni</option>
                                     <option value="Changamwe">Changamwe</option>
@@ -117,64 +117,36 @@ export const Certandloc = ({
                             </Col>
                             <Col md={6} lg={4}>
                                 <Label for={`ward-${index}`}>Ward</Label>
-                                        {/* <Input
-                                            id={`ward-${index}`}
-                                            name={`ward-${index}`}
-                                            type="select"
-                                            value={location.ward}
-                                            onChange={(e) => handleLocationChange(index, 'ward', e.target.value)}
-                                        >
-                                            <option value="">Select Ward</option>
-                                            {location.subcounty && subCountyWards[location.subcounty].map((ward, wardIndex) => (
-                                                <option key={wardIndex} value={ward}>
-                                                    {ward}
-                                                </option>
-                                            ))}
-                                        </Input> */}
-
+                                <Input
+                                    id={`ward-${index}`}
+                                    name={`ward-${index}`}
+                                    type="select"
+                                    value={location.ward}
+                                    disabled={location.subcounty === 'all'}  // Disable ward input if 'all' is selected
+                                    onChange={(e) => handleLocationChange(index, 'ward', e.target.value)}
+                                >
+                                    <option value="">Select Ward</option>
+                                    {location.subcounty && location.subcounty !== 'all' && 
+                                        subCountyWards[location.subcounty].map((ward, wardIndex) => (
+                                            <option key={wardIndex} value={ward}>{ward}</option>
+                                    ))}
+                                </Input>
                                 {locationErrors[index]?.ward && (
                                     <div className="text-danger">{locationErrors[index].ward}</div>
                                 )}
                             </Col>
                             {index > 0 && (
                                 <Col md={6} lg={4} style={{marginTop:30}}>
-                                <Button color="danger" onClick={() => removeLocation(index)}>
-                                    Remove
-                                </Button>
-                            </Col>
+                                    <Button color="danger" onClick={() => removeLocation(index)}>
+                                        Remove
+                                    </Button>
+                                </Col>
                             )}
-
+                        </div>
                         </Row>
                     ))}
                 </CardBody>
             </Card>
-            {/* <Card
-                body
-                className="my-2"
-            >
-                <Row lg={4} md={6} xs={12}>
-                <Col md={6} lg={6}>
-                    <Card>
-                        <CardHeader>
-                            <Label for="before_images_url">Previous Images</Label>
-                        </CardHeader>
-                        <CardBody>
-                              <ImageUpload onImageUpload={(url) => handleImageUpload(url, 'before_images_url')} />
-                        </CardBody>
-                    </Card>
-                </Col>
-                <Col md={6} lg={6}>
-                    <Card>
-                        <CardHeader>
-                            <Label for="after_images_url">Current Images</Label>
-                        </CardHeader>
-                        <CardBody>
-                              <ImageUpload onImageUpload={(url) => handleImageUpload(url, 'after_images_url')} />
-                        </CardBody>
-                    </Card>
-                </Col>       
-            </Row>
-            </Card> */}
         </div>
     )
 }

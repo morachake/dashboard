@@ -64,10 +64,10 @@ export const ProjectDetailsForm = ({ formData, handleInputChange, handleValidati
       />
        <ValidatedInput
         label="Project Finacier"
-        name="Finencier"
+        name="financier"
         type="text"
-        // value={formData.description}
-        // onChange={handleInputChange}
+        value={formData.financier}
+        onChange={handleInputChange}
         // validator={(value) => !value ? 'Required' : ''}
         // onValidationStateChange={handleValidationStateChange}
         // error={formErrors.description}

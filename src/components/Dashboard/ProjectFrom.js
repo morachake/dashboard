@@ -18,10 +18,11 @@ const subCountyWards = {
     Jomvu: ["Jomvu Kuu", "Magongo", "Mikindini"]
 };
 const initialFormData = {
-    isProject: true,
+    is_project: true,
     project_name: '',
     description: '',
     contractor_details: '',
+    financier:'',
     status: '',
     project_status_percentage: '',
     remarks: '',
@@ -88,23 +89,26 @@ export default function ProjectForm() {
     //     }
     //     setFormData({...formData , locations:updatedLocations});
     // }
-    const handleLocationChange = (index, key, value) => {
-    let updatedLocations = [...formData.locations];
+        const handleLocationChange = (index, key, value) => {
+            let updatedLocations = [...formData.locations];
 
-    if (key === 'subcounty') {
-        if (value === 'all') {
-            updatedLocations = Object.entries(subCountyWards).flatMap(([subcounty, wards]) =>
-                wards.map(ward => ({ subcounty, ward }))
-            );
-        } else {
-            const relatedWards = subCountyWards[value];
-            updatedLocations.splice(index, 1, ...relatedWards.map(ward => ({ subcounty: value, ward })));
-        }
-    } else {
-        updatedLocations[index][key] = value;
-    }
-    setFormData({ ...formData, locations: updatedLocations });
-};
+            if (key === 'subcounty') {
+                if (value === 'all') {
+                    // Create an array with every subcounty and its wards
+                    updatedLocations = Object.entries(subCountyWards).flatMap(([subcounty, wards]) => {
+                        return wards.map(ward => ({ subcounty, ward }));
+                    });
+                } else {
+                    // If a specific subcounty is selected, update only that entry
+                    const relatedWards = subCountyWards[value];
+                    updatedLocations[index] = { subcounty: value, ward: relatedWards[0] };
+                }
+            } else {
+                updatedLocations[index][key] = value;
+            }
+            setFormData({ ...formData, locations: updatedLocations });
+        };
+
 
 
     const validateLocation = (index, subcounty, ward) => {

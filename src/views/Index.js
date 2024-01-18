@@ -17,7 +17,7 @@ const Index = () => {
   const [uniqueSectors, setUniqueSectors] = useState([]);
   const [uniqueSubcounties, setUniqueSubcounties] = useState([]);
   const [uniqueWards, setUniqueWards] = useState([]);
-
+  const [typeFilter,setTypeFilter] = useState('');
   useEffect(() => {
     const accessToken = localStorage.getItem('accessToken');
     fetch(`${config.backendURL}/forms`, {
@@ -28,7 +28,6 @@ const Index = () => {
     })
       .then(response => response.json())
       .then(data => {
-        console.log(data)
         setProjects(data);
         setFilteredProjects(data);
         const allLocations = data.flatMap(project => project.locations)
@@ -46,6 +45,7 @@ const Index = () => {
     }
   }, []);
 
+ useEffect(() => {
   const filterProjects = () => {
     let result = projects;
 
@@ -53,22 +53,21 @@ const Index = () => {
       const matchesSector = sectorFilter ? project.sector === sectorFilter : true;
       const matchesSubcounty = subcountyFilter ? project.locations.some(location => location.subcounty === subcountyFilter) : true;
       const matchesWard = wardFilter ? project.locations.some(location => location.ward === wardFilter) : true;
-
-      return matchesSector && matchesSubcounty && matchesWard;
+      const matchesType  = typeFilter ? project.is_project === (typeFilter === 'project') : true
+      return matchesSector && matchesSubcounty && matchesWard && matchesType;
     });
 
     setFilteredProjects(result);
   };
-
-  useEffect(() => {
-    filterProjects();
-  }, [sectorFilter, subcountyFilter, wardFilter, projects]);
+  }, [sectorFilter, subcountyFilter, wardFilter, projects,typeFilter]);
 
   const handleSectorChange = (e) => {
     setSectorFilter(e.target.value);
   };
 
-
+  const handleTypeChange = (e) => {
+    setTypeFilter(e.target.value);
+  }
 
 
 
@@ -95,6 +94,7 @@ const Index = () => {
           onSectorChange={handleSectorChange}
           onLocationChange={handleSubcountyChange}
           onWardChange={handleWardChange}
+          onTypeChange={handleTypeChange}
           sectors={uniqueSectors}
           locations={uniqueSubcounties}
           wards={uniqueWards}
