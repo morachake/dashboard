@@ -31,7 +31,6 @@ export default function ProgramForm() {
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        console.log(formData);
         if (isFormValid()) {
             setIsSubmitting(true);
             saveData();
@@ -53,7 +52,6 @@ export default function ProgramForm() {
             user_id: user.id
 
         };
-        // console.log('Form data:', formData);
         const accessToken = localStorage.getItem('accessToken');
         fetch(`${config.backendURL}/create_form`, {
             method: 'POST',
@@ -69,8 +67,7 @@ export default function ProgramForm() {
                 }
                 return response.json();
             })
-            .then(data => {
-                console.log("Successfully submitted", data);               
+            .then(data => {             
                 clearForm()
             })
             .catch(err => {

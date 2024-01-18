@@ -88,7 +88,6 @@ const AdminNavbar = (props) => {
     })
     .catch( error => console.error("an error occure",error));
   };
-  console.log(defaultPass)
  const toggle = () => {
     if(!modal){
       markNotificationsAsRead();

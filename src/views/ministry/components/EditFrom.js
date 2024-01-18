@@ -19,7 +19,6 @@ import {
 function EditForm({ toggle, modal, project }) {
   const [currentPage ,setCurrentPage] = useState(1)
   const totalPages = 3
-  console.log(project)
   const [formData,setFormData] = useState({
     projectName:'',
     contractorDetails:'',
@@ -52,10 +51,8 @@ function EditForm({ toggle, modal, project }) {
       })
     }
   },[project])
-// console.log("here is your projetc",project.certificates)
   const handleSubmit = (e) =>{
     e.preventDefault();
-    console.log("dtata submittef",formData)
     const accessToken = localStorage.getItem('accessToken')
      fetch(`${config.backendURL}/update_form`, {
       method : 'POST' ,
@@ -72,7 +69,6 @@ function EditForm({ toggle, modal, project }) {
       return response.json()
     })
     .then((response) => {
-      console.log("Successfully",response)
       toggle();
     })
     .catch((err) => {
@@ -83,7 +79,6 @@ function EditForm({ toggle, modal, project }) {
 
 const handleChange = (e, index, type) => {
   const { name, value } = e.target;
-   console.log("Handling change for:", name, value);
   // if (type === 'location') {
   //   const updatedLocations = [...formData.locations];
   //   updatedLocations[index] = { ...updatedLocations[index], [name]: value };
@@ -100,7 +95,6 @@ const handleChange = (e, index, type) => {
 
   
 useEffect(()=>{
-  console.log("current formdata loaded",formData)
 })
 
   const goToNextPage = () =>{

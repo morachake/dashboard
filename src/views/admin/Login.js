@@ -50,7 +50,6 @@ const Login = () => {
     }
   
   };
-  console.log("an arror occured: ",error);
   return (
     <>
       <Col lg="5" md="7">

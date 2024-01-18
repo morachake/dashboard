@@ -189,7 +189,6 @@ export default function ProjectForm() {
                 if (data.error || data.errorMessage) { 
                     throw new Error(data.errorMessage || 'Unknown error occurred');
                 }   
-                console.log("Successfully submitted", data);
                 setModalContent({ title: 'Success', message: 'Form submitted successfully!', type: 'success' });
                 setShowModal(true);
                 clearForm()
