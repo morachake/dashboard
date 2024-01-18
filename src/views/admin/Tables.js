@@ -135,25 +135,24 @@ export default function ProjectTable() {
         return <h5>No certificate data available.</h5>;
       }
       return (
-        <Card>
-          <Table>
-            <thead>
-              <tr>
-                <th>Certificate Number</th>
-                <th>Amount Certified</th>
+       <Card>
+        <Table>
+          <thead>
+            <tr>
+              <th>Certificate Number</th>
+              <th>Amount Certified</th>
+            </tr>
+          </thead>
+          <tbody className={certificates.length > 5 ? 'scrollable-tbody' : ''}>
+            {certificates.map((cert, index) => (
+              <tr key={index}>
+                <td>{cert.certificate_number}</td>
+                <td>{formatCurrency(cert.amount_certified)}</td>
               </tr>
-            </thead>
-            <tbody>
-              {certificates.map((cert, index) => (
-                <tr key={index}>
-                  <td>{cert.certificate_number}</td>
-                  <td>{formatCurrency(cert.amount_certified)}</td>
-                </tr>
-              ))}
-            </tbody>
-          </Table>
-        </Card>
-
+            ))}
+          </tbody>
+        </Table>
+      </Card>
       );
     };
 

@@ -209,3 +209,17 @@
 .center-text {
   text-align: center !important;
 }
+.scrollable-tbody tbody {
+    display: block;
+    max-height: 400px; /* Adjust based on your needs */
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+.scrollable-tbody thead, .scrollable-tbody tbody tr {
+    display: table;
+    width: 100%;
+    table-layout: fixed;
+}
+.scrollable-tbody thead {
+    width: calc(100% - 1em); /* scrollbar is average 1em/16px width, adjust it as needed */
+}

@@ -35,8 +35,8 @@ const adminRoutes = [
     layout: "/admin",
   },
   {
-    path: "/tables",
-    name: "Tables",
+    path: "/projects",
+    name: "Projects",
     // icon: "ni ni-bullet-list-67 text-red",
     component: <Tables />,
     layout: "/admin",
@@ -74,8 +74,8 @@ const executiveRoutes = [
     layout: "/executive",
   },
   {
-    path: "/tables",
-    name: "Tables",
+    path: "/projects",
+    name: "Projects",
     //icon: "ni ni-bullet-list-67 text-red",
     component: <Tables />,
     layout: "/executive",
@@ -112,8 +112,8 @@ const cabinetRoutes = [
     layout: "/cabinet",
   },
   {
-    path: "/tables",
-    name: "Tables",
+    path: "/projects",
+    name: "Projects",
     // icon: "ni ni-bullet-list-67 text-red",
     component: <CabinetTable />,
     layout: "/cabinet",
@@ -157,8 +157,8 @@ const ministryRoutes = [
     layout: "/ministry",
   },
   {
-    path: "/tables",
-    name: "Tables",
+    path: "/projects",
+    name: "projects",
     // icon: "ni ni-bullet-list-67 text-red",
     component: <MinTable />,
     layout: "/ministry",
