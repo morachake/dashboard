@@ -92,7 +92,7 @@ export const Certandloc = ({
                 <CardBody>
                    {formData.locations.map((location, index) => (
                        <Row lg={4} md={6} xs={12} key={index} style={{ alignItems: 'center' }}>
-                            <div style={{ maxHeight: '400px', overflowX: 'auto' }}>
+                            {/* <div style={{ maxHeight: '400px', overflowX: 'auto' }}> */}
                             <Col md={6} lg={4}>
                                 <Label for={`subcounty-${index}`}>Sub-County</Label>
                                 <Input
@@ -142,7 +142,7 @@ export const Certandloc = ({
                                     </Button>
                                 </Col>
                             )}
-                        </div>
+                        {/* </div> */}
                         </Row>
                     ))}
                 </CardBody>
