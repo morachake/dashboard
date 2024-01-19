@@ -223,3 +223,31 @@
 .scrollable-tbody thead {
     width: calc(100% - 1em); /* scrollbar is average 1em/16px width, adjust it as needed */
 }
+
+.my-form-row {
+  padding: 10px;
+  background-color: #f8f9fe;
+  border-radius: 8px;
+  margin-bottom: 15px;
+}
+
+.custom-text-input {
+  border-radius: 5px;
+}
+
+.custom-file-upload {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  width: 70px;
+}
+
+.upload-icon {
+  font-size: 25px; /* Increase font size */
+  color: #FFFF; /* Set color */
+}
+
+.custom-send-button {
+  width: 90%;
+}

@@ -167,47 +167,35 @@ const addRemark = (formId, remarkText) => {
 
 
                 {activeChat && (
-                  <Row form className="align-items-center">
-                      <Col md="6">
-                        <Input
-                          type="text"
-                          value={message}
-                          onChange={(e) => setMessage(e.target.value)}
-                          placeholder={`Message ${activeChat.name}...`}
+                  <Row form className="align-items-center my-form-row">
+                    <Col md="7">
+                      <Input
+                        type="text"
+                        value={message}
+                        onChange={(e) => setMessage(e.target.value)}
+                        placeholder={`Message ${activeChat.name}...`}
+                        className="custom-text-input"
+                      />
+                    </Col>
+                    <Col md="2">
+                      <label htmlFor="pdfUpload" className="custom-file-upload btn btn-primary btn-sm">
+                        <i className="ni ni-cloud-upload-96 upload-icon" />
+                        <input
+                          type="file"
+                          id="pdfUpload"
+                          name="pdfUpload"
+                          accept=".pdf"
+                          style={{ display: 'none' }}
+                          onChange={(e) => handlePdfUpload(e.target.files)}
                         />
-                      </Col>
-                      <Col md="2">
-                        <label htmlFor="imageUpload" className="btn btn-primary btn-sm">
-                          <FontAwesomeIcon icon="fa-solid fa-paperclip" style={{ color: "#FFD43B", fontSize: "16px" }} />
-                          <input
-                            type="file"
-                            id="imageUpload"
-                            name="imageUpload"
-                            accept=".png, .jpg, .jpeg"
-                            style={{ display: 'none' }}
-                            onChange={(e) => handleImageUpload(e.target.files)}
-                          />
-                        </label>
-                      </Col>
-                      <Col md="2">
-                        <label htmlFor="pdfUpload" className="btn btn-primary btn-sm">
-                          <FontAwesomeIcon icon="fa-solid fa-paperclip" style={{ fontSize: "16px" }} />
-                          <input
-                            type="file"
-                            id="pdfUpload"
-                            name="pdfUpload"
-                            accept=".pdf"
-                            style={{ display: 'none' }}
-                            onChange={(e) => handlePdfUpload(e.target.files)}
-                          />
-                        </label>
-                      </Col>
-                      <Col md="1">
-                        <Button color="primary" size="sm" onClick={handleSendMessage}>
-                          Send
-                        </Button>
-                      </Col>
-                </Row>
+                      </label>
+                    </Col>
+                    <Col md="3">
+                      <Button color="primary" size="sm" onClick={handleSendMessage} className="custom-send-button">
+                        Send
+                      </Button>
+                    </Col>
+                  </Row>
                 )}
               </CardBody>
             </Card>
