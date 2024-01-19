@@ -172,7 +172,8 @@ export default function ProjectTable() {
               <p><h4>Description:</h4> {data.description}</p>
               <p><h4>Contractor Details:</h4> {data.contractor_details}</p>
               <p><h4>Contract Sum:</h4> {formattedContractSum}</p>
-              <p><h4>Status:</h4> {data.financier}</p>
+                <p><h4>Financier:</h4> {data.financier}</p>
+              {/* <p><h4>Status:</h4> {data.status}</p> */}
               <p><h4>Completion Percentage :</h4> {data.project_status_percentage}</p>
               {/* <p><h4>Starting date:</h4> {formatReadableDate(data.start_date)}</p> */}
               {/* <p><h4>Completion Date:</h4> {formatReadableDate(data.end_date)}</p> */}
