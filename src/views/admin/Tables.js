@@ -105,56 +105,60 @@ export default function ProjectTable() {
     // const certificatesList = data.certificates.map(cert => `${cert.certificate_number}: ${cert.amount_certified}`);
     // const locationList = data.locations.map(loc => `${loc.subcounty}, ${loc.ward}`);
 
-    const renderLocation = (locations) => {
-      if (!locations || locations.length === 0) {
-        return <h5>No location data available.</h5>;
-      }
-      return (
-        <Card>
-          <Table>
-            <thead>
-              <tr>
-                <th scope='row'>Subcounty</th>
-                <th>Ward</th>
-              </tr>
-            </thead>
-            <tbody>
-              {locations.map((location, index) => (
-                <tr key={index}>
-                  <td>{location.subcounty}</td>
-                  <td>{location.ward}</td>
-                </tr>
-              ))}
-            </tbody>
-          </Table>
-        </Card>
-      );
-    };
-    const renderCertificates = (certificates) => {
-      if (!certificates || certificates.length === 0) {
-        return <h5>No certificate data available.</h5>;
-      }
-      return (
-       <Card>
-        <Table>
-          <thead>
-            <tr>
-              <th>Certificate Number</th>
-              <th>Amount Certified</th>
-            </tr>
-          </thead>
-          <tbody className={certificates.length > 5 ? 'scrollable-tbody' : ''}>
-            {certificates.map((cert, index) => (
-              <tr key={index}>
-                <td>{cert.certificate_number}</td>
-                <td>{formatCurrency(cert.amount_certified)}</td>
-              </tr>
-            ))}
-          </tbody>
-        </Table>
-      </Card>
-      );
-    };
+   const renderLocation = (locations) => {
+        if (!locations || locations.length === 0) {
+          return <h5>No location data available.</h5>;
+        }
+        return (
+          <Card>
+            <div className="scrollable-table">
+              <Table>
+                <thead>
+                  <tr>
+                    <th scope='row'>Subcounty</th>
+                    <th>Ward</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {locations.map((location, index) => (
+                    <tr key={index}>
+                      <td>{location.subcounty}</td>
+                      <td>{location.ward}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </Table>
+            </div>
+          </Card>
+        );
+      };
+      const renderCertificates = (certificates) => {
+        if (!certificates || certificates.length === 0) {
+          return <h5>No certificate data available.</h5>;
+        }
+        return (
+          <Card>
+            <div className="scrollable-table">
+              <Table>
+                <thead>
+                  <tr>
+                    <th>Certificate Number</th>
+                    <th>Amount Certified</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {certificates.map((cert, index) => (
+                    <tr key={index}>
+                      <td>{cert.certificate_number}</td>
+                      <td>{formatCurrency(cert.amount_certified)}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </Table>
+            </div>
+          </Card>
+        );
+      };
 
     
     return (
@@ -168,7 +172,7 @@ export default function ProjectTable() {
               <p><h4>Description:</h4> {data.description}</p>
               <p><h4>Contractor Details:</h4> {data.contractor_details}</p>
               <p><h4>Contract Sum:</h4> {formattedContractSum}</p>
-              {/* <p><h4>Status:</h4> {data.status}</p> */}
+              <p><h4>Status:</h4> {data.financier}</p>
               <p><h4>Completion Percentage :</h4> {data.project_status_percentage}</p>
               {/* <p><h4>Starting date:</h4> {formatReadableDate(data.start_date)}</p> */}
               {/* <p><h4>Completion Date:</h4> {formatReadableDate(data.end_date)}</p> */}

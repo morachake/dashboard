@@ -251,3 +251,24 @@
 .custom-send-button {
   width: 90%;
 }
+
+
+.scrollable-table {
+  overflow-y: auto; /* Enables vertical scrolling */
+  max-height: 300px; /* Adjust the height as needed */
+}
+
+.scrollable-table table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.scrollable-table thead th {
+  position: sticky;
+  top: 0; /* Fixes the header at the top */
+  background-color: #fff; /* Background color for the header */
+}
+
+.scrollable-table tbody tr:nth-child(odd) {
+  background-color: #f2f2f2; /* Optional: Zebra-striping for rows */
+}

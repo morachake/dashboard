@@ -107,22 +107,24 @@ export default function CaninetTable() {
       }
       return (
         <Card>
-          <Table>
-            <thead>
-              <tr>
-                <th scope='row'>Subcounty</th>
-                <th>Ward</th>
-              </tr>
-            </thead>
-            <tbody>
-              {locations.map((location, index) => (
-                <tr key={index}>
-                  <td>{location.subcounty}</td>
-                  <td>{location.ward}</td>
+          <div className="scrollable-table">
+            <Table>
+              <thead>
+                <tr>
+                  <th scope='row'>Subcounty</th>
+                  <th>Ward</th>
                 </tr>
-              ))}
-            </tbody>
-          </Table>
+              </thead>
+              <tbody>
+                {locations.map((location, index) => (
+                  <tr key={index}>
+                    <td>{location.subcounty}</td>
+                    <td>{location.ward}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </Table>
+          </div>
         </Card>
       );
     };
@@ -132,24 +134,25 @@ export default function CaninetTable() {
       }
       return (
         <Card>
-          <Table>
-            <thead>
-              <tr>
-                <th>Certificate Number</th>
-                <th>Amount Certified</th>
-              </tr>
-            </thead>
-            <tbody>
-              {certificates.map((cert, index) => (
-                <tr key={index}>
-                  <td>{cert.certificate_number}</td>
-                  <td>{formatCurrency(cert.amount_certified)}</td>
+          <div className="scrollable-table">
+            <Table>
+              <thead>
+                <tr>
+                  <th>Certificate Number</th>
+                  <th>Amount Certified</th>
                 </tr>
-              ))}
-            </tbody>
-          </Table>
+              </thead>
+              <tbody>
+                {certificates.map((cert, index) => (
+                  <tr key={index}>
+                    <td>{cert.certificate_number}</td>
+                    <td>{formatCurrency(cert.amount_certified)}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </Table>
+          </div>
         </Card>
-
       );
     };
 
