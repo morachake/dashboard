@@ -3,7 +3,6 @@ import UserHeader from 'components/Headers/UserHeader';
 import { Container, Row, Col, Card, CardBody, Input, Button, ListGroup, ListGroupItem } from "reactstrap";
 import { useAuth } from 'context/AuthContext';
 import config from 'config';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 export default function Messaging() {
   const { user } = useAuth();
@@ -11,68 +10,69 @@ export default function Messaging() {
   const [activeChat, setActiveChat] = useState(null);
   const [projects, setProjects] = useState([]);
   const [remarks, setRemarks] = useState([]);
+  const [selectedFile, setSelectedFile] = useState(null);
 
   const accessToken = localStorage.getItem('accessToken');
-  useEffect(() => {
-    fetch(`${config.backendURL}/forms`, {
-      headers: {
-        'Authorization': `Bearer ${accessToken}`
-      }
-    })
-    .then(response => response.ok ? response.json() : Promise.reject('Network response was not ok'))
-    .then(data => setProjects(data))
-    .catch(error => console.error('Error fetching projects:', error));
 
+  useEffect(() => {
+    fetchProjects();
     fetchRemarks();
   }, []);
 
-  function fetchRemarks() {
-    fetch(`${config.backendURL}/get_remarks`, {
-      method: 'GET',
-      headers: {
-        'Authorization': `Bearer ${accessToken}`
-      }
+  const fetchProjects = () => {
+    fetch(`${config.backendURL}/forms`, {
+      headers: { 'Authorization': `Bearer ${accessToken}` }
     })
     .then(response => response.json())
-    .then(data => setRemarks(data)) 
+    .then(data => setProjects(data))
+    .catch(error => console.error('Error fetching projects:', error));
+  };
+
+  const fetchRemarks = () => {
+    fetch(`${config.backendURL}/get_remarks`, {
+      headers: { 'Authorization': `Bearer ${accessToken}` }
+    })
+    .then(response => response.json())
+    .then(data => setRemarks(data))
     .catch(console.error);
-  }
-
-  const handleSendMessage = () => {
-    if (activeChat && message.trim()) {
-      addRemark(activeChat.id, message);
-      setMessage('');
-    }
-  };
-const addRemark = (formId, remarkText) => {
-  const remarkData = {
-    form_id: formId,
-    remark: remarkText,
-    user_id: user.id,
-    // Assuming you need a timestamp for the new remark
-    timestamp: new Date().toISOString()
   };
 
-  // Optimistically update the active chat with the new message
-  if (activeChat && activeChat.id === formId) {
-    const newMessage = {
-      ...remarkData,
-      user: user.id,
-      text: remarkText
+const handleSendMessage = () => {
+  if (activeChat && message.trim()) {
+    // Prepare the new remark
+    const newRemark = {
+      form_id: activeChat.id,
+      text: message,
+      // Additional fields based on your remark structure (e.g., user details)
+      user_id: user.id,
+      timestamp: new Date().toISOString(),
+      file_url: selectedFile ? URL.createObjectURL(selectedFile) : null
     };
+
+    // Optimistically update the chat with the new remark
     setActiveChat(prevActiveChat => ({
       ...prevActiveChat,
-      messages: [...prevActiveChat.messages, newMessage]
+      messages: [...prevActiveChat.messages, newRemark]
     }));
-  }
 
+    // Send the remark to the server
+    addRemark(activeChat.id, message, selectedFile);
+    setMessage('');
+    setSelectedFile(null);
+  }
+};
+
+const addRemark = (formId, remarkText, file) => {
+  const formData = new FormData();
+  formData.append('form_id', formId);
+  formData.append('remark', remarkText);
+  if (file) {
+    formData.append('file', file);
+  }
   fetch(`${config.backendURL}/remarks`, {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${accessToken}`
-    },
-    body: JSON.stringify(remarkData),
+    headers: { 'Authorization': `Bearer ${accessToken}` },
+    body: formData
   })
   .then(response => {
     if (!response.ok) {
@@ -80,15 +80,25 @@ const addRemark = (formId, remarkText) => {
     }
     return response.json();
   })
-  .then(newRemark => {
-    setRemarks(prevRemarks => [...prevRemarks, newRemark]);
+  .then(newRemarkFromServer => {
+    setActiveChat(prevActiveChat => {
+      const updatedMessages = prevActiveChat.messages.map(msg =>
+        msg.timestamp === newRemarkFromServer.timestamp ? newRemarkFromServer : msg
+      );
+      return { ...prevActiveChat, messages: updatedMessages };
+    });
   })
   .catch(error => {
     console.error('Error sending message:', error);
-    // Handle error by possibly removing the optimistic update
   });
 };
 
+  const handleFileUpload = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setSelectedFile(file);
+    }
+  };
 
   const selectChat = (projectId) => {
     const selectedProject = projects.find(project => project.id === projectId);
@@ -99,25 +109,15 @@ const addRemark = (formId, remarkText) => {
       messages: projectRemarks
     });
   };
-  const handleImageUpload = () => {};
-  const handlePdfUpload =() =>{}
-  const userContainerStyle = {
-     height: '400px',
-    overflowY: 'scroll'
-  };
 
-  const messageContainerStyle = {
-   height: '500px',
-   overflowY: 'scroll'
-  };
   return (
     <>
       <UserHeader />
       <Container className="mt--7" fluid>
         <Row>
-          <Col xl="3" lg="4" md="4" className="mb-4 mb-xl-0">
+          <Col xl="3" lg="4" md="4">
             <Card className="bg-secondary shadow">
-              <CardBody className="px-0 user-container" style={userContainerStyle}>
+              <CardBody className="px-0 user-container" style={{ height: '400px', overflowY: 'scroll' }}>
                 <ListGroup flush>
                   <h2 className="centered-heading">Available Projects</h2>
                   {projects.map((project) => (
@@ -138,33 +138,34 @@ const addRemark = (formId, remarkText) => {
           <Col xl="9" lg="8" md="8">
             <Card className="shadow">
               <CardBody>
-               <div className="chat-box message-container" style={messageContainerStyle}>
-                    {activeChat && activeChat.messages.length > 0 ? (
-                      activeChat.messages.map((remark, index) => (
-                       <div key={index} className={`message ${remark.user_id === user.id ? 'sender-message' : 'receiver-message'}`}>
-                          {remark.user_id !== user.id &&
-                           <span className='username'>{remark.user}</span>
-                          }
+                <div className="chat-box message-container" style={{ height: '500px', overflowY: 'scroll' }}>
+                  {activeChat && activeChat.messages.length > 0 ? (
+                    activeChat.messages.map((remark, index) => (
+                      <div key={index} className={`message ${remark.user_id === user.id ? 'sender-message' : 'receiver-message'}`}>
+                        {remark.user_id !== user.id &&
+                          <span className='username'>{remark.user}</span>
+                        }
+                        {/* {remark.file_url && (
                           <Card>
                             <CardBody>
                               <img
                                 src={remark.file_url}
                                 alt={remark.text}
-                                style={{ width: '200px', height: '150px' }} 
+                                style={{ width: '200px', height: '150px' }}
                               />
                             </CardBody>
                           </Card>
-                          <p className='message-text'>{remark.text}</p>
-                          <small className='timestamp'>{new Date(remark.timestamp).toLocaleString()}</small>
-                        </div>
-                      ))
-                    ) : (
-                      <div className="no-messages">
-                        <p>Please select a project to add a remark</p>
+                        )} */}
+                        <p className='message-text'>{remark.text}</p>
+                        <small className='timestamp'>{new Date(remark.timestamp).toLocaleString()}</small>
                       </div>
-                    )}
-                  </div>
-
+                    ))
+                  ) : (
+                    <div className="no-messages">
+                      <p>Please select a project to add a remark</p>
+                    </div>
+                  )}
+                </div>
 
                 {activeChat && (
                   <Row form className="align-items-center my-form-row">
@@ -178,15 +179,14 @@ const addRemark = (formId, remarkText) => {
                       />
                     </Col>
                     <Col md="2">
-                      <label htmlFor="pdfUpload" className="custom-file-upload btn btn-primary btn-sm">
+                      <label htmlFor="fileUpload" className="custom-file-upload btn btn-primary btn-sm">
                         <i className="ni ni-cloud-upload-96 upload-icon" />
                         <input
                           type="file"
-                          id="pdfUpload"
-                          name="pdfUpload"
-                          accept=".pdf"
+                          id="fileUpload"
+                          accept=".pdf, image/*"
                           style={{ display: 'none' }}
-                          onChange={(e) => handlePdfUpload(e.target.files)}
+                          // onChange={handleFileUpload}
                         />
                       </label>
                     </Col>

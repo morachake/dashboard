@@ -272,3 +272,15 @@
 .scrollable-table tbody tr:nth-child(odd) {
   background-color: #f2f2f2; /* Optional: Zebra-striping for rows */
 }
+
+
+.scrollable-card-content {
+  overflow-y: auto;
+  max-height: 300px; 
+  padding: 15px;
+}
+
+
+.scrollable-card-content > * {
+  margin-bottom: 10px; /* Space between items, adjust as needed */
+}

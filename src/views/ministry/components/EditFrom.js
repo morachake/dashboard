@@ -17,98 +17,75 @@ import {
 } from 'reactstrap';
 
 function EditForm({ toggle, modal, project }) {
-  const [currentPage ,setCurrentPage] = useState(1)
-  const totalPages = 3
-  const [formData,setFormData] = useState({
-    projectName:'',
-    contractorDetails:'',
-    contractSum:'',
-    description:'',
-    status:'',
-    startDate:'',
-    endDate:'',
-    afterImages:'',
-   // certificates:'[]',
-   // locations:'[]',
-    sectorName:'',
-    statusPercentage:'',
-  })
+  const [formData,setFormData] = useState({...project  })
   useEffect(() =>{
-    if(project){
-      setFormData({
-        form_id : project.id,
-        projectName : project.project_name || '',
-        contractorDetails : project.contractor_details || '',
-        contractSum : project.contract_sum || '',
-        description : project.description || '',
-        status: project.status || '',
-        startDate : project.startDate || '',
-        endDate : project.endDate || '',
-        afterImages: project.afterImages || '',
-       // certificates: project.certificates || [],
-       // locations: project.locations || [],
-        statusPercentage : project.project_status_percentage || '',
-      })
-    }
+      setFormData({...project })
+      console.log(project)
   },[project])
-  const handleSubmit = (e) =>{
+
+  const handleSubmit = (e) => {
     e.preventDefault();
-    const accessToken = localStorage.getItem('accessToken')
-     fetch(`${config.backendURL}/update_form`, {
-      method : 'POST' ,
+    const accessToken = localStorage.getItem('accessToken');
+
+    fetch(`${config.backendURL}/update_form`, {
+      method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization' : `Bearer ${accessToken}`
+        'Authorization': `Bearer ${accessToken}`
       },
-      body: JSON.stringify(formData)
+      body: JSON.stringify({
+        ...formData,
+        form_id: project.id
+      })
     })
-    .then((response) => { 
-      if(!response.ok){
-        throw new Error(`Could not not send update request : ${response.status}`)
+    .then(response => {
+      if (!response.ok) {
+        throw new Error(`Could not send update request: ${response.status}`);
       }
-      return response.json()
+      return response.json();
     })
-    .then((response) => {
+    .then(() => {
       toggle();
     })
-    .catch((err) => {
-      console.error("na error occures" + err)
+    .catch(err => {
+      console.error("An error occurred: " + err);
     });
-  }
+  };
 
 
-const handleChange = (e, index, type) => {
-  const { name, value } = e.target;
-  // if (type === 'location') {
-  //   const updatedLocations = [...formData.locations];
-  //   updatedLocations[index] = { ...updatedLocations[index], [name]: value };
-  //   setFormData({ ...formData, locations: updatedLocations });
-  // } else if (type === 'certificate') {
-  //   const updatedCertificates = [...formData.certificates];
-  //   updatedCertificates[index] = { ...updatedCertificates[index], [name]: value };
-  //   setFormData({ ...formData, certificates: updatedCertificates });
-  // } else {
-    setFormData({ ...formData, [name]: value });
-  // }
-};
+ const handleChange = (e, index, type) => {
+    const { name, value } = e.target;
 
+    if (type === 'location') {
+      const updatedLocations = formData.locations.map((loc, idx) => 
+        idx === index ? { ...loc, [name]: value } : loc
+      );
+      setFormData({ ...formData, locations: updatedLocations });
+    } else if (type === 'certificate') {
+      const updatedCertificates = formData.certificates.map((cert, idx) => 
+        idx === index ? { ...cert, [name]: value } : cert
+      );
+      setFormData({ ...formData, certificates: updatedCertificates });
+    } else {
+      setFormData({ ...formData, [name]: value });
+    }
+  };
+   const handleDelete = (index, type) => {
+    if (type === 'location') {
+      const filteredLocations = formData.locations.filter((_, i) => i !== index);
+      console.log(filteredLocations)
+      setFormData({ ...formData, locations: filteredLocations });
+    } else if (type === 'certificate') {
+      const filteredCertificates = formData.certificates.filter((_, i) => i !== index);
+      setFormData({ ...formData, certificates: filteredCertificates });
+    }
+  };
 
-  
-useEffect(()=>{
-})
-
-  const goToNextPage = () =>{
-    setCurrentPage(currentPage + 1)
-  }
-  const goToPreviuosPage = () =>{
-    setCurrentPage(currentPage -1)
-  }
   return (
      <Modal isOpen={modal} toggle={toggle} size='lg'>
       <ModalHeader toggle={toggle}>Edit Project: {project.projectName}</ModalHeader>
       <ModalBody>
         <Form onSubmit={handleSubmit} >
-        {/* {currentPage === 1 && ( */}
           <Card>
           <Col> 
                   <Row>
@@ -143,7 +120,6 @@ useEffect(()=>{
               </Row>
         </Col>
         </Card> 
-        {/* )} */}
          <Card>
               <FormGroup>
                   <Label for="Description">Description</Label>
@@ -154,13 +130,13 @@ useEffect(()=>{
                       <Col>
                       <FormGroup>
                           <Label for="Startdate">Start date</Label>
-                          <Input type='date' value={formData.startDate} onChange={handleChange} />
+                          <Input type='date' name="startDate" value={formData.startDate} onChange={handleChange} />
                       </FormGroup>
                       </Col>
                       <Col>
                       <FormGroup>
                           <Label for="Enddate">End date</Label>
-                          <Input type='date' value={formData.endDate} onChange={handleChange}/>
+                          <Input type='date' name="endDate" value={formData.endDate} onChange={handleChange}/>
                       </FormGroup>
                       </Col>
                       <Col>
@@ -172,10 +148,10 @@ useEffect(()=>{
                     </Row>
             </Col>
           </Card>
-       {/* {currentPage === 2 && ( */}
            <Card>
-            <CardHeader>You Project Locations</CardHeader>
-              {project.locations.map((location,index) =>(
+            <CardHeader>You Project Location</CardHeader>
+             <div className="scrollable-card-content">
+                {formData.locations.map((location,index) =>(
                 <Col key={index}>
                     <Row>
                     <Col md={6} xs={12}>
@@ -194,66 +170,57 @@ useEffect(()=>{
                           <Input 
                           type='text' 
                           value={location.ward} 
-                          onChange={(e) => handleChange(e,index,'location')}
+                           onChange={(e) => handleChange(e,index,'location')}
                           />
                         </FormGroup>
                       </Col>
                        <Col>
-                          <Button type="submit" color='danger'>Remove</Button>
+                          <Button type="submit" color='danger' onClick={() => handleDelete(index,'location')}>Remove</Button>
                       </Col>  
                 </Row>
               </Col>
           ))}
+            </div>
+            
        </Card>
-        {/* )}     */}
-      
-       {/* {currentPage === 3 && ( */}
-          <Card>
-              <CardHeader>You Current Certificates</CardHeader>
-                    {project.certificates.map((certificate,index) =>(
-                    <Col md={12} xs={12} key={index}>
-                        <Row>
-                        <Col>
-                          <FormGroup>
-                            <Label for="certno">Cert No</Label>
-                            <Input type='text'
+          <Card >
+              <CardHeader>Your Current Certificates</CardHeader>
+              <div className="scrollable-card-content">
+                {formData.certificates.map((certificate, index) => (
+                  <Col md={12} xs={12} key={index}>
+                    <Row>
+                      <Col>
+                        <FormGroup>
+                          <Label for="certno">Cert No</Label>
+                          <Input 
+                            type='text'
                             value={certificate.certificate_number} 
-                            onChange={(e) => handleChange(e,index,'certificate')}
-                            />
-                          </FormGroup>
-                        </Col>
-                        <Col>
-                            <FormGroup>
-                              <Label for="Ward">Amount</Label>
-                              <Input 
-                              type='text' 
-                              value={certificate.amount_certified} 
-                              onChange={(e) => handleChange(e,index,'certificate')}
-                              />
-                            </FormGroup>
-                        </Col>
-                        <Col>
-                          <Button type="submit" color='danger'>Remove</Button>
+                            // onChange={(e) => handleChange(e, index, 'certificate')}
+                          />
+                        </FormGroup>
+                      </Col>
+                      <Col>
+                        <FormGroup>
+                          <Label for="Ward">Amount</Label>
+                          <Input 
+                            type='text' 
+                            value={certificate.amount_certified} 
+                            // onChange={(e) => handleChange(e, index, 'certificate')}
+                          />
+                        </FormGroup>
+                      </Col>
+                      <Col>
+                        <Button type="submit" color='danger' onClick={() => handleDelete(index,'certificate')}>Remove</Button>
                       </Col>       
-                  </Row>
+                    </Row>
                   </Col>
-                  ))}
+                ))}
+              </div>
             </Card>
-        
-       {/* )} */}
        </Form>
       </ModalBody>
       <ModalFooter>
-        {/* {currentPage > 1 && totalPages &&(
-             <Button color="primary" onClick={goToPreviuosPage}>Back</Button>
-        )
-        }
-        {currentPage < totalPages && (
-             <Button color="primary" onClick={goToNextPage}>Next</Button>
-        )} */}
-        {/* {currentPage === totalPages && ( */}
           <Button color="primary" onClick={handleSubmit}>Update</Button>
-        {/* ) } */}
       </ModalFooter>
     </Modal>
   );
