@@ -145,7 +145,8 @@ const addRemark = (formId, remarkText, file) => {
                         {remark.user_id !== user.id &&
                           <span className='username'>{remark.user}</span>
                         }
-                        {/* {remark.file_url && (
+                        <>
+                         {remark.file_url && (
                           <Card>
                             <CardBody>
                               <img
@@ -155,7 +156,8 @@ const addRemark = (formId, remarkText, file) => {
                               />
                             </CardBody>
                           </Card>
-                        )} */}
+                         )}
+                        </>
                         <p className='message-text'>{remark.text}</p>
                         <small className='timestamp'>{new Date(remark.timestamp).toLocaleString()}</small>
                       </div>
@@ -186,7 +188,7 @@ const addRemark = (formId, remarkText, file) => {
                           id="fileUpload"
                           accept=".pdf, image/*"
                           style={{ display: 'none' }}
-                          // onChange={handleFileUpload}
+                          onChange={handleFileUpload}
                         />
                       </label>
                     </Col>

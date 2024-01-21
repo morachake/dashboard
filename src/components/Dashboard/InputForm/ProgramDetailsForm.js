@@ -1,11 +1,38 @@
 import ValidatedInput from 'components/Reusable/ValidatedInput';
+import config from 'config';
 import React from 'react';
 import { Row, Col, Input, Label } from 'reactstrap';
 
-export const ProgramDetailsForm = ({ formData, handleInputChange, handleValidationStateChange, formErrors, requiredValidator }) => {
+export const ProgramDetailsForm = ({ 
+  formData, 
+  handleInputChange, 
+  handleValidationStateChange, 
+  formErrors, 
+  requiredValidator,
+  programs 
+}) => {
+
+  
   return (
     <div>
       {/* Basic Program Details */}
+      <Row>
+        <Col>
+          <Label for="status">Select Program Name</Label>
+          <Input
+            id="program_id"
+            name="program_id"
+            type="select"
+            value={formData.program_id}
+            onChange={handleInputChange}
+          >
+            <option value="">Select a Program</option>
+            {programs.map(program => (
+              <option key={program.id} value={program.id} onChange={handleInputChange}>{program.department_name}</option> 
+            ))}
+          </Input>
+         </Col>
+      </Row>
       <Row lg={4} md={6} xs={12}>
         <Col md={6} lg={8}>
           <ValidatedInput
@@ -85,11 +112,11 @@ export const ProgramDetailsForm = ({ formData, handleInputChange, handleValidati
         </Col>
         <Col md={6} lg={4}>
           <ValidatedInput
-            label="Milestone"
-            id="milestone"
-            name="milestone"
+            label="Milestones"
+            id="milestones"
+            name="milestones"
             type="text"
-            value={formData.milestone}
+            value={formData.milestones}
             onChange={handleInputChange}
             onValidationStateChange={handleValidationStateChange}
           />

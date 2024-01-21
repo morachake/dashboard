@@ -1,5 +1,5 @@
 import { useAuth } from 'context/AuthContext';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Form, Button, Card, CardBody } from 'reactstrap';
 import config from 'config';
 import { ProgramDetailsForm } from './InputForm/ProgramDetailsForm';
@@ -12,21 +12,51 @@ const initialFormData ={
     contract_sum_usd:'',
     contractor_details: '',
     status: '',
+    program_id: '',
     project_status_percentage: '',
     financier: '',
     start_date: '',
     end_date: '',
-    milestone: '',
+    milestones: '',
 };
 
 export default function ProgramForm() {
     const [isSubmitting,setIsSubmitting] = useState(false)
+    const [programs,setPrograms] = useState([])
     const { user } = useAuth();
     const [formErrors, setFormErrors] = useState({});
     const [formData, setFormData] = useState({
         ...initialFormData,
         user_id: user.id
     });
+    const accessToken = localStorage.getItem('accessToken');
+    useEffect(() => {
+        const fetchPrograms = async () => {
+            try {
+                const response = await fetch(`${config.backendURL}/program`, {
+                    headers: {
+                        'content-type': 'application/json',
+                        'Authorization': `Bearer ${accessToken}`,
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const data = await response.json();
+                console.log("Fetched programs:", data);
+                setPrograms(data);
+            } catch (error) {
+                console.error("Error fetching programs:", error);
+            }
+        };
+
+        fetchPrograms();
+    }, []);
+
+  
+
     const [formValid, setFormValid] = useState({});
 
     const handleSubmit = (event) => {
@@ -52,7 +82,7 @@ export default function ProgramForm() {
             user_id: user.id
 
         };
-        const accessToken = localStorage.getItem('accessToken');
+       
         fetch(`${config.backendURL}/create_form`, {
             method: 'POST',
             body: JSON.stringify(jsonPayload),
@@ -98,6 +128,7 @@ export default function ProgramForm() {
                     requiredValidator={requiredValidator}
                     numberValidator={numberValidator}
                     formErrors={formErrors}
+                    programs={programs}
 
                 />
                 <Form onSubmit={handleSubmit}>

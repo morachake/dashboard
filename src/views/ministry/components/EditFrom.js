@@ -18,13 +18,27 @@ import {
 
 function EditForm({ toggle, modal, project }) {
   const [formData,setFormData] = useState({...project  })
-  useEffect(() =>{
-      setFormData({...project })
-      console.log(project)
-  },[project])
+const formatDate = (dateStr) => {
+  if (!dateStr) return '';
+  const date = new Date(dateStr);
+  return date.toISOString().split('T')[0];
+}
 
+  useEffect(() =>{
+      setFormData({
+        ...project,
+        // start_date: formatDate(project.start_date),
+        // end_date: formatDate(project.end_date)
+       })
+      },[project])
+      
+      console.log(project)
   const handleSubmit = (e) => {
     e.preventDefault();
+
+      console.log("Formatted start date:", formData.start_date);
+      console.log("Formatted end date:", formData.end_date);
+
     const accessToken = localStorage.getItem('accessToken');
 
     fetch(`${config.backendURL}/update_form`, {
@@ -56,6 +70,9 @@ function EditForm({ toggle, modal, project }) {
  const handleChange = (e, index, type) => {
     const { name, value } = e.target;
 
+    // if(name === 'start_date' || name === 'end_date'){
+    //   setFormData({...formData, [name]: formatDate(value)});
+    // }else 
     if (type === 'location') {
       const updatedLocations = formData.locations.map((loc, idx) => 
         idx === index ? { ...loc, [name]: value } : loc
@@ -92,13 +109,13 @@ function EditForm({ toggle, modal, project }) {
                     <Col>
                     <FormGroup>
                     <Label for="contractorDetails">Contractor Details</Label>
-                    <Input type="text" name="contractorDetails" value={formData.contractorDetails} onChange={handleChange} />
+                    <Input type="text" name="contractor_details" value={formData.contractor_details} onChange={handleChange} />
                   </FormGroup>
                     </Col>
                     <Col>
                     <FormGroup>
                       <Label for="contractSum">Contract Sum</Label>
-                      <Input type="text" name="contractSum" value={formData.contractSum} onChange={handleChange} />
+                      <Input type="text" name="contract_sum" value={formData.contract_sum} onChange={handleChange} />
                     </FormGroup> 
                     </Col>      
                   </Row>
@@ -108,13 +125,13 @@ function EditForm({ toggle, modal, project }) {
                   <Col>
                     <FormGroup>
                       <Label for="projectName">Project Name</Label>
-                      <Input type="text" name="projectName" value={formData.projectName} onChange={handleChange} />
+                      <Input type="text" name="project_name" value={formData.project_name} onChange={handleChange} />
                     </FormGroup>
                   </Col>
                   <Col>
                     <FormGroup>
                         <Label for="Status">Status</Label>
-                        <Input type='text' value={formData.status} onChange={handleChange} />
+                        <Input type='text' name='status' value={formData.status} onChange={handleChange} />
                     </FormGroup> 
                   </Col>
               </Row>
@@ -123,26 +140,26 @@ function EditForm({ toggle, modal, project }) {
          <Card>
               <FormGroup>
                   <Label for="Description">Description</Label>
-                  <Input type='textarea' name='decsription' value={formData.description} onChange={handleChange}/>
+                  <Input type='textarea' name='description' value={formData.description} onChange={handleChange}/>
               </FormGroup>
                 <Col>
                     <Row>
                       <Col>
-                      <FormGroup>
+                      {/* <FormGroup>
                           <Label for="Startdate">Start date</Label>
-                          <Input type='date' name="startDate" value={formData.startDate} onChange={handleChange} />
-                      </FormGroup>
+                          <Input type='date' name="start_date" value={formData.start_date} onChange={handleChange} />
+                      </FormGroup> */}
                       </Col>
                       <Col>
-                      <FormGroup>
+                      {/* <FormGroup>
                           <Label for="Enddate">End date</Label>
-                          <Input type='date' name="endDate" value={formData.endDate} onChange={handleChange}/>
-                      </FormGroup>
+                          <Input type='date' name="end_date" value={formData.end_date} onChange={handleChange}/>
+                      </FormGroup> */}
                       </Col>
                       <Col>
                       <FormGroup>
                           <Label for="Statuspercentage">status Percentage</Label>
-                          <Input type='text' value={formData.statusPercentage} onChange={handleChange} />
+                          <Input type='text' value={formData.project_status_percentage} onChange={handleChange} />
                         </FormGroup>
                       </Col>
                     </Row>
@@ -175,7 +192,7 @@ function EditForm({ toggle, modal, project }) {
                         </FormGroup>
                       </Col>
                        <Col>
-                          <Button type="submit" color='danger' onClick={() => handleDelete(index,'location')}>Remove</Button>
+                          <Button type="button" color='danger' onClick={() => handleDelete(index,'location')}>Remove</Button>
                       </Col>  
                 </Row>
               </Col>
@@ -195,7 +212,7 @@ function EditForm({ toggle, modal, project }) {
                           <Input 
                             type='text'
                             value={certificate.certificate_number} 
-                            // onChange={(e) => handleChange(e, index, 'certificate')}
+                            onChange={(e) => handleChange(e, index, 'certificate')}
                           />
                         </FormGroup>
                       </Col>
@@ -205,12 +222,12 @@ function EditForm({ toggle, modal, project }) {
                           <Input 
                             type='text' 
                             value={certificate.amount_certified} 
-                            // onChange={(e) => handleChange(e, index, 'certificate')}
+                            onChange={(e) => handleChange(e, index, 'certificate')}
                           />
                         </FormGroup>
                       </Col>
                       <Col>
-                        <Button type="submit" color='danger' onClick={() => handleDelete(index,'certificate')}>Remove</Button>
+                        <Button type="button" color='danger' onClick={() => handleDelete(index,'certificate')}>Remove</Button>
                       </Col>       
                     </Row>
                   </Col>
