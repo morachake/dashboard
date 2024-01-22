@@ -28,24 +28,7 @@ const Header = ({ onSectorChange, onLocationChange,onWardChange, sectors, locati
                   </Input>
                 </FormGroup>
               </Col>
-              <Col>
-                <FormGroup>
-                  <Label for="sectorSelect">
-                    Filter by sector
-                  </Label>
-                  <Input
-                    id="sectorSelect"
-                    name="select"
-                    type="select"
-                    onChange={onSectorChange}
-                  >
-                    <option value="">All Sectors</option>
-                    {Array.isArray(sectors) && sectors.map((sector, index) => (
-                      <option key={index} value={sector}>{sector}</option>
-                    ))}
-                  </Input>
-                </FormGroup>
-              </Col>
+             
               <Col>
                 <FormGroup>
                   <Label for="wardSelect">
@@ -64,9 +47,27 @@ const Header = ({ onSectorChange, onLocationChange,onWardChange, sectors, locati
                   </Input>
                 </FormGroup>
               </Col>
+               <Col>
+                <FormGroup>
+                  <Label for="sectorSelect">
+                    Filter by sector
+                  </Label>
+                  <Input
+                    id="sectorSelect"
+                    name="select"
+                    type="select"
+                    onChange={onSectorChange}
+                  >
+                    <option value="">All Sectors</option>
+                    {Array.isArray(sectors) && sectors.map((sector, index) => (
+                      <option key={index} value={sector}>{sector}</option>
+                    ))}
+                  </Input>
+                </FormGroup>
+              </Col>
             </Row>
               <Row>
-             <Col md='6' sm="8" xs="12" >
+             <Col md='12' sm="12" xs="12" >
                 <FormGroup>
                   <Label for="locationSelect">
                     Filter by Type
@@ -83,7 +84,7 @@ const Header = ({ onSectorChange, onLocationChange,onWardChange, sectors, locati
                   </Input>
                 </FormGroup>
               </Col>
-              <Col md="6" sm="6" xs="12">
+              {/* <Col md="6" sm="6" xs="12">
                 <FormGroup>
                   <Label for="sectorSelect">
                     Filter by Date
@@ -97,7 +98,7 @@ const Header = ({ onSectorChange, onLocationChange,onWardChange, sectors, locati
                    
                   </Input>
                 </FormGroup>
-              </Col>
+              </Col> */}
             </Row>
             <Row>
           </Row>

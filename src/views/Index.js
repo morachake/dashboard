@@ -56,9 +56,9 @@ const Index = () => {
       const matchesType  = typeFilter ? project.is_project === (typeFilter === 'project') : true
       return matchesSector && matchesSubcounty && matchesWard && matchesType;
     });
-
     setFilteredProjects(result);
   };
+  filterProjects()
   }, [sectorFilter, subcountyFilter, wardFilter, projects,typeFilter]);
 
   const handleSectorChange = (e) => {
@@ -112,8 +112,8 @@ const Index = () => {
 
                   <BarChart
                     data={filteredProjects}
-                    //isWardFilterApplied={wardFilter !== ''}
-                   // currentWardFilter={wardFilter}
+                    isWardFilterApplied={wardFilter !== ''}
+                   currentWardFilter={wardFilter}
                    currentFilter={{ sector: sectorFilter, subcounty: subcountyFilter, ward: wardFilter }}
                   />
 
