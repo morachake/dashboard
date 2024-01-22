@@ -130,7 +130,11 @@ const formatDate = (dateStr) => {
                   <Col>
                     <FormGroup>
                         <Label for="Status">Status</Label>
-                        <Input type='text' name='status' value={formData.status} onChange={handleChange} />
+                        <Input type='select' name='status' value={formData.status} onChange={handleChange} >
+                            <option value="Ongoing">Ongoing</option>
+                            <option value="Complete">Complete</option>
+                            <option value="Stalled">Stalled</option>
+                        </Input>
                     </FormGroup> 
                   </Col>
               </Row>
@@ -158,7 +162,7 @@ const formatDate = (dateStr) => {
                       <Col>
                       <FormGroup>
                           <Label for="Statuspercentage">status Percentage</Label>
-                          <Input type='text' value={formData.project_status_percentage} onChange={handleChange} />
+                          <Input type='number' value={formData.project_status_percentage} onChange={handleChange} />
                         </FormGroup>
                       </Col>
                     </Row>

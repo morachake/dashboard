@@ -1,5 +1,4 @@
 import ValidatedInput from 'components/Reusable/ValidatedInput';
-import config from 'config';
 import React from 'react';
 import { Row, Col, Input, Label } from 'reactstrap';
 
@@ -165,7 +164,7 @@ export const ProgramDetailsForm = ({
             label="Contractor Details"
             id="contractor_details"
             name="contractor_details"
-            type="text"  // Assuming this should be 'text' and not 'number'
+            type="text"  
             value={formData.contractor_details}
             onChange={handleInputChange}
             onValidationStateChange={handleValidationStateChange}

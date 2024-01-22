@@ -1,5 +1,5 @@
 
-import { ListBox } from 'primereact/listbox';
+import Select from 'react-select';
 import { Row, Col, Input, FormGroup, Card, Label, Button, CardBody, CardHeader } from 'reactstrap';
 export const Certandloc = ({
     handleImageUpload,
@@ -14,8 +14,13 @@ export const Certandloc = ({
     locationErrors,
     wards,
     removeLocation,
-    subCountyWards
+    subCountyWards,
+    caption,
+    
 }) => {
+
+    const subCountyOptions = Object.keys(subCountyWards).map(key => ({ value: key, label: key }));
+
     return (
         <div>
             <Card
@@ -24,7 +29,7 @@ export const Certandloc = ({
             >
                 <CardHeader style={{ alignItems: 'center', padding: '10px' }}>
                     <Button type="button" size="md" color='primary' onClick={addCertificateItem}>
-                        Add Certificate
+                        {caption}
                     </Button>
                 </CardHeader>
 
@@ -89,10 +94,9 @@ export const Certandloc = ({
                         <Button color='primary' onClick={addLocation}>Add locations</Button>
                 </CardHeader>
                     
-                <CardBody>
+              <CardBody>
                    {formData.locations.map((location, index) => (
                        <Row lg={4} md={6} xs={12} key={index} style={{ alignItems: 'center' }}>
-                            {/* <div style={{ maxHeight: '400px', overflowX: 'auto' }}> */}
                             <Col md={6} lg={4}>
                                 <Label for={`subcounty-${index}`}>Sub-County</Label>
                                 <Input
@@ -142,10 +146,10 @@ export const Certandloc = ({
                                     </Button>
                                 </Col>
                             )}
-                        {/* </div> */}
                         </Row>
                     ))}
-                </CardBody>
+                </CardBody> 
+                
             </Card>
         </div>
     )

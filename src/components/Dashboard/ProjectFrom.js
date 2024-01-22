@@ -61,45 +61,15 @@ export default function ProjectForm() {
         setFormValid(isValid)
         return isValid
     }
-
-    // const handleLocationChange = (index, key, value) => {
-    //     const updatedLocations = [...formData.locations];
-    //     if (key === 'subcounty') {
-    //         updatedLocations[index] = { subcounty: value, ward: '' }; // Reset ward when subcounty changes
-    //         setWards(subCountyWards[value] || []); // Update wards for the UI
-    //     } else {
-    //         updatedLocations[index][key] = value;
-    //     }
-    //     setFormData({ ...formData, locations: updatedLocations });
-    // };
-// 
-    // const handleLocationChange = (index,key,value) => {
-    //     let updatedLocations = [...formData.locations];
-    //     if(key === 'subcounty'){
-    //         if(value === 'all'){
-    //             updatedLocations = Object.entries(subCountyWards).flatMap(([subcounty,wards]) =>
-    //                 wards.map(ward => ({subcounty, ward}))
-    //             )
-    //         } else {
-    //             updatedLocations[index] ={subcounty: value , ward: ''}
-    //             setWards(subCountyWards[value] || []);
-    //         }
-    //     } else {
-    //         updatedLocations[index][key] = value;
-    //     }
-    //     setFormData({...formData , locations:updatedLocations});
-    // }
         const handleLocationChange = (index, key, value) => {
             let updatedLocations = [...formData.locations];
 
             if (key === 'subcounty') {
                 if (value === 'all') {
-                    // Create an array with every subcounty and its wards
                     updatedLocations = Object.entries(subCountyWards).flatMap(([subcounty, wards]) => {
                         return wards.map(ward => ({ subcounty, ward }));
                     });
                 } else {
-                    // If a specific subcounty is selected, update only that entry
                     const relatedWards = subCountyWards[value];
                     updatedLocations[index] = { subcounty: value, ward: relatedWards[0] };
                 }
@@ -137,14 +107,6 @@ export default function ProjectForm() {
             locations: [...prevFormData.locations, { subcounty: '', ward: '' }]
         }));
     }
-
-
-    const handleImageUpload = (url, imageType) => {
-        setFormData((prevFormData) => ({
-            ...prevFormData,
-            [imageType]: url
-        }));
-    };
 
 
     const handleSubmit = (event) => {
@@ -263,6 +225,7 @@ export default function ProjectForm() {
     };
     const renderStep = () => {
         switch (currentStep) {
+            
             case 1:
                 return <ProjectDetailsForm
                     handleInputChange={handleInputChange}
@@ -275,7 +238,7 @@ export default function ProjectForm() {
                 />
             case 2:
                 return <Certandloc
-                    handleImageUpload={handleImageUpload}
+                    caption="Project payment Certificate"
                     formData={formData}
                     handleCertificateItemChange={handleCertificateItemChange}
                     validateCertificateData={validateCertificateData}
@@ -288,7 +251,7 @@ export default function ProjectForm() {
                     wards={wards}
                     removeLocation={removeLocation}
                     subCountyWards={subCountyWards}
-                />
+                /> 
             default:
                 return null
         }
