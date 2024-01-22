@@ -27,8 +27,8 @@ const formatDate = (dateStr) => {
   useEffect(() =>{
       setFormData({
         ...project,
-        // start_date: formatDate(project.start_date),
-        // end_date: formatDate(project.end_date)
+         start_date: formatDate(project.start_date),
+         end_date: formatDate(project.end_date)
        })
       },[project])
       
@@ -70,10 +70,9 @@ const formatDate = (dateStr) => {
  const handleChange = (e, index, type) => {
     const { name, value } = e.target;
 
-    // if(name === 'start_date' || name === 'end_date'){
-    //   setFormData({...formData, [name]: formatDate(value)});
-    // }else 
-    if (type === 'location') {
+    if(name === 'start_date' || name === 'end_date'){
+      setFormData({...formData, [name]: formatDate(value)});
+    }else if (type === 'location') {
       const updatedLocations = formData.locations.map((loc, idx) => 
         idx === index ? { ...loc, [name]: value } : loc
       );
@@ -145,16 +144,16 @@ const formatDate = (dateStr) => {
                 <Col>
                     <Row>
                       <Col>
-                      {/* <FormGroup>
+                     <FormGroup>
                           <Label for="Startdate">Start date</Label>
                           <Input type='date' name="start_date" value={formData.start_date} onChange={handleChange} />
-                      </FormGroup> */}
+                      </FormGroup> 
                       </Col>
                       <Col>
-                      {/* <FormGroup>
+                     <FormGroup>
                           <Label for="Enddate">End date</Label>
                           <Input type='date' name="end_date" value={formData.end_date} onChange={handleChange}/>
-                      </FormGroup> */}
+                      </FormGroup> 
                       </Col>
                       <Col>
                       <FormGroup>
