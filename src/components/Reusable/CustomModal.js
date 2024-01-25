@@ -19,7 +19,7 @@ function CustomModal({ isOpen, toggle, title, body, onConfirm, modalType }) {
           ) : (
             <div style={{ textAlign: 'center' }}>
               <div >
-                <img src={SucessImage} alt='Cancel' style={{width:100}}/>
+                <img src={FailedImage} alt='Cancel' style={{width:100}}/>
               </div>
               <p>{body}</p>
             </div>

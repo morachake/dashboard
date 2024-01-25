@@ -1,6 +1,7 @@
-
 import Select from 'react-select';
 import { Row, Col, Input, FormGroup, Card, Label, Button, CardBody, CardHeader } from 'reactstrap';
+import { useEffect, useState } from 'react';
+
 export const Certandloc = ({
     handleImageUpload,
     formData,
@@ -8,18 +9,45 @@ export const Certandloc = ({
     validateCertificateData,
     removeCertificateItem,
     addCertificateItem,
-    addLocation,
-    validateLocation,
-    handleLocationChange,
-    locationErrors,
     wards,
-    removeLocation,
     subCountyWards,
     caption,
+    onLocationChange,
+    index
     
 }) => {
+    const [selectedLocation,setSelectedLocation]= useState([])
+    const generateLocationOptions =() =>{
+        const locationOptions = Object.keys(subCountyWards).map((subCounty) =>{
+            const wards = subCountyWards[subCounty].map((ward) =>({value:ward,label:ward, subCounty}))
+            return {label:subCounty,options : wards}
+        });
+        return locationOptions
+    }
+    const customStyles ={
+        control:(provider) =>({
+            ...provider,
+            width :'100%',
+            marginBottom:10
+        })
+    }
 
-    const subCountyOptions = Object.keys(subCountyWards).map(key => ({ value: key, label: key }));
+    const handleSelectLocation = (selectedOptions) => {
+        console.log("Selected Location Options:", selectedOptions);
+
+        const selectedLocationData = selectedOptions.map((option, idx) => ({
+            subCounty: option.subCounty,
+            ward: option.value,
+            key: `${option.subCounty}-${option.value}-${idx}`
+        }));
+
+        console.log("Selected Location Data:", selectedLocationData);
+
+        setSelectedLocation(selectedOptions);
+        console.log("selectedOptions:", selectedOptions);
+        onLocationChange(selectedOptions);
+    };  
+
 
     return (
         <div>
@@ -86,71 +114,19 @@ export const Certandloc = ({
                 </CardBody>
             </Card>
 
-            <Card 
-                body
-                className="my-2"
-            >
-                 <CardHeader style={{ alignItems: 'center', padding: '10px' }}>          
-                        <Button color='primary' onClick={addLocation}>Add locations</Button>
-                </CardHeader>
-                    
-              <CardBody>
-                   {formData.locations.map((location, index) => (
-                       <Row lg={4} md={6} xs={12} key={index} style={{ alignItems: 'center' }}>
-                            <Col md={6} lg={4}>
-                                <Label for={`subcounty-${index}`}>Sub-County</Label>
-                                <Input
-                                    id={`subcounty-${index}`}
-                                    name={`subcounty-${index}`}
-                                    type="select"
-                                    value={location.subcounty}
-                                    onChange={(e) => handleLocationChange(index, 'subcounty', e.target.value)}
-                                >
-                                    <option value="">Select Sub-County</option>
-                                    <option value="all">All</option>
-                                    <option value="Mvita">Mvita</option>
-                                    <option value="Likoni">Likoni</option>
-                                    <option value="Changamwe">Changamwe</option>
-                                    <option value="Kisauni">Kisauni</option>
-                                    <option value="Nyali">Nyali</option>
-                                    <option value="Jomvu">Jomvu</option>
-                                </Input>
-                                {locationErrors[index]?.subcounty && (
-                                    <div className="text-danger">{locationErrors[index].subcounty}</div>
-                                )}
-                            </Col>
-                            <Col md={6} lg={4}>
-                                <Label for={`ward-${index}`}>Ward</Label>
-                                <Input
-                                    id={`ward-${index}`}
-                                    name={`ward-${index}`}
-                                    type="select"
-                                    value={location.ward}
-                                    disabled={location.subcounty === 'all'}  // Disable ward input if 'all' is selected
-                                    onChange={(e) => handleLocationChange(index, 'ward', e.target.value)}
-                                >
-                                    <option value="">Select Ward</option>
-                                    {location.subcounty && location.subcounty !== 'all' && 
-                                        subCountyWards[location.subcounty].map((ward, wardIndex) => (
-                                            <option key={wardIndex} value={ward}>{ward}</option>
-                                    ))}
-                                </Input>
-                                {locationErrors[index]?.ward && (
-                                    <div className="text-danger">{locationErrors[index].ward}</div>
-                                )}
-                            </Col>
-                            {index > 0 && (
-                                <Col md={6} lg={4} style={{marginTop:30}}>
-                                    <Button color="danger" onClick={() => removeLocation(index)}>
-                                        Remove
-                                    </Button>
-                                </Col>
-                            )}
-                        </Row>
-                    ))}
-                </CardBody> 
-                
+            <Card body className="my-2">
+                <Label for={`subcounty-${index}`}>Sub-County</Label>
+               <Select
+                    options={generateLocationOptions()}
+                    isMulti
+                    value={selectedLocation}
+                    onChange={handleSelectLocation}
+                    styles={customStyles}
+                    // menuIsOpen={true}
+                    onMenuClose={() => {}}
+                />
+
             </Card>
         </div>
-    )
-}
+    );
+};

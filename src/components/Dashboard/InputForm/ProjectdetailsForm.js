@@ -1,12 +1,15 @@
 import ValidatedInput from 'components/Reusable/ValidatedInput';
 import React from 'react';
 import { Row, Col, Input, Label } from 'reactstrap';
+import Location from './Location';
 
 
 export const ProjectDetailsForm = ({ formData, handleInputChange, handleValidationStateChange,formErrors, requiredValidator }) => {
   return (
     <div>
+          {/* <Location/> */}
       <Row lg={4} md={6} xs={12}>
+        
         <Col md={6} lg={6}>
           <ValidatedInput
             label="Project Name"

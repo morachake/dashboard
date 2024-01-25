@@ -32,7 +32,7 @@ const formatDate = (dateStr) => {
        })
       },[project])
       
-      console.log(project)
+      console.log("your projects",project)
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -52,6 +52,7 @@ const formatDate = (dateStr) => {
         form_id: project.id
       })
     })
+    // console.log(formData)
     .then(response => {
       if (!response.ok) {
         throw new Error(`Could not send update request: ${response.status}`);

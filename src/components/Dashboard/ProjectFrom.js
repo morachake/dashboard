@@ -1,5 +1,5 @@
 import { useAuth } from 'context/AuthContext';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Form, Button, Card, CardBody } from 'reactstrap';
 
 import config from 'config';
@@ -17,6 +17,8 @@ const subCountyWards = {
     Nyali: ["Frere Town", "Ziwa la Ng’ombe", "Mkomani", "Kongowea", "Kadzandani"],
     Jomvu: ["Jomvu Kuu", "Magongo", "Mikindini"]
 };
+
+
 const initialFormData = {
     is_project: true,
     project_name: '',
@@ -42,6 +44,7 @@ export default function ProjectForm() {
     const [wards, setWards] = useState([]);
     const [showModal,setShowModal] = useState(false);
     const [modalContent,setModalContent] = useState({title:"",message:"",type:""});
+    const [selectedLocations, setSelectedLocations] = useState([]);
     const [formErrors, setFormErrors] = useState({});
     const [locationErrors, setLocationErrors] = useState({});
     const [currentStep, setCurrentStep] = useState(1)
@@ -61,59 +64,30 @@ export default function ProjectForm() {
         setFormValid(isValid)
         return isValid
     }
-        const handleLocationChange = (index, key, value) => {
-            let updatedLocations = [...formData.locations];
+    const handleLocationChange = ( newLocationData) => {
 
-            if (key === 'subcounty') {
-                if (value === 'all') {
-                    updatedLocations = Object.entries(subCountyWards).flatMap(([subcounty, wards]) => {
-                        return wards.map(ward => ({ subcounty, ward }));
-                    });
-                } else {
-                    const relatedWards = subCountyWards[value];
-                    updatedLocations[index] = { subcounty: value, ward: relatedWards[0] };
-                }
-            } else {
-                updatedLocations[index][key] = value;
-            }
-            setFormData({ ...formData, locations: updatedLocations });
-        };
+        const formattedLocations  = newLocationData.map(location =>({
+            subcounty: location.subCounty,
+            ward: location.label,
+        }))
 
+             setSelectedLocations(newLocationData)
 
-
-    const validateLocation = (index, subcounty, ward) => {
-        const newLocationErrors = { ...locationErrors };
-        newLocationErrors[index] = {
-            subcounty: subcounty ? '' : 'Subcounty is required',
-            ward: ward ? '' : 'Ward is required',
-        };
-
-        setLocationErrors(newLocationErrors);
-    };
-
-    const removeLocation = (index) => {
-        const updatedLocations = [...formData.locations].filter((_, locIndex) => locIndex !== index);
-        setFormData({ ...formData, locations: updatedLocations });
-
-        const newLocationErrors = { ...locationErrors };
-        delete newLocationErrors[index];
-        setLocationErrors(newLocationErrors);
+             setFormData((prevFormData)=>({
+                ...prevFormData,
+                locations: formattedLocations
+             }))
     };
 
 
-    const addLocation = () => {
-        setFormData(prevFormData => ({
-            ...prevFormData,
-            locations: [...prevFormData.locations, { subcounty: '', ward: '' }]
-        }));
-    }
-
+  
 
     const handleSubmit = (event) => {
         event.preventDefault();
         if (isFormValid()) {
             setIsSubmitting(true);
             saveData();
+            console.log("Submit Locations",formData.locations)
         } else {
             console.error('Form validation failed');
         }
@@ -225,7 +199,7 @@ export default function ProjectForm() {
     };
     const renderStep = () => {
         switch (currentStep) {
-            
+           
             case 1:
                 return <ProjectDetailsForm
                     handleInputChange={handleInputChange}
@@ -234,9 +208,9 @@ export default function ProjectForm() {
                     requiredValidator={requiredValidator}
                     numberValidator={numberValidator}
                     formErrors={formErrors}
-
+                    index={0}
                 />
-            case 2:
+             case 2:
                 return <Certandloc
                     caption="Project payment Certificate"
                     formData={formData}
@@ -244,12 +218,9 @@ export default function ProjectForm() {
                     validateCertificateData={validateCertificateData}
                     removeCertificateItem={removeCertificateItem}
                     addCertificateItem={addCertificateItem}
-                    addLocation={addLocation}
-                    validateLocation={validateLocation}
-                    handleLocationChange={handleLocationChange}
+                    onLocationChange={handleLocationChange}
                     locationErrors={locationErrors}
                     wards={wards}
-                    removeLocation={removeLocation}
                     subCountyWards={subCountyWards}
                 /> 
             default:
