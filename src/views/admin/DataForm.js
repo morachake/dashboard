@@ -42,7 +42,7 @@ export default function DataForm() {
                             className={activeTab === '2' ? 'active' : ''}
                             onClick={() => toggleTab('2')}
                         >
-                            <Button color={activeTab === '2' ? 'primary' : 'secondary'}>New Program</Button>
+                            <Button color={activeTab === '2' ? 'primary' : 'secondary'}>New Activity</Button>
                         </NavLink>
                     </NavItem>
                     </Nav> 
