@@ -18,6 +18,7 @@ import {
 import { useAuth } from "context/AuthContext";
 import NotificationModal from "./NotificationModal";
 import config from "config";
+import { toast } from 'react-toastify';
 
 
 const AdminNavbar = (props) => {
@@ -49,7 +50,7 @@ const AdminNavbar = (props) => {
 
     const defaultPassCheck = () => {
       fetch(`${config.backendURL}/check_default_user_password`, {
-        method: 'GET', // Removed the extra space after 'GET'
+        method: 'GET',
         headers: { 'Authorization': `Bearer ${accessToken}` }
       })
       .then(response => {
@@ -59,13 +60,22 @@ const AdminNavbar = (props) => {
         return response.json();
       })
       .then(data => {
-        
         setDefaultPass(data);
+
+        // Display a warning alert if the user is using the default password and is_default_password is true
+        if (data && data.is_default_password === true) {
+          setTimeout(() =>{
+              toast.warn("Your password is the default password. Please change it for security reasons.", {
+              position: "top-right",autoClose:false
+            });
+          })
+          
+        }
       })
       .catch(error => {
         console.error("An error occurred:", error);
       });
-}
+    };
 
   useEffect(() => {
     defaultPassCheck()

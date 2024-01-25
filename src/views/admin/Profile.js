@@ -17,7 +17,9 @@ import {
 import UserHeader from "components/Headers/UserHeader.js";
 import { useAuth } from "context/AuthContext";
 import { useState } from "react";
+ import {  toast } from 'react-toastify';
 
+  import 'react-toastify/dist/ReactToastify.css';
 
 const Profile = () => {
   const { user } = useAuth()
@@ -30,16 +32,30 @@ const Profile = () => {
   const toggleShowPassword =() =>{
     setShowPassword(!showPassword)
   }
-   const handlePasswordReset = async (e) => {
+  const handlePasswordReset = async (e) => {
   e.preventDefault();
+
+  // Check for empty fields
+  if (!oldPassword || !newPassword) {
+    toast.error("Old password and new password are required", { position: "top-right" });
+    return;
+  }
+
   const response = await resetPassword(oldPassword, newPassword);
 
-  setMessage(response.message);
-  setIsError(!response.success);
+  if (response.success) {
+    // Password reset successful
+    toast.success(response.message, { position: "top-right" });
+  } else {
+    // Password reset failed
+    toast.error(response.message, { position: "top-right" });
+  }
 
+  // Clear input fields
   setOldPassword("");
   setNewPassword("");
 };
+
 
   return (
     <>
