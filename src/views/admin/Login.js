@@ -16,6 +16,8 @@ import {
   Row,
   Col,
 } from "reactstrap";
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Login = () => {
   const [username,setUsername] = useState("");
@@ -29,6 +31,11 @@ const Login = () => {
     setShowPassword(!showPassword)
   }
   const handleLogin = async () => {
+     if (!username || !password) {
+    // Show a toast for empty fields
+    toast.error("Username and password are required", { position: "top-right" });
+    return;
+  }
     setLoading(true);
     setButtonText('Loading...');
     setTimeout(() => setButtonText('Please Wait ....'),1500)
@@ -38,12 +45,17 @@ const Login = () => {
       const result = await login(username, password); 
         setLoading(false);
         if (result.error) {
-          setError(result.error);
+            toast.error(result.error, { position: "top-right" });
+          // setError(result.error);
         } else {
-          setError("")
+          toast.dismiss();
+          toast.success("Login successfull!",{ position: "top-right"});
+          // setError("")
         }
     } catch (error){
-      setError("An Error occured")
+      toast.error("An error occurred",{ position: "top-right"})
+      // setError("An Error occured")
+      
     } finally{
       setLoading(false);
       setButtonText("Sign In");
