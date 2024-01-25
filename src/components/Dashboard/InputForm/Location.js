@@ -1,8 +1,8 @@
 import Select from 'react-select';
 import { Row, Col, Input, FormGroup, Card, Label, Button, CardBody, CardHeader } from 'reactstrap';
-import {  useState } from 'react';
+import { useEffect, useState } from 'react';
 
-export const Certandloc = ({
+export default function Location ({
     handleImageUpload,
     formData,
     handleCertificateItemChange,
@@ -15,7 +15,7 @@ export const Certandloc = ({
     onLocationChange,
     index
     
-}) => {
+})  {
     const [selectedLocation,setSelectedLocation]= useState([])
     const generateLocationOptions =() =>{
         const locationOptions = Object.keys(subCountyWards).map((subCounty) =>{

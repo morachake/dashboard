@@ -2,21 +2,19 @@ import ValidatedInput from 'components/Reusable/ValidatedInput';
 import React from 'react';
 import { Row, Col, Input, Label } from 'reactstrap';
 
+
 export const ProgramDetailsForm = ({ 
   formData, 
   handleInputChange, 
-  handleValidationStateChange, 
-  formErrors, 
-  requiredValidator,
-  programs 
-}) => {
-
-  
+  handleValidationStateChange,
+  formErrors,
+   requiredValidator ,
+   programs
+  }) => {
   return (
     <div>
-      {/* Basic Program Details */}
-      <Row>
-        <Col>
+        <Row className='mb-4'>
+          <Col>
           <Label for="status">Select Program Name</Label>
           <Input
             id="program_id"
@@ -31,21 +29,24 @@ export const ProgramDetailsForm = ({
             ))}
           </Input>
          </Col>
-      </Row>
-      <Row lg={4} md={6} xs={12}>
-        <Col md={6} lg={8}>
+        </Row>
+      <Row lg={4} md={6} xs={12} mt={5}>
+        
+        <Col md={6}  lg={6}>
           <ValidatedInput
-            label="Program Name"
-            id="project_name"
+            label="Activity Name"
+            id="program_name"
             name="project_name"
             type="text"
             value={formData.project_name}
             onChange={handleInputChange}
+            validator={(value) => !value ? 'Required' : ''}
             onValidationStateChange={handleValidationStateChange}
+            error={formErrors.project_name}
           />
-        </Col>
-        <Col md={6} lg={4}>
-          <Label for="status">Status</Label>
+          </Col>
+        <Col md={6} lg={3}>
+          <Label for="status">Activity Status</Label>
           <Input
             name="status"
             type="select"
@@ -59,9 +60,33 @@ export const ProgramDetailsForm = ({
             <option value="Stalled">Stalled</option>
           </Input>
         </Col>
-      </Row>
+        <Col md={6} lg={3}>
+          <ValidatedInput
+            label="Pecentage"
+            id="project_status_percentage"
+            name="project_status_percentage"
+            placeholder="Enter the project status"
+            type="number"
+            value={formData.project_status_percentage}
+            onChange={handleInputChange}
+            validator={requiredValidator}
+            onValidationStateChange={handleValidationStateChange}
+            error={formErrors.project_status_percentage}
+          />
 
-      {/* Date Information */}
+        </Col>
+      </Row>
+      <ValidatedInput
+        label="Describe the activity"
+        name="description"
+        type="textarea"
+        value={formData.description}
+        onChange={handleInputChange}
+        validator={(value) => !value ? 'Required' : ''}
+        onValidationStateChange={handleValidationStateChange}
+        error={formErrors.description}
+      />
+      
       <Row lg={4} md={6} xs={12}>
         <Col md={6} lg={6}>
           <ValidatedInput
@@ -70,7 +95,9 @@ export const ProgramDetailsForm = ({
             type="date"
             value={formData.start_date}
             onChange={handleInputChange}
+            validator={requiredValidator}
             onValidationStateChange={handleValidationStateChange}
+            error={formErrors.start_date}
           />
         </Col>
         <Col md={6} lg={6}>
@@ -80,25 +107,25 @@ export const ProgramDetailsForm = ({
             type="date"
             value={formData.end_date}
             onChange={handleInputChange}
+            validator={requiredValidator}
             onValidationStateChange={handleValidationStateChange}
+            error={formErrors.end_date}
           />
         </Col>
-      </Row>
-
-      {/* Program Progress and Metrics */}
-      <Row lg={4} md={6} xs={12}>
-        <Col md={6} lg={4}>
+        </Row>
+         <Row lg={4} md={6} xs={12}>
+        <Col md={6} lg={6}>
           <ValidatedInput
-            label="Percentage"
-            id="project_status_percentage"
-            name="project_status_percentage"
-            type="number"
-            value={formData.project_status_percentage}
+            label="Financier"
+            id="financier"
+            name="financier"
+            type="text"
+            value={formData.financier}
             onChange={handleInputChange}
             onValidationStateChange={handleValidationStateChange}
           />
         </Col>
-        <Col md={6} lg={4}>
+        <Col md={6} lg={6}>
           <ValidatedInput
             label="Expenditure"
             id="contract_sum"
@@ -109,46 +136,7 @@ export const ProgramDetailsForm = ({
             onValidationStateChange={handleValidationStateChange}
           />
         </Col>
-        <Col md={6} lg={4}>
-           <ValidatedInput
-              label="Project Finacier"
-              name="financier"
-              type="text"
-              value={formData.financier}
-              onChange={handleInputChange}
-              // validator={(value) => !value ? 'Required' : ''}
-              // onValidationStateChange={handleValidationStateChange}
-              // error={formErrors.description}
-              />
-        </Col>
-      </Row>
-
-      {/* Financial Information */}
-     
-
-      {/* Additional Information */}
-      <ValidatedInput
-        label="Program Description"
-        name="description"
-        type="textarea"
-        value={formData.description}
-        onChange={handleInputChange}
-        onValidationStateChange={handleValidationStateChange}
-        error={formErrors.description}
-      />
-      <Row lg={4} md={6} xs={12}>
-        <Col md={6} lg={12}>
-          <ValidatedInput
-            label="Contractor Details"
-            id="contractor_details"
-            name="contractor_details"
-            type="text"  
-            value={formData.contractor_details}
-            onChange={handleInputChange}
-            onValidationStateChange={handleValidationStateChange}
-          />
-        </Col>
-      </Row>
+      </Row>  
     </div>
   );
 };

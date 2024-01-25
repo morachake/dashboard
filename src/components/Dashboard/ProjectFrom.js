@@ -4,7 +4,7 @@ import { Form, Button, Card, CardBody } from 'reactstrap';
 
 import config from 'config';
 import { ProjectDetailsForm } from './InputForm/ProjectdetailsForm';
-import { Certandloc } from './InputForm/Certand loc';
+import  Certandloc  from './InputForm/Certand loc';
 import { validateFormStep } from './InputForm/formValidator';
 import CustomModal from 'components/Reusable/CustomModal';
 

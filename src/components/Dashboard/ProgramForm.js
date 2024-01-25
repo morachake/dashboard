@@ -1,25 +1,13 @@
 import { useAuth } from 'context/AuthContext';
 import React, { useEffect, useState } from 'react';
 import { Form, Button, Card, CardBody } from 'reactstrap';
-import config from 'config';
-import { ProgramDetailsForm } from './InputForm/ProgramDetailsForm';
-import { validateFormStep } from './InputForm/formValidator';
-import { Certandloc } from './InputForm/Certand loc';
 
-const initialFormData ={ 
-    project_name: '',
-    description: '',
-    contract_sum: '',
-    contract_sum_usd:'',
-    contractor_details: '',
-    status: '',
-    program_id: '',
-    project_status_percentage: '',
-    financier: '',
-    start_date: '',
-    end_date: '',
-    milestones: '',
-};
+import config from 'config';
+import { validateFormStep } from './InputForm/formValidator';
+import CustomModal from 'components/Reusable/CustomModal';
+import Location from './InputForm/Location';
+import { ProgramDetailsForm } from './InputForm/ProgramDetailsForm';
+
 
 const subCountyWards = {
     Mvita: ["Mji Wa Kale/Makadara", "Tudor", "Tononoka", "Shimanzi/Ganjoni", "Majengo"],
@@ -30,18 +18,68 @@ const subCountyWards = {
     Jomvu: ["Jomvu Kuu", "Magongo", "Mikindini"]
 };
 
+
+const initialFormData = {
+    is_project: false,
+    project_name: '',
+    description: '',
+    financier:'',
+    status: '',
+    project_status_percentage: '',
+    remarks: '',
+    start_date: '',
+    end_date: '',
+    certificates: [],
+    recommendations: '',
+    contract_sum: '',
+    locations: [],
+    milestones:'',
+    program_id:'',
+    contractor_details: 'ContractorDetails',
+};
+
 export default function ProgramForm() {
     const [isSubmitting,setIsSubmitting] = useState(false)
-    const [programs,setPrograms] = useState([])
     const { user } = useAuth();
+    const [wards, setWards] = useState([]);
+    const [showModal,setShowModal] = useState(false);
+    const [modalContent,setModalContent] = useState({title:"",message:"",type:""});
+    const [selectedLocations, setSelectedLocations] = useState([]);
     const [formErrors, setFormErrors] = useState({});
+    const [programs,setPrograms] = useState([])
     const [locationErrors, setLocationErrors] = useState({});
     const [currentStep, setCurrentStep] = useState(1)
-    const [wards, setWards] = useState([]);
     const [formData, setFormData] = useState({
         ...initialFormData,
         user_id: user.id
     });
+    const toggleModal = () => {
+        setShowModal(!showModal)
+        setCurrentStep(1)
+    }
+    const [formValid, setFormValid] = useState({});
+    // const [updatedLocations ,setUpdatedLocations] = useState([])
+    const  validateCurrentStep = () =>{
+        const {isValid, errors} = validateFormStep(currentStep,formData)
+        setFormErrors(errors)
+        setFormValid(isValid)
+        return isValid
+    }
+    const handleLocationChange = ( newLocationData) => {
+
+        const formattedLocations  = newLocationData.map(location =>({
+            subcounty: location.subCounty,
+            ward: location.label,
+        }))
+
+             setSelectedLocations(newLocationData)
+
+             setFormData((prevFormData)=>({
+                ...prevFormData,
+                locations: formattedLocations
+             }))
+    };
+
     const accessToken = localStorage.getItem('accessToken');
     useEffect(() => {
         const fetchPrograms = async () => {
@@ -68,16 +106,14 @@ export default function ProgramForm() {
 
         fetchPrograms();
     }, []);
-
   
-
-    const [formValid, setFormValid] = useState({});
 
     const handleSubmit = (event) => {
         event.preventDefault();
         if (isFormValid()) {
             setIsSubmitting(true);
             saveData();
+            console.log("Submit Locations",formData.locations)
         } else {
             console.error('Form validation failed');
         }
@@ -96,7 +132,7 @@ export default function ProgramForm() {
             user_id: user.id
 
         };
-       
+        const accessToken = localStorage.getItem('accessToken');
         fetch(`${config.backendURL}/create_form`, {
             method: 'POST',
             body: JSON.stringify(jsonPayload),
@@ -111,11 +147,18 @@ export default function ProgramForm() {
                 }
                 return response.json();
             })
-            .then(data => {             
+            .then(data => {
+                if (data.error || data.errorMessage) { 
+                    throw new Error(data.errorMessage || 'Unknown error occurred');
+                }   
+                setModalContent({ title: 'Success', message: 'Form submitted successfully!', type: 'success' });
+                setShowModal(true);
                 clearForm()
             })
             .catch(err => {
-                console.error("Error during submission:", err.message);   
+                console.error("Error during submission:", err.message);
+                setModalContent({ title: 'Error', message: 'An Eror Occure During submission ! Please try again', type: 'error' });
+                setShowModal(true);
             })
             .finally(() => {setIsSubmitting(false)});
     };
@@ -123,52 +166,6 @@ export default function ProgramForm() {
         setFormData({ ...initialFormData });
         setWards([]);
     }
-
-    const validateLocation = (index, subcounty, ward) => {
-        const newLocationErrors = { ...locationErrors };
-        newLocationErrors[index] = {
-            subcounty: subcounty ? '' : 'Subcounty is required',
-            ward: ward ? '' : 'Ward is required',
-        };
-
-        setLocationErrors(newLocationErrors);
-    };
-    const handleLocationChange = (index, key, value) => {
-            let updatedLocations = [...formData.locations];
-
-            if (key === 'subcounty') {
-                if (value === 'all') {
-                    // Create an array with every subcounty and its wards
-                    updatedLocations = Object.entries(subCountyWards).flatMap(([subcounty, wards]) => {
-                        return wards.map(ward => ({ subcounty, ward }));
-                    });
-                } else {
-                    // If a specific subcounty is selected, update only that entry
-                    const relatedWards = subCountyWards[value];
-                    updatedLocations[index] = { subcounty: value, ward: relatedWards[0] };
-                }
-            } else {
-                updatedLocations[index][key] = value;
-            }
-            setFormData({ ...formData, locations: updatedLocations });
-    };
-    const removeLocation = (index) => {
-        const updatedLocations = [...formData.locations].filter((_, locIndex) => locIndex !== index);
-        setFormData({ ...formData, locations: updatedLocations });
-
-        const newLocationErrors = { ...locationErrors };
-        delete newLocationErrors[index];
-        setLocationErrors(newLocationErrors);
-    };
-
-
-    const addLocation = () => {
-        setFormData(prevFormData => ({
-            ...prevFormData,
-            locations: [...prevFormData.locations, { subcounty: '', ward: '' }]
-        }));
-    }
-
 
     const validateCertificateData = (certificate) => {
         let errors = {};
@@ -201,6 +198,7 @@ export default function ProgramForm() {
         updatedCertificates.splice(index, 1);
         setFormData({ ...formData, certificates: updatedCertificates });
     };
+
     const requiredValidator = value => value.trim() ? '' : 'required';
     const numberValidator = value => !isNaN(value) && value.trim() !== '' ? '' : 'number';
 
@@ -210,18 +208,13 @@ export default function ProgramForm() {
     const isFormValid = () => {
         return Object.values(formValid).every(Boolean);
     };
-     const totalSteps = 2
-     const  validateCurrentStep = () =>{
-        const {isValid, errors} = validateFormStep(currentStep,formData)
-        setFormErrors(errors)
-        setFormValid(isValid)
-        return isValid
-    }
+    const totalSteps = 2
+
     const nextStep = () => {
-        if(validateCurrentStep()){
+        // if(validateCurrentStep()){
            if (currentStep < 2) { 
             setCurrentStep(currentStep + 1);
-        }  
+        // }  
         }
     };
 
@@ -230,44 +223,48 @@ export default function ProgramForm() {
             setCurrentStep(currentStep - 1);
         }
     };
-    const renderStep = () =>{
-        switch(currentStep){
+    const renderStep = () => {
+        switch (currentStep) {
+           
             case 1:
-                return  <ProgramDetailsForm
+                return <ProgramDetailsForm
                     handleInputChange={handleInputChange}
                     formData={formData}
                     handleValidationStateChange={handleValidationStateChange}
                     requiredValidator={requiredValidator}
                     numberValidator={numberValidator}
                     formErrors={formErrors}
+                    index={0}
                     programs={programs}
-
                 />
-            case 2 :
-                return <Certandloc
-                    caption ="Program Location"
+             case 2:
+                return <Location
+                    caption="Project payment Certificate"
                     formData={formData}
                     handleCertificateItemChange={handleCertificateItemChange}
                     validateCertificateData={validateCertificateData}
                     removeCertificateItem={removeCertificateItem}
                     addCertificateItem={addCertificateItem}
-                    addLocation={addLocation}
-                    validateLocation={validateLocation}
-                    handleLocationChange={handleLocationChange}
+                    onLocationChange={handleLocationChange}
                     locationErrors={locationErrors}
                     wards={wards}
-                    removeLocation={removeLocation}
                     subCountyWards={subCountyWards}
-                />
-            default :
+                /> 
+            default:
                 return null
-
         }
     }
     return (
         <Card >
            <CardBody>
-            
+            <CustomModal 
+                isOpen={showModal}
+                toggle={toggleModal}
+                title={modalContent.title}
+                message={modalContent.message}
+                type={modalContent.type}
+                onConfirm={toggleModal}
+            />
                 <Form onSubmit={handleSubmit}>
                     {renderStep()}
                     <div className="form-navigation">
