@@ -34,6 +34,8 @@ const initialFormData = {
     certificates: [],
     recommendations: '',
     locations: [],
+    milestones:'',
+    program_id:'',
     before_images_url: '',
     after_images_url: '',
 };
@@ -46,6 +48,7 @@ export default function ProjectForm() {
     const [modalContent,setModalContent] = useState({title:"",message:"",type:""});
     const [selectedLocations, setSelectedLocations] = useState([]);
     const [formErrors, setFormErrors] = useState({});
+    const [programs,setPrograms] = useState([])
     const [locationErrors, setLocationErrors] = useState({});
     const [currentStep, setCurrentStep] = useState(1)
     const [formData, setFormData] = useState({
@@ -79,7 +82,32 @@ export default function ProjectForm() {
              }))
     };
 
+    const accessToken = localStorage.getItem('accessToken');
+    useEffect(() => {
+        const fetchPrograms = async () => {
+            try {
+                const response = await fetch(`${config.backendURL}/program`, {
+                    headers: {
+                        'content-type': 'application/json',
+                        'Authorization': `Bearer ${accessToken}`,
+                    }
+                });
 
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const data = await response.json();
+                const userprograms = data.filter(program => program.director_id === user.id)
+                console.log("Fetched programs:", userprograms);
+                setPrograms(userprograms);
+            } catch (error) {
+                console.error("Error fetching programs:", error);
+            }
+        };
+
+        fetchPrograms();
+    }, []);
   
 
     const handleSubmit = (event) => {
@@ -209,6 +237,7 @@ export default function ProjectForm() {
                     numberValidator={numberValidator}
                     formErrors={formErrors}
                     index={0}
+                    programs={programs}
                 />
              case 2:
                 return <Certandloc

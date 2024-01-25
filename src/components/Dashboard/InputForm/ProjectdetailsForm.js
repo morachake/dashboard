@@ -4,10 +4,33 @@ import { Row, Col, Input, Label } from 'reactstrap';
 import Location from './Location';
 
 
-export const ProjectDetailsForm = ({ formData, handleInputChange, handleValidationStateChange,formErrors, requiredValidator }) => {
+export const ProjectDetailsForm = ({ 
+  formData, 
+  handleInputChange, 
+  handleValidationStateChange,
+  formErrors,
+   requiredValidator ,
+   programs
+  }) => {
   return (
     <div>
-          {/* <Location/> */}
+        <Row>
+          <Col>
+          <Label for="status">Select Program Name</Label>
+          <Input
+            id="program_id"
+            name="program_id"
+            type="select"
+            value={formData.program_id}
+            onChange={handleInputChange}
+          >
+            <option value="">Select a Program</option>
+            {programs.map(program => (
+              <option key={program.id} value={program.id} onChange={handleInputChange}>{program.program_name}</option> 
+            ))}
+          </Input>
+         </Col>
+        </Row>
       <Row lg={4} md={6} xs={12}>
         
         <Col md={6} lg={6}>
@@ -65,16 +88,7 @@ export const ProjectDetailsForm = ({ formData, handleInputChange, handleValidati
         onValidationStateChange={handleValidationStateChange}
         error={formErrors.description}
       />
-       <ValidatedInput
-        label="Project Finacier"
-        name="financier"
-        type="text"
-        value={formData.financier}
-        onChange={handleInputChange}
-        // validator={(value) => !value ? 'Required' : ''}
-        // onValidationStateChange={handleValidationStateChange}
-        // error={formErrors.description}
-      />
+      
       <Row lg={4} md={6} xs={12}>
         <Col md={6} lg={4}>
           <ValidatedInput
@@ -100,6 +114,7 @@ export const ProjectDetailsForm = ({ formData, handleInputChange, handleValidati
             error={formErrors.end_date}
           />
         </Col>
+        
         <Col md={6} lg={4}>
           <ValidatedInput
             label="Contract Sum"
@@ -115,6 +130,30 @@ export const ProjectDetailsForm = ({ formData, handleInputChange, handleValidati
           />
         </Col>
         </Row>
+         <Row lg={4} md={6} xs={12}>
+        <Col md={6} lg={6}>
+          <ValidatedInput
+            label="Financier"
+            id="financier"
+            name="financier"
+            type="text"
+            value={formData.financier}
+            onChange={handleInputChange}
+            onValidationStateChange={handleValidationStateChange}
+          />
+        </Col>
+        <Col md={6} lg={6}>
+          <ValidatedInput
+            label="Contract Sum USD"
+            id="contract_sum_usd"
+            name="contract_sum_usd"
+            type="number"
+            value={formData.contract_sum_usd}
+            onChange={handleInputChange}
+            onValidationStateChange={handleValidationStateChange}
+          />
+        </Col>
+      </Row>
           <ValidatedInput
               label="Contractor Details"
               id="contractor_details"

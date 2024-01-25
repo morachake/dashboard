@@ -27,7 +27,7 @@ export const ProgramDetailsForm = ({
           >
             <option value="">Select a Program</option>
             {programs.map(program => (
-              <option key={program.id} value={program.id} onChange={handleInputChange}>{program.department_name}</option> 
+              <option key={program.id} value={program.id} onChange={handleInputChange}>{program.program_name}</option> 
             ))}
           </Input>
          </Col>
@@ -45,7 +45,7 @@ export const ProgramDetailsForm = ({
           />
         </Col>
         <Col md={6} lg={4}>
-          <Label for="status">Select Status</Label>
+          <Label for="status">Status</Label>
           <Input
             name="status"
             type="select"
@@ -100,7 +100,7 @@ export const ProgramDetailsForm = ({
         </Col>
         <Col md={6} lg={4}>
           <ValidatedInput
-            label="Contract Sum"
+            label="Expenditure"
             id="contract_sum"
             name="contract_sum"
             type="number"
@@ -110,43 +110,21 @@ export const ProgramDetailsForm = ({
           />
         </Col>
         <Col md={6} lg={4}>
-          <ValidatedInput
-            label="Milestones"
-            id="milestones"
-            name="milestones"
-            type="text"
-            value={formData.milestones}
-            onChange={handleInputChange}
-            onValidationStateChange={handleValidationStateChange}
-          />
+           <ValidatedInput
+              label="Project Finacier"
+              name="financier"
+              type="text"
+              value={formData.financier}
+              onChange={handleInputChange}
+              // validator={(value) => !value ? 'Required' : ''}
+              // onValidationStateChange={handleValidationStateChange}
+              // error={formErrors.description}
+              />
         </Col>
       </Row>
 
       {/* Financial Information */}
-      <Row lg={4} md={6} xs={12}>
-        <Col md={6} lg={6}>
-          <ValidatedInput
-            label="Financier"
-            id="financier"
-            name="financier"
-            type="text"
-            value={formData.financier}
-            onChange={handleInputChange}
-            onValidationStateChange={handleValidationStateChange}
-          />
-        </Col>
-        <Col md={6} lg={6}>
-          <ValidatedInput
-            label="Contract Sum USD"
-            id="contract_sum_usd"
-            name="contract_sum_usd"
-            type="number"
-            value={formData.contract_sum_usd}
-            onChange={handleInputChange}
-            onValidationStateChange={handleValidationStateChange}
-          />
-        </Col>
-      </Row>
+     
 
       {/* Additional Information */}
       <ValidatedInput
