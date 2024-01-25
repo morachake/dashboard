@@ -17,6 +17,10 @@ import { PrimeReactProvider } from 'primereact/api';
 import "primereact/resources/themes/lara-light-indigo/theme.css";            
 import "./index.css"
 import MinLayout from "layouts/MinLayout.js";
+import { ToastContainer } from "react-toastify";
+
+
+
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
 root.render(
@@ -49,5 +53,6 @@ root.render(
       </Routes>
     </AuthProvider>
   </BrowserRouter>
+  <ToastContainer/>
 </PrimeReactProvider>
 );

@@ -7,6 +7,8 @@ import { ProjectDetailsForm } from './InputForm/ProjectdetailsForm';
 import  Certandloc  from './InputForm/Certand loc';
 import { validateFormStep } from './InputForm/formValidator';
 import CustomModal from 'components/Reusable/CustomModal';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 
 const subCountyWards = {
@@ -153,13 +155,14 @@ export default function ProjectForm() {
                 if (data.error || data.errorMessage) { 
                     throw new Error(data.errorMessage || 'Unknown error occurred');
                 }   
-                setModalContent({ title: 'Success', message: 'Form submitted successfully!', type: 'success' });
+                toast.success('Form submitted successfully!');
                 setShowModal(true);
                 clearForm()
+                setCurrentStep(1)
             })
             .catch(err => {
                 console.error("Error during submission:", err.message);
-                setModalContent({ title: 'Error', message: 'An Eror Occure During submission ! Please try again', type: 'error' });
+                toast.error('An Eror Occure During submission ! Please try again',);
                 setShowModal(true);
             })
             .finally(() => {setIsSubmitting(false)});
@@ -259,14 +262,6 @@ export default function ProjectForm() {
     return (
         <Card >
            <CardBody>
-            <CustomModal 
-                isOpen={showModal}
-                toggle={toggleModal}
-                title={modalContent.title}
-                message={modalContent.message}
-                type={modalContent.type}
-                onConfirm={toggleModal}
-            />
                 <Form onSubmit={handleSubmit}>
                     {renderStep()}
                     <div className="form-navigation">

@@ -7,6 +7,9 @@ import { validateFormStep } from './InputForm/formValidator';
 import CustomModal from 'components/Reusable/CustomModal';
 import Location from './InputForm/Location';
 import { ProgramDetailsForm } from './InputForm/ProgramDetailsForm';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 
 
 const subCountyWards = {
@@ -151,13 +154,14 @@ export default function ProgramForm() {
                 if (data.error || data.errorMessage) { 
                     throw new Error(data.errorMessage || 'Unknown error occurred');
                 }   
-                setModalContent({ title: 'Success', message: 'Form submitted successfully!', type: 'success' });
+               toast.success("Form ubmitted Successfully")
                 setShowModal(true);
                 clearForm()
+                setCurrentStep(1)
             })
             .catch(err => {
                 console.error("Error during submission:", err.message);
-                setModalContent({ title: 'Error', message: 'An Eror Occure During submission ! Please try again', type: 'error' });
+                toast.error("An Error occured while submitting,Please try again!")
                 setShowModal(true);
             })
             .finally(() => {setIsSubmitting(false)});
@@ -257,14 +261,6 @@ export default function ProgramForm() {
     return (
         <Card >
            <CardBody>
-            <CustomModal 
-                isOpen={showModal}
-                toggle={toggleModal}
-                title={modalContent.title}
-                message={modalContent.message}
-                type={modalContent.type}
-                onConfirm={toggleModal}
-            />
                 <Form onSubmit={handleSubmit}>
                     {renderStep()}
                     <div className="form-navigation">
