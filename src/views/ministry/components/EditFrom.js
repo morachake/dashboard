@@ -17,13 +17,20 @@ import {
     Row,
     Card,
     CardHeader,
-    Form
+    Form,
+    CardBody
 } from 'reactstrap';
 
 function EditForm({ toggle, modal, project }) {
   const [formData,setFormData] = useState({...project  })
   const [locationOptions, setLocationOptions] = useState([]);
-  const [selectedLocations, setSelectedLocations] = useState([]);
+ const [selectedLocations, setSelectedLocations] = useState(
+  formData.locations.map((location, index) => ({
+    value: index,
+    label: `${location.subcounty}, ${location.ward}`,
+  }))
+);
+
 
   const subCountyWards = {
     Mvita: ["Mji Wa Kale/Makadara", "Tudor", "Tononoka", "Shimanzi/Ganjoni", "Majengo"],
@@ -62,12 +69,13 @@ function EditForm({ toggle, modal, project }) {
          end_date: formatDate(project.end_date)
        })
       }, [project])
-      console.log("your projects",project)
+       console.log("Before submisssion",formData)
     const handleSubmit = (e) => {
     e.preventDefault();
 
-      console.log("Formatted start date:", formData.start_date);
-      console.log("Formatted end date:", formData.end_date);
+      // console.log("Formatted start date:", formData.start_date);
+      // console.log("Formatted end date:", formData.end_date);
+      console.log("submission", formData)
 
     const accessToken = localStorage.getItem('accessToken');
 
@@ -115,17 +123,14 @@ function EditForm({ toggle, modal, project }) {
     if(name === 'start_date' || name === 'end_date'){
       setFormData({...formData, [name]: formatDate(value)});
     }else if (type === 'location') {
-      // const updatedLocations = formData.locations.map((loc, idx) => 
-      //   idx === index ? { ...loc, [name]: value } : loc
-      // );
-      // setFormData({ ...formData, locations: updatedLocations });
-      setFormData(prevState => {
-        const updatedLocations = prevState.locations.map((loc, idx) =>
-          idx === index ? { ...loc, [name]: value } : loc
-        );
-        return { ...prevState, locations: updatedLocations };
-      });
-
+      const selectedLocationValues = selectedLocations.map((location) => location.value);
+        setFormData((prevState) => {
+          const updatedLocations = prevState.locations.map((loc, idx) =>
+            idx === index ? { ...loc, [name]: value } : loc
+          );
+          console.log("Updated location: " , updatedLocations)
+          return { ...prevState, locations: updatedLocations, selectedLocationValues };
+        });
     } else if (type === 'certificate') {
       const updatedCertificates = formData.certificates.map((cert, idx) => 
         idx === index ? { ...cert, [name]: value } : cert
@@ -135,15 +140,22 @@ function EditForm({ toggle, modal, project }) {
       setFormData({ ...formData, [name]: value });
     }
   };
-   const handleDelete = (index, type) => {
-    if (type === 'location') {
-      const filteredLocations = formData.locations.filter((_, i) => i !== index);
-      console.log(filteredLocations)
-      setFormData({ ...formData, locations: filteredLocations });
-    } else if (type === 'certificate') {
-      const filteredCertificates = formData.certificates.filter((_, i) => i !== index);
-      setFormData({ ...formData, certificates: filteredCertificates });
-    }
+ 
+
+  const handleCertificateItemChange = (index) => (e) => {
+    const { name, value } = e.target;
+    const updatedCertificates = formData.certificates.map((cert, idx) =>
+      idx === index ? { ...cert, [name]: value } : cert
+    );
+    setFormData({ ...formData, certificates: updatedCertificates });
+  };
+
+  const addCertificateItem = () => {
+    setFormData((prevFormData) => {
+      const newCertificate = { certificate_number: '', amount_certified: '' };
+      const updatedCertificates = [...prevFormData.certificates, newCertificate];
+      return { ...prevFormData, certificates: updatedCertificates };
+    });
   };
 
   return (
@@ -211,7 +223,7 @@ function EditForm({ toggle, modal, project }) {
                       <Col>
                       <FormGroup>
                           <Label for="Statuspercentage">status Percentage</Label>
-                          <Input type='number' value={formData.project_status_percentage} onChange={handleChange} />
+                          <Input type='number' name="project_status_percentage" value={formData.project_status_percentage} onChange={handleChange} />
                         </FormGroup>
                       </Col>
                     </Row>
@@ -224,6 +236,7 @@ function EditForm({ toggle, modal, project }) {
                     isMulti
                     options={locationOptions.concat(generateLocationOptions())}
                     value={selectedLocations}
+                    name="locations"
                     onChange={(selectedOptions) => {
                       setSelectedLocations(selectedOptions);
                       console.log(selectedOptions);
@@ -231,39 +244,44 @@ function EditForm({ toggle, modal, project }) {
                   />
                 </Col>
             </Card>
-          <Card >
-              <CardHeader>Your Current Certificates</CardHeader>
-              <div className="scrollable-card-content">
-                {formData.certificates.map((certificate, index) => (
-                  <Col md={12} xs={12} key={index}>
-                    <Row>
-                      <Col>
-                        <FormGroup>
-                          <Label for="certno">Cert No</Label>
-                          <Input 
-                            type='text'
-                            value={certificate.certificate_number} 
-                            onChange={(e) => handleChange(e, index, 'certificate')}
-                          />
-                        </FormGroup>
-                      </Col>
-                      <Col>
-                        <FormGroup>
-                          <Label for="Ward">Amount</Label>
-                          <Input 
-                            type='text' 
-                            value={certificate.amount_certified} 
-                            onChange={(e) => handleChange(e, index, 'certificate')}
-                          />
-                        </FormGroup>
-                      </Col>
-                      <Col>
-                        <Button type="button" color='danger' onClick={() => handleDelete(index,'certificate')}>Remove</Button>
-                      </Col>       
-                    </Row>
-                  </Col>
-                ))}
-              </div>
+            
+            <Card
+                body
+                className="my-2"
+            >
+                  <CardBody>
+                      {project.certificates.map((certificate, index) => (
+                        <Row lg={4} md={6} xs={12} style={{ alignItems: 'center' }} key={index}>
+                          <Col md={6} lg={4}>
+                            <FormGroup>
+                              <Label for={`certificateNumber-${index}`}>Certificate Number</Label>
+                              <Input
+                                id={`certificateNumber-${index}`}
+                                name="certificate_number"
+                                placeholder="Certificate Number"
+                                type="text"
+                                value={certificate.certificate_number}
+                                onChange={handleCertificateItemChange(index)}
+                              />
+                            </FormGroup>
+                          </Col>
+                          <Col md={6} lg={4}>
+                            <FormGroup>
+                              <Label for={`amountCertified-${index}`}>Amount Certified</Label>
+                              <Input
+                                id={`amountCertified-${index}`}
+                                name="amount_certified"
+                                placeholder="Amount Certified"
+                                type="text"
+                                value={certificate.amount_certified}
+                                onChange={handleCertificateItemChange(index)}
+                              />
+                            </FormGroup>
+                          </Col>
+                        </Row>
+                      ))}
+                  <Button color="primary" onClick={addCertificateItem}>Add Certificate</Button>
+                </CardBody>     
             </Card>
        </Form>
       </ModalBody>
