@@ -176,7 +176,8 @@ export default function MinTable() {
                   <p><h4>Contractor Details:</h4> {data.contractor_details}</p>
                   <p><h4>Financier:</h4> {data.financier}</p>
                   <p><h4>Project Completion Percentage :</h4>{data.project_status_percentage}%</p>
-                  <p><h4>Certificates:</h4></p>
+                  <p><h4>Milestones:</h4>{data.milestones}</p>
+                   <p><h4>Certificates</h4></p>
                   <ListGroup>
                     {renderCertificates(data.certificates)}
                   </ListGroup>

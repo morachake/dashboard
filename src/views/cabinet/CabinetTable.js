@@ -173,6 +173,7 @@ export default function CaninetTable() {
               <p><h4>Completion Percentage :</h4> {data.project_status_percentage}</p>
               {/* <p><h4>Starting date:</h4> {formatReadableDate(data.start_date)}</p> */}
               {/* <p><h4>Completion Date:</h4> {formatReadableDate(data.end_date)}</p> */}
+              <p><h4>Milestones:</h4>{data.milestones}</p>
               <p><h4>Certificates:</h4></p>
               <ListGroup>
                 {renderCertificates(data.certificates)}

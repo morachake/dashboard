@@ -115,10 +115,17 @@ function EditForm({ toggle, modal, project }) {
     if(name === 'start_date' || name === 'end_date'){
       setFormData({...formData, [name]: formatDate(value)});
     }else if (type === 'location') {
-      const updatedLocations = formData.locations.map((loc, idx) => 
-        idx === index ? { ...loc, [name]: value } : loc
-      );
-      setFormData({ ...formData, locations: updatedLocations });
+      // const updatedLocations = formData.locations.map((loc, idx) => 
+      //   idx === index ? { ...loc, [name]: value } : loc
+      // );
+      // setFormData({ ...formData, locations: updatedLocations });
+      setFormData(prevState => {
+        const updatedLocations = prevState.locations.map((loc, idx) =>
+          idx === index ? { ...loc, [name]: value } : loc
+        );
+        return { ...prevState, locations: updatedLocations };
+      });
+
     } else if (type === 'certificate') {
       const updatedCertificates = formData.certificates.map((cert, idx) => 
         idx === index ? { ...cert, [name]: value } : cert
@@ -211,24 +218,19 @@ function EditForm({ toggle, modal, project }) {
             </Col>
           </Card>
            <Card>
-            <CardHeader>You Project Location</CardHeader>
-            <Col>
-                <Select
-                  isMulti
-                  options={locationOptions.concat(generateLocationOptions())}
-                  value={selectedLocations}
-                  onChange={(selectedOptions) => {
-                    setSelectedLocations(selectedOptions);
-                    // Handle the selected location options
-                    console.log(selectedOptions);
-                  }}
-                />
-
-          </Col>
-             {/* <div className="scrollable-card-content"> */}
-               
-            {/* </div> */}       
-          </Card>
+              <CardHeader>You Project Location</CardHeader>
+              <Col>
+                  <Select
+                    isMulti
+                    options={locationOptions.concat(generateLocationOptions())}
+                    value={selectedLocations}
+                    onChange={(selectedOptions) => {
+                      setSelectedLocations(selectedOptions);
+                      console.log(selectedOptions);
+                    }}
+                  />
+                </Col>
+            </Card>
           <Card >
               <CardHeader>Your Current Certificates</CardHeader>
               <div className="scrollable-card-content">
