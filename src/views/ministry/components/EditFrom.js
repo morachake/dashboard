@@ -34,10 +34,10 @@ function EditForm({ toggle, modal, project }) {
 const subCountyWards = {
     Mvita: ["Mji Wa Kale/Makadara", "Tudor", "Tononoka", "Shimanzi/Ganjoni", "Majengo"],
     Likoni: ["Mtongwe", "Shika Adabu", "Bofu", "Likoni", "Timbwani"],
-    Changamwe: ["Port Reitz", "Kipevu", "Airport", "Changamwe", "Chaani"],
+    Changamwe: ["Port Reitz", "Kipevu", "Airport", "Miritini", "Chaani"],
     Kisauni: ["Mjambere", "Junda", "Bamburi", "Mwakirunge", "Mtopanga", "Magogoni", "Shanzu"],
     Nyali: ["Frere Town", "Ziwa la Ng’ombe", "Mkomani", "Kongowea", "Kadzandani"],
-    Jomvu: ["Jomvu Kuu", "Miritini", "Mikindini"]
+    Jomvu: ["Jomvu Kuu", "Magongo", "Mikindini"]
 };
 
   const formatDate = (dateStr) => {
