@@ -68,37 +68,46 @@ const subCountyWards = {
 
 
 
-    const handleSubmit = (e) => {
-    e.preventDefault();
+   const handleSubmit = (e) => {
+      e.preventDefault();
 
-    const accessToken = localStorage.getItem('accessToken');
+      const accessToken = localStorage.getItem('accessToken');
 
-    fetch(`${config.backendURL}/update_form`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${accessToken}`
-      },
-      body: JSON.stringify({
-        ...formData,
-        form_id: project.id
+      // Transform the locations data
+      const transformedLocations = selectedLocations.map((selectedLocation) => ({
+        subcounty: selectedLocation.label.split(',')[0],
+        ward: selectedLocation.label.split(',')[1],
+      }));
+
+      const updatedFormData = { ...formData, locations: transformedLocations };
+
+      fetch(`${config.backendURL}/update_form`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${accessToken}`
+        },
+        body: JSON.stringify({
+          ...updatedFormData,
+          form_id: project.id
+        })
       })
-    })
-    .then(response => {
-      if (!response.ok) {
-        throw new Error(`Could not send update request: ${response.status}`);
-      }
-      return response.json();
-    })
-    .then(() => {
-      toggle();
-      toast.success("Updated Successfully");
-    })
-    .catch(err => {
-      console.error("An error occurred: " + err);
-      toast.error("Update Failed Please try again later");
-    });
-  };
+        .then(response => {
+          if (!response.ok) {
+            throw new Error(`Could not send update request: ${response.status}`);
+          }
+          return response.json();
+        })
+        .then(() => {
+          toggle();
+          toast.success("Updated Successfully");
+        })
+        .catch(err => {
+          console.error("An error occurred: " + err);
+          toast.error("Update Failed. Please try again later.");
+        });
+    };
+
 
   const generateLocationOptions  = () =>{
     const options = [];

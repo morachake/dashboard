@@ -25,7 +25,7 @@ export default function MinTable() {
     .then(data => {
       // const filteredProjects = data.filter(project => project.user_id === user.id);
       setProjects(data)
-
+      console.log(data)
     })
     .catch(error => console.error('Error fetching projects:', error));
 
@@ -107,7 +107,7 @@ export default function MinTable() {
     };
     const recommendationsList = processRecommendations(data.recommendations);
     const formattedContractSum = formatCurrency(data.contract_sum);
-
+ 
     const renderListItems = (items) => items.map((item, index) => <ListGroupItem key={index}>{item}</ListGroupItem>);
       const renderLocation = (locations) => {
         if (!locations || locations.length === 0) {
