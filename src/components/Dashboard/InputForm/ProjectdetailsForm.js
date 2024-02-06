@@ -153,7 +153,18 @@ export const ProjectDetailsForm = ({
             onValidationStateChange={handleValidationStateChange}
           />
         </Col>
+        
       </Row>
+          <ValidatedInput
+            label="Describe the milestones"
+            name="milestones"
+            type="textarea"
+            value={formData.milestones}
+            onChange={handleInputChange}
+            validator={(value) => !value ? 'Required' : ''}
+            onValidationStateChange={handleValidationStateChange}
+            error={formErrors.milestones}
+          />
           <ValidatedInput
               label="Contractor Details"
               id="contractor_details"

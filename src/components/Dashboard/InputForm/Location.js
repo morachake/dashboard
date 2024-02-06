@@ -61,57 +61,6 @@ export default function Location ({
                     </Button>
                 </CardHeader>
 
-                <CardBody>
-                    {formData.certificates.map((certificate, index) => (
-                            <Row lg={4} md={6} xs={12} style={{alignItems:'center'}} key={index}>
-                                <Col md={6} lg={4}>
-                                    <FormGroup>
-                                        <Label for={`certificateNumber-${index}`}>Certificate Number</Label>
-                                        <Input
-                                            id={`certificateNumber-${index}`}
-                                            name="certificate_number"
-                                            placeholder="Certificate Number"
-                                            type="text"
-                                            value={certificate.certificate_number}
-                                            onChange={(e) => handleCertificateItemChange(e, index)}
-                                        />
-                                        {/* Display validation error if any */}
-                                        {validateCertificateData(certificate).certificate_number && (
-                                            <div className="text-danger">
-                                                {validateCertificateData(certificate).certificate_number}
-                                            </div>
-                                        )}
-                                    </FormGroup>
-                                </Col>
-                                <Col md={6} lg={4}>
-                                    <FormGroup>
-                                        <Label for={`amountCertified-${index}`}>Amount Certified</Label>
-                                        <Input
-                                            id={`amountCertified-${index}`}
-                                            name="amount_certified"
-                                            placeholder="Amount Certified"
-                                            type="text"
-                                            value={certificate.amount_certified}
-                                            onChange={(e) => handleCertificateItemChange(e, index)}
-                                        />
-                                        {validateCertificateData(certificate).amount_certified && (
-                                            <div className="text-danger">
-                                                {validateCertificateData(certificate).amount_certified}
-                                            </div>
-                                        )}
-                                    </FormGroup>
-                                </Col>
-                            {index > 0 && (
-                                <Col>
-                                    <Button type="button" color='danger'  onClick={() => removeCertificateItem(index)}>
-                                        Remove 
-                                    </Button>
-                                </Col>
-
-                          )} 
-                            </Row>
-                    ))}
-                </CardBody>
             </Card>
 
             <Card body className="my-2">

@@ -50,23 +50,13 @@ export default function ProgramForm() {
     const [formErrors, setFormErrors] = useState({});
     const [programs,setPrograms] = useState([])
     const [locationErrors, setLocationErrors] = useState({});
-    const [currentStep, setCurrentStep] = useState(1)
     const [formData, setFormData] = useState({
         ...initialFormData,
         user_id: user.id
     });
-    const toggleModal = () => {
-        setShowModal(!showModal)
-        setCurrentStep(1)
-    }
+    
     const [formValid, setFormValid] = useState({});
-    // const [updatedLocations ,setUpdatedLocations] = useState([])
-    const  validateCurrentStep = () =>{
-        const {isValid, errors} = validateFormStep(currentStep,formData)
-        setFormErrors(errors)
-        setFormValid(isValid)
-        return isValid
-    }
+  
     const handleLocationChange = ( newLocationData) => {
 
         const formattedLocations  = newLocationData.map(location =>({
@@ -154,14 +144,13 @@ export default function ProgramForm() {
                     throw new Error(data.errorMessage || 'Unknown error occurred');
                 }   
                toast.success("Form ubmitted Successfully")
-                setShowModal(true);
+         
                 clearForm()
-                setCurrentStep(1)
             })
             .catch(err => {
                 console.error("Error during submission:", err.message);
                 toast.error("An Error occured while submitting,Please try again!")
-                setShowModal(true);
+               
             })
             .finally(() => {setIsSubmitting(false)});
     };
@@ -170,17 +159,6 @@ export default function ProgramForm() {
         setWards([]);
     }
 
-    const validateCertificateData = (certificate) => {
-        let errors = {};
-        if (!certificate.certificate_number) {
-            errors.certificate_number = 'Certificate number is required';
-        }
-        if (!certificate.amount_certified || isNaN(parseFloat(certificate.amount_certified))) {
-            errors.amount_certified = 'Valid amount certified is required';
-        }
-        return errors;
-    };
- 
     const handleCertificateItemChange = (event, index) => {
         const { name, value } = event.target;
         const updatedCertificates = [...formData.certificates];
@@ -188,19 +166,6 @@ export default function ProgramForm() {
         setFormData({ ...formData, certificates: updatedCertificates });
     };
 
-    const addCertificateItem = () => {
-        const newCertificate = { certificate_number: '', amount_certified: '' };
-        setFormData((prevFormData) => ({
-            ...prevFormData,
-            certificates: [...prevFormData.certificates, newCertificate],
-        }));
-    };
-
-    const removeCertificateItem = (index) => {
-        const updatedCertificates = [...formData.certificates];
-        updatedCertificates.splice(index, 1);
-        setFormData({ ...formData, certificates: updatedCertificates });
-    };
 
     const requiredValidator = value => value.trim() ? '' : 'required';
     const numberValidator = value => !isNaN(value) && value.trim() !== '' ? '' : 'number';
@@ -211,26 +176,13 @@ export default function ProgramForm() {
     const isFormValid = () => {
         return Object.values(formValid).every(Boolean);
     };
-    const totalSteps = 2
-
-    const nextStep = () => {
-        // if(validateCurrentStep()){
-           if (currentStep < 2) { 
-            setCurrentStep(currentStep + 1);
-        // }  
-        }
-    };
-
-    const prevStep = () => {
-            if (currentStep > 1) {
-            setCurrentStep(currentStep - 1);
-        }
-    };
-    const renderStep = () => {
-        switch (currentStep) {
-           
-            case 1:
-                return <ProgramDetailsForm
+    return (
+        <Card >
+           <CardBody>
+                <Form onSubmit={handleSubmit}>
+                
+                
+                <ProgramDetailsForm
                     handleInputChange={handleInputChange}
                     formData={formData}
                     handleValidationStateChange={handleValidationStateChange}
@@ -239,46 +191,16 @@ export default function ProgramForm() {
                     formErrors={formErrors}
                     index={0}
                     programs={programs}
-                />
-             case 2:
-                return <Location
                     caption="Project payment Certificate"
-                    formData={formData}
                     handleCertificateItemChange={handleCertificateItemChange}
-                    validateCertificateData={validateCertificateData}
-                    removeCertificateItem={removeCertificateItem}
-                    addCertificateItem={addCertificateItem}
                     onLocationChange={handleLocationChange}
                     locationErrors={locationErrors}
                     wards={wards}
                     subCountyWards={subCountyWards}
-                /> 
-            default:
-                return null
-        }
-    }
-    return (
-        <Card >
-           <CardBody>
-                <Form onSubmit={handleSubmit}>
-                    {renderStep()}
-                    <div className="form-navigation">
-                        {currentStep > 1 && (
-                            <Button onClick={prevStep} type='button' color='secondary'>Previous</Button>
-                            
-                        )}
-                        {currentStep < totalSteps && (
-                            <Button onClick={nextStep} type='button' color='primary'>
-                                
-                                Next</Button>
-                        )}
-                        {currentStep === totalSteps && (
-                            <Button type="submit" color='primary' disabled={!isFormValid() || isSubmitting}>
-                                {isSubmitting ? "Submitting...." : "Submit"}
-
-                            </Button>
-                        )}
-                    </div>
+                />         
+                <Button type="submit" color='primary' disabled={!isFormValid() || isSubmitting}>
+                    {isSubmitting ? "Submitting...." : "Submit"}
+                </Button>
                 </Form>
             </CardBody>
         </Card>
