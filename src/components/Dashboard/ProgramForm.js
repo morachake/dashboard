@@ -4,7 +4,6 @@ import { Form, Button, Card, CardBody } from 'reactstrap';
 
 import config from 'config';
 import { validateFormStep } from './InputForm/formValidator';
-import CustomModal from 'components/Reusable/CustomModal';
 import Location from './InputForm/Location';
 import { ProgramDetailsForm } from './InputForm/ProgramDetailsForm';
 import { toast } from 'react-toastify';
@@ -15,10 +14,10 @@ import 'react-toastify/dist/ReactToastify.css';
 const subCountyWards = {
     Mvita: ["Mji Wa Kale/Makadara", "Tudor", "Tononoka", "Shimanzi/Ganjoni", "Majengo"],
     Likoni: ["Mtongwe", "Shika Adabu", "Bofu", "Likoni", "Timbwani"],
-    Changamwe: ["Port Reitz", "Kipevu", "Airport", "Miritini", "Chaani"],
+    Changamwe: ["Port Reitz", "Kipevu", "Airport", "Changamwe", "Chaani"],
     Kisauni: ["Mjambere", "Junda", "Bamburi", "Mwakirunge", "Mtopanga", "Magogoni", "Shanzu"],
     Nyali: ["Frere Town", "Ziwa la Ng’ombe", "Mkomani", "Kongowea", "Kadzandani"],
-    Jomvu: ["Jomvu Kuu", "Magongo", "Mikindini"]
+    Jomvu: ["Jomvu Kuu", "Miritini", "Mikindini"]
 };
 
 
