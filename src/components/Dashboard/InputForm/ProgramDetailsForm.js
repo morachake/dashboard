@@ -26,18 +26,13 @@ export const ProgramDetailsForm = ({
         return locationOptions
     }
     const handleSelectLocation = (selectedOptions) => {
-        console.log("Selected Location Options:", selectedOptions);
-
+       
         const selectedLocationData = selectedOptions.map((option, idx) => ({
             subCounty: option.subCounty,
             ward: option.value,
             key: `${option.subCounty}-${option.value}-${idx}`
         }));
-
-        console.log("Selected Location Data:", selectedLocationData);
-
-        setSelectedLocation(selectedOptions);
-        console.log("selectedOptions:", selectedOptions);
+        setSelectedLocation(selectedOptions);  
         onLocationChange(selectedOptions);
     };  
 

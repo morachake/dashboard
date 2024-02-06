@@ -32,19 +32,13 @@ export default function Certandloc ({
         })
     }
 
-    const handleSelectLocation = (selectedOptions) => {
-        console.log("Selected Location Options:", selectedOptions);
-
+        const handleSelectLocation = (selectedOptions) => {
         const selectedLocationData = selectedOptions.map((option, idx) => ({
             subCounty: option.subCounty,
             ward: option.value,
             key: `${option.subCounty}-${option.value}-${idx}`
         }));
-
-        console.log("Selected Location Data:", selectedLocationData);
-
         setSelectedLocation(selectedOptions);
-        console.log("selectedOptions:", selectedOptions);
         onLocationChange(selectedOptions);
     };  
 

@@ -6,7 +6,6 @@ import config from 'config';
 import { ProjectDetailsForm } from './InputForm/ProjectdetailsForm';
 import  Certandloc  from './InputForm/Certand loc';
 import { validateFormStep } from './InputForm/formValidator';
-import CustomModal from 'components/Reusable/CustomModal';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -101,7 +100,6 @@ export default function ProjectForm() {
 
                 const data = await response.json();
                 const userprograms = data.filter(program => program.director_id === user.id)
-                console.log("Fetched programs:", userprograms);
                 setPrograms(userprograms);
             } catch (error) {
                 console.error("Error fetching programs:", error);
@@ -117,7 +115,6 @@ export default function ProjectForm() {
         if (isFormValid()) {
             setIsSubmitting(true);
             saveData();
-            console.log("Submit Locations",formData.locations)
         } else {
             console.error('Form validation failed');
         }

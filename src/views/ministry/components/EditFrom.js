@@ -122,7 +122,6 @@ const subCountyWards = {
           const updatedLocations = prevState.locations.map((loc, idx) =>
             idx === index ? { ...loc, [name]: value } : loc
           );
-          console.log("Updated location: " , updatedLocations)
           return { ...prevState, locations: updatedLocations, selectedLocationValues };
         });
     } else if (type === 'certificate') {
@@ -232,7 +231,6 @@ const subCountyWards = {
                     name="locations"
                     onChange={(selectedOptions) => {
                       setSelectedLocations(selectedOptions);
-                      console.log(selectedOptions);
                     }}
                   />
                 </Col>
@@ -243,44 +241,44 @@ const subCountyWards = {
                 className="my-2"
             >
                  <CardBody>
-  {formData.certificates.map((certificate, index) => (
-    <Row lg={4} md={6} xs={12} style={{ alignItems: 'center' }} key={index}>
-      <Col md={6} lg={4}>
-        <FormGroup>
-          <Label for={`certificateNumber-${index}`}>Certificate Number</Label>
-          <Input
-            id={`certificateNumber-${index}`}
-            name="certificate_number"
-            placeholder="Certificate Number"
-            type="text"
-            value={certificate.certificate_number}
-            onChange={handleCertificateChange(index)}
-          />
-        </FormGroup>
-      </Col>
-      <Col md={6} lg={4}>
-        <FormGroup>
-          <Label for={`amountCertified-${index}`}>Amount Certified</Label>
-          <Input
-            id={`amountCertified-${index}`}
-            name="amount_certified"
-            placeholder="Amount Certified"
-            type="text"
-            value={certificate.amount_certified}
-            onChange={handleCertificateChange(index)}
-          />
-        </FormGroup>
-      </Col>
-    </Row>
-  ))}
-  <Button color="primary" onClick={addCertificateItem}>Add Certificate</Button>
-</CardBody>  
+                    {formData.certificates.map((certificate, index) => (
+                      <Row lg={4} md={6} xs={12} style={{ alignItems: 'center' }} key={index}>
+                        <Col md={6} lg={4}>
+                          <FormGroup>
+                            <Label for={`certificateNumber-${index}`}>Certificate Number</Label>
+                            <Input
+                              id={`certificateNumber-${index}`}
+                              name="certificate_number"
+                              placeholder="Certificate Number"
+                              type="text"
+                              value={certificate.certificate_number}
+                              onChange={handleCertificateChange(index)}
+                            />
+                          </FormGroup>
+                        </Col>
+                        <Col md={6} lg={4}>
+                          <FormGroup>
+                            <Label for={`amountCertified-${index}`}>Amount Certified</Label>
+                            <Input
+                              id={`amountCertified-${index}`}
+                              name="amount_certified"
+                              placeholder="Amount Certified"
+                              type="text"
+                              value={certificate.amount_certified}
+                              onChange={handleCertificateChange(index)}
+                            />
+                          </FormGroup>
+                        </Col>
+                      </Row>
+                    ))}
+                    <Button color="primary" onClick={addCertificateItem}>Add Certificate</Button>
+                  </CardBody>  
             </Card>
-       </Form>
-      </ModalBody>
-      <ModalFooter>
-          <Button color="primary" onClick={handleSubmit}>Update</Button>
-      </ModalFooter>
+         </Form>
+        </ModalBody>
+        <ModalFooter>
+            <Button color="primary" onClick={handleSubmit}>Update</Button>
+        </ModalFooter>
     </Modal>
   );
 }

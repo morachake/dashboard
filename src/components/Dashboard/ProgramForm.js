@@ -89,7 +89,6 @@ export default function ProgramForm() {
 
                 const data = await response.json();
                 const userprograms = data.filter(program => program.director_id === user.id)
-                console.log("Fetched programs:", userprograms);
                 setPrograms(userprograms);
             } catch (error) {
                 console.error("Error fetching programs:", error);
@@ -105,7 +104,6 @@ export default function ProgramForm() {
         if (isFormValid()) {
             setIsSubmitting(true);
             saveData();
-            console.log("Submit Locations",formData.locations)
         } else {
             console.error('Form validation failed');
         }

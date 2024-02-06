@@ -33,7 +33,7 @@ export default function Location ({
     }
 
     const handleSelectLocation = (selectedOptions) => {
-        console.log("Selected Location Options:", selectedOptions);
+  
 
         const selectedLocationData = selectedOptions.map((option, idx) => ({
             subCounty: option.subCounty,
@@ -41,10 +41,10 @@ export default function Location ({
             key: `${option.subCounty}-${option.value}-${idx}`
         }));
 
-        console.log("Selected Location Data:", selectedLocationData);
+   
 
         setSelectedLocation(selectedOptions);
-        console.log("selectedOptions:", selectedOptions);
+        
         onLocationChange(selectedOptions);
     };  
 
