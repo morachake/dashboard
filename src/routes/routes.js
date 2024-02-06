@@ -36,7 +36,7 @@ const adminRoutes = [
   },
   {
     path: "/projects",
-    name: "Projectsa",
+    name: "Projects",
     // icon: "ni ni-bullet-list-67 text-red",
     component: <Tables />,
     layout: "/admin",
