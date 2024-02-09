@@ -114,11 +114,11 @@ const AdminNavbar = (props) => {
           >
             <div>
             <h6 style={{ fontSize: '0.9em', color: '#FFFF' }}> Mombasa county service delivery units</h6>
-                {defaultPass && defaultPass.is_default_password  &&
+                {/* {defaultPass && defaultPass.is_default_password  &&
                   <Alert color="danger">
                     Your password is the default password. Please change it for security reasons.
                   </Alert>
-              }
+              } */}
             </div>
           </Link>
           <div className="navbar-search navbar-search-dark form-inline mr-3 d-none d-md-flex ml-lg-auto">

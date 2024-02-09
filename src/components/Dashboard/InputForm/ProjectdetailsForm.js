@@ -1,7 +1,6 @@
 import ValidatedInput from 'components/Reusable/ValidatedInput';
 import React from 'react';
 import { Row, Col, Input, Label } from 'reactstrap';
-import Location from './Location';
 
 
 export const ProjectDetailsForm = ({ 

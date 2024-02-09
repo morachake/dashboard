@@ -172,6 +172,7 @@ export default function MinTable() {
             <CardBody>
               <Row>
                 <Col lg="6" md="12">
+                  <p><h4>Program Name</h4> {data.program_name}</p>
                   <p><h4>Description:</h4> {data.description}</p>
                   <p><h4>Contractor Details:</h4> {data.contractor_details}</p>
                   <p><h4>Financier:</h4> {data.financier}</p>

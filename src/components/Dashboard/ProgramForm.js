@@ -101,13 +101,16 @@ export default function ProgramForm() {
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        if (isFormValid()) {
+        const {isFormValid,errors} = validateFormStep(1,formData)
+        setFormErrors(errors)
+        if (!isFormValid) {
             setIsSubmitting(true);
             saveData();
         } else {
             console.error('Form validation failed');
         }
     };
+
 
     const handleInputChange = (event) => {
         const { name, value } = event.target;
