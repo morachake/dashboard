@@ -89,7 +89,7 @@ export default function ProgramForm() {
 
                 const data = await response.json();
                 const userprograms = data.filter(program => program.director_id === user.id)
-                setPrograms(userprograms);
+                setPrograms(data);
             } catch (error) {
                 console.error("Error fetching programs:", error);
             }

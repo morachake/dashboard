@@ -99,8 +99,8 @@ export default function ProjectForm() {
                 }
 
                 const data = await response.json();
-                const userprograms = data.filter(program => program.director_id === user.id)
-                setPrograms(userprograms);
+                // const userprograms = data.filter(program => program.director_id === user.id)
+                setPrograms(data);
             } catch (error) {
                 console.error("Error fetching programs:", error);
             }
